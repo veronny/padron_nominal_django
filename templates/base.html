@@ -98,7 +98,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="#" class="nav-link">
+                      <a href="{% url 'operacional' %}" class="nav-link">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Reporte Operacional</p>
                       </a>
@@ -146,14 +146,10 @@
       <div class="content-header">
         <div class="container-fluid">
           <div class="row mb-2">
-            <div class="col-sm-6">
-              <h1 class="m-0">Dashboard</h1>
-            </div><!-- /.col -->
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#"></a></li>
-              </ol>
-            </div><!-- /.col -->
+            
+            {% block header %}
+            {% endblock %}
+          
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
       </div>
@@ -223,5 +219,9 @@
 <script src="{% static 'assets/dist/js/adminlte.js' %}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{% static 'assets/dist/js/pages/dashboard.js' %}"></script>
+<!-- HTMX -->
+<script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.js"></script>
+<!-- Apache ECharts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
 </body>
 </html>
