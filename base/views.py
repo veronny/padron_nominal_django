@@ -6,6 +6,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
 
+
+
 # Create your views here.
 def BASE(request):
     return render(request, 'base.html')
@@ -58,3 +60,4 @@ def signup(request):
             'form': UserCreationForm,
             "error": 'Password fo not match'
         })
+

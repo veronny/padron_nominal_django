@@ -13,9 +13,54 @@
 {% endblock %}
 
 {% block body %}
-
-
+<!-- SEGUIMIENTO -->
 <div class="row">
-Pagina de discapacidad
+  <div class="col-md-3">
+    <section class="card card-body shadow mb-2">
+      <div hx-target="#content" hx-swap="innerHTML" hx-indicator="#loading">
+        <ul class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active">TIPO DE REPORTE</a>
+            <a href="#" class="list-group-item list-group-item-action" hx-get="{% url 'get_provincias' 1 %}" hx-swap="innerHTML" hx-trigger="click">PROVINCIA</a>
+            <a href="#" class="list-group-item list-group-item-action" hx-get="#" hx-swap="innerHTML" hx-trigger="click">DISTRITO</a>
+            <a href="#" class="list-group-item list-group-item-action" hx-get="#" hx-swap="innerHTML" hx-trigger="click">RED</a>
+            <a href="#" class="list-group-item list-group-item-action" hx-get="#" hx-swap="innerHTML" hx-trigger="click">MICRORED</a>
+            <a href="#" class="list-group-item list-group-item-action" hx-get="#" hx-swap="innerHTML" hx-trigger="click">ESTABLECIMIENTO</a>
+            <!-- <a href="#" class="list-group-item list-group-item-action" hx-trigger="click">DNI</a> -->
+        </ul>
+      </div>
+    </section>
 </div>
+
+<div class="col-md-9"> 
+    <div id="loading" style="display:none;">Cargando...
+      <section class = "card card-body shadow mb-2">
+      </section>
+    </div>
+    <div id="content">
+      <section class = "card card-body shadow mb-2">
+      </section>
+    </div>
+  </div>
+</div>
+   <!-- FIN DE SEGUIMIENTO ----------->  
+  <div class="col-md-9"> 
+  <h1>Matriz de Relaciones</h1>
+    <table border="1">
+      <tr>
+        <th>Etapa</th>
+        {% for cie in cies %}
+            <th>{{ cie.Cie }}</th>
+        {% endfor %}
+      </tr>
+      {% for etapa, relaciones in matriz.items %}
+      <tr>
+        <td>{{ etapa.Etapa }}</td>
+        {% for cie, relacion in relaciones.items %}
+          <td>{{ relacion }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
 {% endblock %}
