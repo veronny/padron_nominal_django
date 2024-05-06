@@ -43,24 +43,5 @@
   </div>
 </div>
    <!-- FIN DE SEGUIMIENTO ----------->  
-  <div class="col-md-9"> 
-  <h1>Matriz de Relaciones</h1>
-    <table border="1">
-      <tr>
-        <th>Etapa</th>
-        {% for cie in cies %}
-            <th>{{ cie.Cie }}</th>
-        {% endfor %}
-      </tr>
-      {% for etapa, relaciones in matriz.items %}
-      <tr>
-        <td>{{ etapa.Etapa }}</td>
-        {% for cie, relacion in relaciones.items %}
-          <td>{{ relacion }}</td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    </table>
-  </div>
-
+ 
 {% endblock %}
