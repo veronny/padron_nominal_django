@@ -1,0 +1,13 @@
+<!-- HTMX -->
+<script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.js"></script>
+
+<label class="text-primary">MICRORED : </label>
+    <select class="form-control custom-select" name="microredes" hx-get="#" hx-trigger="change" x-target="#resultado">
+        {% for m in microredes %}
+            {% if m.MicroRed %}
+                <option value="{{ m.Codigo_MicroRed }}">{{ m.MicroRed }}</option>
+            {% else %}
+                <option value="{{ m.Codigo_MicroRed|default:'Sin microred' }}">{{ m.MicroRed|default:'Sin microred' }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>

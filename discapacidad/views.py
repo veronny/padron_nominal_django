@@ -9,8 +9,8 @@ from django.db import connection
 # filtros
 from base.models import DimPeriodo, DimDiscapacidadEtapa, MAESTRO_HIS_ESTABLECIMIENTO
 from .models import DimDisFisicaCie,TramaBaseDiscapacidadRpt02FisicaNominal
-from django.db.models import Case, When, Value, IntegerField, Sum, OuterRef, Subquery, Value
-from django.db.models.functions import Substr, Cast, Concat
+from django.db.models import Case, When, Value, IntegerField, Sum, OuterRef, Subquery
+from django.db.models.functions import Substr, Cast, Concat, Replace
 from django.db.models import CharField
 
 # report excel
@@ -22,6 +22,8 @@ import openpyxl
 from openpyxl.utils import get_column_letter
 
 from .utils import generar_operacional
+
+from django.db.models.functions import Substr
 
 # Create your views here.
 @login_required
@@ -606,18 +608,14 @@ def rpt_operacional_rbc(ubigeo, fecha_inicio, fecha_fin):
 
     return resultado_prov_rbc
 
-
 # validar matriz
-def crear_matriz(request):
-    
+def crear_matriz(request):    
     ubigeo = '1201'
     fecha_inicio = '20240102'# Ejemplo de ubigeo
     fecha_fin = '20240110'# Ejemplo de ubigeo
-    matriz = rpt_operacional_fisico(ubigeo,fecha_inicio,fecha_fin)
-    
+    matriz = rpt_operacional_fisico(ubigeo,fecha_inicio,fecha_fin)  
     # Puedes renderizar la matriz en una plantilla HTML o hacer cualquier otro procesamiento necesario
     return render(request, 'discapacidad/matrizes.html', {'matriz': matriz})
-
 
 #--- PROVINCIAS EXCEL -------------------------------------------------------------
 class RptOperacinalProv(TemplateView):
@@ -1148,6 +1146,87 @@ class RptOperacinalProv(TemplateView):
         sheet['B59'].font = Font(name = 'Arial', size= 8, bold = True)
         sheet['B59'] ='SUB TOTAL' 
         
+        #########################################################
+        ########## CAPACITACION AGENTES COMUNITARIOS ############
+        #########################################################
+        sheet['B61'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B61'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B61'] ='CAPACITACIÓN A AGENTES COMUNITARIOS EN REHABILITACIÓN BASADA EN LA COMUNIDAD (5005155)' 
+                
+        sheet['C62'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C62'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['C62'].fill = fill
+        sheet['C62'].border = border
+        sheet['C62'] = '1° TALLER'
+        
+        sheet['D62'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D62'].fill = fill
+        sheet['D62'].border = border
+        sheet['D62'] = '2° TALLER'
+        
+        sheet['E62'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['E62'].fill = fill
+        sheet['E62'].border = border
+        sheet['E62'] = 'PROMSA'
+        
+        sheet['C63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['C63'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['C63'].fill = fill
+        sheet['C63'].border = border
+        sheet['C63'] = 'N°'
+        
+        sheet['D63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D63'].fill = fill
+        sheet['D63'].border = border
+        sheet['D63'] = 'Capacitados'
+        
+        sheet['E63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E63'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E63'].fill = fill
+        sheet['E63'].border = border
+        sheet['E63'] = 'N°'
+        
+        sheet['F63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F63'].fill = fill
+        sheet['F63'].border = border
+        sheet['F63'] = 'Capacitados'
+        
+        sheet['G63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G63'].fill = fill
+        sheet['G63'].border = border
+        sheet['G63'] = 'N° '
+        
+        sheet['H63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H63'].fill = fill
+        sheet['H63'].border = border
+        sheet['H63'] = 'Capacitados'
+        
+        sheet['G63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G63'].fill = fill
+        sheet['G63'].border = border
+        sheet['G63'] = 'N°'
+        
+        sheet['H63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H63'].fill = fill
+        sheet['H63'].border = border
+        sheet['H63'] = 'Capacitados'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=55, max_row=58, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+            
         #############################################################################
         #############################################################################                
         # cambina celdas
@@ -1218,6 +1297,7 @@ class RptOperacinalProv(TemplateView):
             'DIS_59': 'G27',
             'DIS_60': 'H27',           
         }
+        
         # Definir ubicaciones específicas para cada columna y su suma total
         col_ubi_sensorial = {    
             'PROVINCIA': 'D10',
@@ -1283,7 +1363,7 @@ class RptOperacinalProv(TemplateView):
             'DIS_115': 'H50'
         }
         
-         # Definir ubicaciones específicas para cada columna y su suma total
+        # Definir ubicaciones específicas para cada columna y su suma total
         col_ubi_rbc = {    
             'PROVINCIA': 'D10',
             'DIS_116': 'D55',
@@ -1690,7 +1770,6 @@ class RptOperacinalProv(TemplateView):
         sheet['H45'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['H45'].font = Font(name = 'Arial', size= 9, bold = True)
         sheet['H45'] = t_sum_cat_vertical_10    
-        
         ##########################################################################
         
         #################################
@@ -1851,3 +1930,207 @@ class RptOperacinalProv(TemplateView):
         workbook.save(response)
 
         return response
+
+################################################
+# REPORTE DE DISTRITO
+################################################
+def get_distritos(request, distritos_id):
+    provincias = (
+                 MAESTRO_HIS_ESTABLECIMIENTO
+                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+                 .annotate(ubigueo_filtrado=Substr('Ubigueo_Establecimiento', 1, 4))
+                 .values('Provincia','ubigueo_filtrado')
+                 .distinct()
+    )
+    mes_inicio = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    mes_fin = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    context = {
+                'provincias': provincias,
+                'mes_inicio':mes_inicio,
+                'mes_fin':mes_fin,
+              }
+     
+    return render(request, 'discapacidad/distritos.html', context)
+
+def p_distritos(request):
+    provincia_param = request.GET.get('provincia')
+
+    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
+    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+
+    # Filtra los establecimientos por el código de la provincia
+    if provincia_param:
+        establecimientos = establecimientos.filter(Ubigueo_Establecimiento__startswith=provincia_param[:4])
+    # Selecciona el distrito y el código Ubigueo
+    distritos = establecimientos.values('Distrito', 'Ubigueo_Establecimiento').distinct()
+    
+    context = {
+        'provincia': provincia_param,
+        'distritos': distritos
+    }
+        
+    return render(request, 'discapacidad/partials/p_distritos.html', context)
+
+################################################
+# REPORTE POR REDES
+################################################
+def get_redes(request,redes_id):
+    redes = (
+                 MAESTRO_HIS_ESTABLECIMIENTO
+                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+                 .annotate(codigo_red_filtrado=Substr('Codigo_Red', 1, 4))
+                 .values('Red','codigo_red_filtrado')
+                 .distinct()
+    )
+    mes_inicio = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    mes_fin = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    context = {
+                'redes': redes,
+                'mes_inicio':mes_inicio,
+                'mes_fin':mes_fin,
+              }
+    
+    return render(request, 'discapacidad/redes.html', context)
+
+
+################################################
+# REPORTE POR MICRO-REDES
+################################################
+def get_microredes(request, microredes_id):
+    redes = (
+                 MAESTRO_HIS_ESTABLECIMIENTO
+                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+                 .annotate(codigo_red_filtrado=Substr('Codigo_Red', 1, 4))
+                 .values('Red','codigo_red_filtrado')
+                 .distinct()
+    )
+    mes_inicio = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    mes_fin = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    context = {
+                'redes': redes,
+                'mes_inicio':mes_inicio,
+                'mes_fin':mes_fin,
+              }
+
+    return render(request, 'discapacidad/microredes.html', context)
+
+def p_microredes(request):
+    redes_param = request.GET.get('redes')
+    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
+    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL').distinct()
+    # Filtra los establecimientos por el código de la provincia
+    if redes_param:
+        establecimientos = establecimientos.filter(Codigo_Red__startswith=redes_param[:2])
+    # Selecciona el distrito y el código Ubigueo
+    microredes = establecimientos.values('MicroRed','Codigo_MicroRed').distinct()  
+    context = {
+        'redes_param': redes_param,
+        'microredes': microredes
+    }
+        
+    return render(request, 'discapacidad/partials/p_microredes.html', context)
+
+#--- ESTABLECIMIENTOS -------------------------------------------------------
+def get_establecimientos(request,establecimiento_id):
+    redes = (
+                 MAESTRO_HIS_ESTABLECIMIENTO
+                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+                 .annotate(codigo_red_filtrado=Substr('Codigo_Red', 1, 4))
+                 .values('Red','codigo_red_filtrado')
+                 .distinct()
+    )
+    mes_inicio = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    mes_fin = (
+                DimPeriodo
+                .objects.filter(Anio='2024')
+                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
+                .values('Mes','periodo_filtrado')
+                .order_by('NroMes')
+                .distinct()
+    ) 
+    context = {
+                'redes': redes,
+                'mes_inicio':mes_inicio,
+                'mes_fin':mes_fin,
+              }
+    return render(request,'discapacidad/establecimientos.html', context)
+
+
+def p_microredes_establec(request):
+    redes_param = request.GET.get('redes')
+    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
+    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL',Codigo_Red=redes_param)
+    # Selecciona el MicroRed y Codigo_MicroRed
+    microredes = establecimientos.values('MicroRed','Codigo_MicroRed').distinct()  
+    context = {
+        'microredes': microredes,
+        'is_htmx': True
+    }       
+    print(establecimientos)
+    return render(request, 'discapacidad/partials/p_microredes_establec.html', context)
+
+def p_establecimientos(request):
+    microredes = request.GET.get('microredes')
+    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
+    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')    
+    # Filtra los establecimientos por el código de la provincia
+    if microredes:
+        establecimientos = establecimientos.filter(Codigo_Red__startswith=microredes[:2])
+    # Selecciona el distrito y el código Ubigueo
+    establec = establecimientos.values('Codigo_Unico','Nombre_Establecimiento').distinct()
+    
+    context= {
+            'establec': establec
+             }
+    
+
+    return render(request, 'discapacidad/partials/p_establecimientos.html', context)

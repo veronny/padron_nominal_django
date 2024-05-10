@@ -3,7 +3,7 @@
       <div class="col-md-12">
         <section class="card card-body shadow mb-2">
             <div class="col-md-6 offset-md-3 text-center py-1 text-primary">
-                <h4>POR PROVINCIA</h4>
+                <h4>POR DISTRITO</h4>
             </div>
           <form method="GET" enctype="multipart/form-data" action="{% url 'rpt_operacional_prov_xls' %}">
             <!-- cabecera-->   
@@ -40,7 +40,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                     <label class="text-primary" for="provincia">PROVINCIA :</label>
-                    <select class="form-control" name="provincia">
+                    <select class="form-control" name="provincia" hx-get="{% url 'p_distritos' %}" hx-trigger="change" hx-target="#p_distritos">
                         <option value="">--- SELECCIONAR ---</option>
                         {% for p in provincias %}
                         <option value="{{ p.ubigueo_filtrado }}">{{ p.Provincia }} </option>
@@ -49,6 +49,19 @@
                 </div>
               </div>
             </div>
+                
+                <!--- INCLUDE DROP INCLUYENTE --->
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <div id="p_distritos">
+                          {% include 'discapacidad/partials/p_distritos.html' %}
+                      </div>
+                    </div>
+                  </div>
+                </div> 
+                <!--- FIN INCLUDE DROP INCLUYENTE --->
+
             <br>        
             <div class="col-md-6 offset-md-3 text-center py-1 form-group">        
               <button type="submit" class="btn btn-success btn-lg text-center"><i class="fa fa-file-excel"></i> Procesar</button>
