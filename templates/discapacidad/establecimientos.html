@@ -40,7 +40,7 @@
               <div class="col-md-12">
                 <div class="form-group">
                     <label class="text-primary" for="redes">REDES :</label>
-                    <select class="form-control" name="redes" hx-get="{% url 'p_microredes' %}" hx-trigger="change" hx-target="#p_microredes">
+                    <select class="form-control" name="redes" hx-get="{% url 'p_microredes_establec' %}" hx-trigger="change" hx-target="#p_microredes_establec">
                         <option value="">--- SELECCIONAR ---</option>
                         {% for r in redes %}
                         <option value="{{ r.codigo_red_filtrado }}">{{ r.Red }} </option>
@@ -54,7 +54,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <div id="p_microredes">
+                  <div id="p_microredes_establec">
                       {% include 'discapacidad/partials/p_microredes_establec.html' %}
                   </div>
                 </div>
@@ -72,6 +72,8 @@
               </div>
             </div>  
             <!--- FIN INCLUDE DROP INCLUYENTE ESTABLECIMIENTO --->
+            
+
             <br>        
             <div class="col-md-6 offset-md-3 text-center py-1 form-group">        
               <button type="submit" class="btn btn-success btn-lg text-center"><i class="fa fa-file-excel"></i> Procesar</button>

@@ -1,5 +1,5 @@
-<label class="text-primary" for="p_microredes" name="p_microredes">Microred : </label>
-    <select class="form-control custom-select" name="microredes" hx-get="#" hx-trigger="change" hx-target="#p_establecimientos">
+<label class="text-primary" for="p_microredes_establec" name="p_microredes_establec">MICRORED : </label>
+    <select class="form-control custom-select" name="p_microredes_establec" hx-get="{% url 'p_establecimientos' %}" hx-trigger="change" hx-target="#p_establecimientos" hx-include="[name='redes']">
         {% for m in microredes %}
         <option value="{{ m.Codigo_MicroRed }}">{{ m.MicroRed }}</option>
         {% endfor %}

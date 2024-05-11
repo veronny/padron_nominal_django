@@ -25,6 +25,9 @@ urlpatterns = [
     path('p_microredes_establec/', views.p_microredes_establec, name='p_microredes_establec'),
     path('p_establecimiento/', views.p_establecimientos, name='p_establecimientos'),    
     
+   #path('establecimiento/', views.establecimiento, name='establecimiento'),
+   #path('obtener_microredes/', views.obtener_microredes, name='obtener_microredes'),
+   #path('obtener_establecimientos/', views.obtener_establecimientos, name='obtener_establecimientos'),
     
     
     path('matrizes/', views.crear_matriz, name='matrizes'),

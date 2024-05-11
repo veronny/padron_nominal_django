@@ -2058,25 +2058,18 @@ def get_microredes(request, microredes_id):
 
 def p_microredes(request):
     redes_param = request.GET.get('redes')
-    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
-    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL').distinct()
-    # Filtra los establecimientos por el código de la provincia
-    if redes_param:
-        establecimientos = establecimientos.filter(Codigo_Red__startswith=redes_param[:2])
-    # Selecciona el distrito y el código Ubigueo
-    microredes = establecimientos.values('MicroRed','Codigo_MicroRed').distinct()  
+    microredes = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Codigo_Red=redes_param, Descripcion_Sector='GOBIERNO REGIONAL').values('Codigo_MicroRed','MicroRed').distinct()
     context = {
         'redes_param': redes_param,
         'microredes': microredes
     }
-        
     return render(request, 'discapacidad/partials/p_microredes.html', context)
 
 #--- ESTABLECIMIENTOS -------------------------------------------------------
 def get_establecimientos(request,establecimiento_id):
     redes = (
                  MAESTRO_HIS_ESTABLECIMIENTO
-                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL',Disa='JUNIN')
                  .annotate(codigo_red_filtrado=Substr('Codigo_Red', 1, 4))
                  .values('Red','codigo_red_filtrado')
                  .distinct()
@@ -2106,31 +2099,19 @@ def get_establecimientos(request,establecimiento_id):
 
 
 def p_microredes_establec(request):
-    redes_param = request.GET.get('redes')
-    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
-    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL',Codigo_Red=redes_param)
-    # Selecciona el MicroRed y Codigo_MicroRed
-    microredes = establecimientos.values('MicroRed','Codigo_MicroRed').distinct()  
+    redes_param = request.GET.get('redes') 
+    microredes = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Codigo_Red=redes_param, Descripcion_Sector='GOBIERNO REGIONAL',Disa='JUNIN').values('Codigo_MicroRed','MicroRed').distinct()
     context = {
         'microredes': microredes,
         'is_htmx': True
-    }       
-    print(establecimientos)
+    }
     return render(request, 'discapacidad/partials/p_microredes_establec.html', context)
 
 def p_establecimientos(request):
-    microredes = request.GET.get('microredes')
-    # Filtra los establecimientos por sector "GOBIERNO REGIONAL"
-    establecimientos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')    
-    # Filtra los establecimientos por el código de la provincia
-    if microredes:
-        establecimientos = establecimientos.filter(Codigo_Red__startswith=microredes[:2])
-    # Selecciona el distrito y el código Ubigueo
-    establec = establecimientos.values('Codigo_Unico','Nombre_Establecimiento').distinct()
-    
+    microredes = request.GET.get('p_microredes_establec')    
+    codigo_red = request.GET.get('redes')
+    establec = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Codigo_MicroRed=microredes,Codigo_Red=codigo_red,Descripcion_Sector='GOBIERNO REGIONAL',Disa='JUNIN').values('Codigo_Unico','Nombre_Establecimiento').distinct()
     context= {
-            'establec': establec
-             }
-    
-
+        'establec': establec
+    }
     return render(request, 'discapacidad/partials/p_establecimientos.html', context)
