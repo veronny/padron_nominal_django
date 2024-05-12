@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views 
-from .views import RptOperacinalProv 
+from .views import RptOperacinalProv, RptOperacinalDist
 
 urlpatterns = [
     #discapacidad
@@ -9,9 +9,14 @@ urlpatterns = [
     path('get_provincias/<int:provincias_id>/', views.get_provincias, name='get_provincias'),
     #-- provincia excel
     path('rpt_operacional_prov_excel/', RptOperacinalProv.as_view(), name = 'rpt_operacional_prov_xls'),
+    
     # distrito
     path('get_distritos/<int:distritos_id>/', views.get_distritos, name='get_distritos'),
     path('p_distritos/', views.p_distritos, name='p_distritos'),
+    #-- distrito excel
+    path('rpt_operacional_distrito_excel/', RptOperacinalDist.as_view(), name = 'rpt_operacional_dist_xls'),
+    
+    
     
     # redes
     path('get_redes/<int:redes_id>/', views.get_redes, name='get_redes'),
