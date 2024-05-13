@@ -1,10 +1,11 @@
 from django.urls import path
 from . import views 
-from .views import RptOperacinalProv, RptOperacinalDist
+from .views import RptOperacinalProv, RptOperacinalDist, RptOperacinalRed 
 
 urlpatterns = [
     #discapacidad
     path('operacional/', views.operacional, name='operacional'),
+    
     # provincia
     path('get_provincias/<int:provincias_id>/', views.get_provincias, name='get_provincias'),
     #-- provincia excel
@@ -15,11 +16,11 @@ urlpatterns = [
     path('p_distritos/', views.p_distritos, name='p_distritos'),
     #-- distrito excel
     path('rpt_operacional_distrito_excel/', RptOperacinalDist.as_view(), name = 'rpt_operacional_dist_xls'),
-    
-    
-    
+        
     # redes
     path('get_redes/<int:redes_id>/', views.get_redes, name='get_redes'),
+    #-- redes excel
+    path('rpt_operacional_red_excel/', RptOperacinalRed.as_view(), name = 'rpt_operacional_red_xls'),
     
     #microredes
     path('get_microredes/<int:microredes_id>/', views.get_microredes, name='get_microredes'),

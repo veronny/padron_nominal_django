@@ -5,7 +5,7 @@
             <div class="col-md-6 offset-md-3 text-center py-1 text-primary">
                 <h4>POR REDES DE SALUD</h4>
             </div>
-          <form method="GET" enctype="multipart/form-data" action="{% url 'rpt_operacional_prov_xls' %}">
+          <form method="GET" enctype="multipart/form-data" action="{% url 'rpt_operacional_red_xls' %}">
             <!-- cabecera-->   
             <div class="form row">
                 <div class="col-md-4 form-group">
@@ -39,8 +39,8 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                    <label class="text-primary" for="provincia">REDES :</label>
-                    <select class="form-control" name="provincia">
+                    <label class="text-primary" for="red">REDES :</label>
+                    <select class="form-control" name="red">
                         <option value="">--- SELECCIONAR ---</option>
                         {% for p in redes %}
                         <option value="{{ p.codigo_red_filtrado }}">{{ p.Red }} </option>

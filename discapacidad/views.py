@@ -3863,7 +3863,1455 @@ def get_redes(request,redes_id):
     
     return render(request, 'discapacidad/redes.html', context)
 
+#--- FUNCIONES OPERACIONALES PARTES REPORTE -----------------------------------------
+def rpt_operacional_fisico_red(codigo_red, fecha_inicio, fecha_fin):
+    with connection.cursor() as cursor:
+        # Insertar los datos agrupados y las sumas en la tabla temporal
+        cursor.execute("""
+                SELECT
+                    codigo_red,
+                    red,
+                    SUM(dis_1) AS dis_1,
+                    SUM(dis_2) AS dis_2,
+                    SUM(dis_3) AS dis_3,
+                    SUM(dis_4) AS dis_4,
+                    SUM(dis_5) AS dis_5,
+                    SUM(dis_6) AS dis_6,
+                    SUM(dis_7) AS dis_7,
+                    SUM(dis_8) AS dis_8,
+                    SUM(dis_9) AS dis_9,
+                    SUM(dis_10) AS dis_10,
+                    SUM(dis_11) AS dis_11,
+                    SUM(dis_12) AS dis_12,
+                    SUM(dis_13) AS dis_13,
+                    SUM(dis_14) AS dis_14,
+                    SUM(dis_15) AS dis_15,
+                    SUM(dis_16) AS dis_16,
+                    SUM(dis_17) AS dis_17,
+                    SUM(dis_18) AS dis_18,
+                    SUM(dis_19) AS dis_19,
+                    SUM(dis_20) AS dis_20,
+                    SUM(dis_21) AS dis_21,
+                    SUM(dis_22) AS dis_22,
+                    SUM(dis_23) AS dis_23,
+                    SUM(dis_24) AS dis_24,
+                    SUM(dis_25) AS dis_25,
+                    SUM(dis_26) AS dis_26,
+                    SUM(dis_27) AS dis_27,
+                    SUM(dis_28) AS dis_28,
+                    SUM(dis_29) AS dis_29,
+                    SUM(dis_30) AS dis_30,
+                    SUM(dis_31) AS dis_31,
+                    SUM(dis_32) AS dis_32,
+                    SUM(dis_33) AS dis_33,
+                    SUM(dis_34) AS dis_34,
+                    SUM(dis_35) AS dis_35,
+                    SUM(dis_36) AS dis_36,
+                    SUM(dis_37) AS dis_37,
+                    SUM(dis_38) AS dis_38,
+                    SUM(dis_39) AS dis_39,
+                    SUM(dis_40) AS dis_40,
+                    SUM(dis_41) AS dis_41,
+                    SUM(dis_42) AS dis_42,
+                    SUM(dis_43) AS dis_43,
+                    SUM(dis_44) AS dis_44,
+                    SUM(dis_45) AS dis_45,
+                    SUM(dis_46) AS dis_46,
+                    SUM(dis_47) AS dis_47,
+                    SUM(dis_48) AS dis_48,
+                    SUM(dis_49) AS dis_49,
+                    SUM(dis_50) AS dis_50,
+                    SUM(dis_51) AS dis_51,
+                    SUM(dis_52) AS dis_52,
+                    SUM(dis_53) AS dis_53,
+                    SUM(dis_54) AS dis_54,
+                    SUM(dis_55) AS dis_55,
+                    SUM(dis_56) AS dis_56,
+                    SUM(dis_57) AS dis_57,
+                    SUM(dis_58) AS dis_58,
+                    SUM(dis_59) AS dis_59,
+                    SUM(dis_60) AS dis_60
+                FROM (
+                    SELECT
+                        MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Red AS codigo_red,
+                        MAESTRO_HIS_ESTABLECIMIENTO.Red AS red,
+                        renaes,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_1,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_2,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_3,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_4,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_5,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_6,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_7,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_8,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_9,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_10,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_11,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_12,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_13,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_14,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_15,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_16,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_17,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_18,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_19,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_20,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_21,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_22,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_23,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_24,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_25,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_26,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_27,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_28,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_29,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_30,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_31,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_32,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_33,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_34,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_35,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_36,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_37,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_38,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_39,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_40,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_41,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_42,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_43,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_44,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_45,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_46,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_47,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_48,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_49,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_50,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_51,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_52,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_53,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_54,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_55,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_56,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_57,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_58,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_59,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_60
+                    FROM TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL
+                    LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                    WHERE MAESTRO_HIS_ESTABLECIMIENTO.codigo_red = %s
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                    GROUP BY MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Red, MAESTRO_HIS_ESTABLECIMIENTO.Red, TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.renaes
+                ) subquery
+                GROUP BY codigo_Red, red
+                """, [str(codigo_red)[:2], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
+        resultado_red = cursor.fetchall()
+    
+    return resultado_red
 
+class RptOperacinalRed(TemplateView):
+    def get(self, request, *args, **kwargs):
+        # Variables ingresadas
+        fecha_inicio = request.GET.get('fecha_inicio')
+        fecha_fin = request.GET.get('fecha_fin')
+        red = request.GET.get('red')
+
+        # Creación de la consulta
+        resultado_red = rpt_operacional_fisico_red(red, fecha_inicio, fecha_fin)
+        resultado_dist_sensorial = rpt_operacional_sensorial_dist(red, fecha_inicio, fecha_fin)
+        resultado_dist_certificado = rpt_operacional_certificado_dist(red, fecha_inicio, fecha_fin)
+        resultado_dist_rbc = rpt_operacional_rbc_dist(red, fecha_inicio, fecha_fin)
+        
+        # Crear un nuevo libro de Excel
+        workbook = openpyxl.Workbook()
+        sheet = workbook.active
+
+        # cambia el alto de la columna
+        sheet.row_dimensions[1].height = 14
+        sheet.row_dimensions[2].height = 14
+        sheet.row_dimensions[4].height = 25
+        sheet.row_dimensions[15].height = 25
+        # cambia el ancho de la columna
+        sheet.column_dimensions['A'].width = 2
+        sheet.column_dimensions['B'].width = 40
+        sheet.column_dimensions['C'].width = 9
+        sheet.column_dimensions['D'].width = 9
+        sheet.column_dimensions['E'].width = 10
+        sheet.column_dimensions['F'].width = 9
+        sheet.column_dimensions['G'].width = 9
+        sheet.column_dimensions['H'].width = 9
+        sheet.column_dimensions['I'].width = 9
+        # linea de division
+        sheet.freeze_panes = 'AL8'
+        
+        # Configuración del fondo y el borde
+        fill = PatternFill(patternType='solid', fgColor='00B0F0')
+        border = Border(left=Side(style='thin', color='00B0F0'),
+                        right=Side(style='thin', color='00B0F0'),
+                        top=Side(style='thin', color='00B0F0'),
+                        bottom=Side(style='thin', color='00B0F0'))
+
+        borde_plomo = Border(left=Side(style='thin', color='A9A9A9'), # Plomo
+                right=Side(style='thin', color='A9A9A9'), # Plomo
+                top=Side(style='thin', color='A9A9A9'), # Plomo
+                bottom=Side(style='thin', color='A9A9A9')) # Plomo
+
+        # crea titulo del reporte
+        sheet['B1'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B1'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['B1'] = 'OFICINA DE TECNOLOGIAS DE LA INFORMACION'
+        
+        sheet['B2'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B2'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['B2'] = 'DIRECCION REGIONAL DE SALUD JUNIN'
+        
+        sheet['B4'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B4'].font = Font(name = 'Arial', size= 12, bold = True)
+        sheet['B4'] = 'REPORTE DE ACTIVIDADES DEL COMPONENTE DE DISCAPACIDAD'
+        
+        sheet['B6'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['B6'] ='DIRESA / GERESA / DISA:'
+
+        sheet['B7'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['B7'] ='HOSPITAL Y/O RED DE SALUD'
+        
+        sheet['F6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['F6'] ='PERIODO'
+        
+        sheet['G6'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['G6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['G6'] ='AÑO:'
+        
+        sheet['G7'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['G7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['G7'] ='MES:'
+        
+        sheet['H6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H6'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['H6'].border = borde_plomo
+        sheet['H6'] = ''
+        
+        sheet['H7'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H7'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['H7'].border = borde_plomo
+        sheet['H7'] = ''
+        
+        sheet['B9'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B9'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['B9'] ='PERSONAS CON DISCAPACIDAD RECIBEN ATENCION DE REHABILITACION EN ESTABLECIMIENTOS DE SALUD (3000688)'
+        
+        sheet['B10'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B10'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['B10'] ='Capacitación en medicina de rehabilitación integral (5004449)'
+        
+        sheet['B12'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B12'].font = Font(name = 'Arial', size= 8,)
+        sheet['B12'] ='Capacitación' 
+        
+        sheet['C11'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C11'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['C11'].fill = fill
+        sheet['C11'].border = border
+        sheet['C11'] = 'N°'
+        
+        sheet['C12'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C12'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['C12'].border = borde_plomo
+        sheet['C12'] = ''
+        
+        sheet['D11'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D11'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['D11'].fill = fill
+        sheet['D11'].border = border
+        sheet['D11'] = 'Capacitados'
+        
+        sheet['D12'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D12'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['D12'].border = borde_plomo
+        sheet['D12'] = ''
+        ########################################################
+        ########## DISCAPACIDAD FISICA #########################
+        sheet['B14'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B14'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B14'] ='Atención de Rehabilitación en Personas con Discapacidad de Tipo Física (5005150)' 
+                
+        sheet['B15'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['B15'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['B15'].fill = fill
+        sheet['B15'].border = border
+        sheet['B15'] = 'Atenciones'
+        
+        sheet['C15'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C15'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['C15'].fill = fill
+        sheet['C15'].border = border
+        sheet['C15'] = 'Total'
+        
+        sheet['D15'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D15'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D15'].fill = fill
+        sheet['D15'].border = border
+        sheet['D15'] = 'Niños         (1d - 11a)'
+        
+        sheet['E15'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E15'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E15'].fill = fill
+        sheet['E15'].border = border
+        sheet['E15'] = 'Adolescentes (12a - 17a)'
+        
+        sheet['F15'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F15'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F15'].fill = fill
+        sheet['F15'].border = border
+        sheet['F15'] = 'Jóvenes (18a - 29a)'
+        
+        sheet['G15'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G15'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G15'].fill = fill
+        sheet['G15'].border = border
+        sheet['G15'] = 'Adultos (30a - 59a)'
+        
+        sheet['H15'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H15'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H15'].fill = fill
+        sheet['H15'].border = border
+        sheet['H15'] = 'A. Mayores (60a +)'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=16, max_row=27, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+        sheet['B16'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B16'].font = Font(name = 'Arial', size= 8)
+        sheet['B16'] ='Lesiones medulares (0515001)' 
+        
+        sheet['B17'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B17'].font = Font(name = 'Arial', size= 8)
+        sheet['B17'] ='Amputados de miembro superior (0515002)' 
+        
+        sheet['B18'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B18'].font = Font(name = 'Arial', size= 8)
+        sheet['B18'] ='Amputados de miembro inferior (0515003)' 
+        
+        sheet['B19'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B19'].font = Font(name = 'Arial', size= 8)
+        sheet['B19'] ='Enfermedad muscular y unión mioneural (0515004)' 
+        
+        sheet['B20'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B20'].font = Font(name = 'Arial', size= 8)
+        sheet['B20'] ='Lesiones de nervio periférico (0515005)' 
+        
+        sheet['B21'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B21'].font = Font(name = 'Arial', size= 8)
+        sheet['B21'] ='Trastornos del desarrollo de la función motriz (0515006)' 
+        
+        sheet['B22'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B22'].font = Font(name = 'Arial', size= 8)
+        sheet['B22'] ='Enfermedad articular degenerativa (0515007)' 
+        
+        sheet['B23'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B23'].font = Font(name = 'Arial', size= 8)
+        sheet['B23'] ='Enfermedad cerebro vascular (0515008)' 
+        
+        sheet['B24'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B24'].font = Font(name = 'Arial', size= 8)
+        sheet['B24'] ='Encefalopatía infantil (0515009)' 
+        
+        sheet['B25'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B25'].font = Font(name = 'Arial', size= 8)
+        sheet['B25'] ='Enfermedad de Parkinson (0515010)' 
+        
+        sheet['B26'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B26'].font = Font(name = 'Arial', size= 8)
+        sheet['B26'] ='Síndrome de Down (0515011)' 
+        
+        sheet['B27'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B27'].font = Font(name = 'Arial', size= 8)
+        sheet['B27'] ='Trastornos posturales (0515012)' 
+        
+        sheet['B28'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B28'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B28'] ='SUB TOTAL' 
+        ##########################################################    
+        ########## DISCAPACIDAD SENSORIAL ########################
+        ##########################################################
+        sheet['B30'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B30'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B30'] ='Atención de Rehabilitación en Personas con Discapacidad de Tipo Sensorial (5005151)' 
+                
+        sheet['B31'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['B31'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['B31'].fill = fill
+        sheet['B31'].border = border
+        sheet['B31'] = 'Atenciones'
+        
+        sheet['C31'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C31'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['C31'].fill = fill
+        sheet['C31'].border = border
+        sheet['C31'] = 'Total'
+        
+        sheet['D31'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D31'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D31'].fill = fill
+        sheet['D31'].border = border
+        sheet['D31'] = 'Niños         (1d - 11a)'
+        
+        sheet['E31'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E31'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E31'].fill = fill
+        sheet['E31'].border = border
+        sheet['E31'] = 'Adolescentes (12a - 17a)'
+        
+        sheet['F31'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F31'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F31'].fill = fill
+        sheet['F31'].border = border
+        sheet['F31'] = 'Jóvenes (18a - 29a)'
+        
+        sheet['G31'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G31'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G31'].fill = fill
+        sheet['G31'].border = border
+        sheet['G31'] = 'Adultos (30a - 59a)'
+        
+        sheet['H31'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H31'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H31'].fill = fill
+        sheet['H31'].border = border
+        sheet['H31'] = 'A Mayores (60a +)'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=32, max_row=36, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+        sheet['B32'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B32'].font = Font(name = 'Arial', size= 8)
+        sheet['B32'] ='Hipoacusia y/o sordera (0515101)' 
+        
+        sheet['B33'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B33'].font = Font(name = 'Arial', size= 8)
+        sheet['B33'] ='Baja visión y/o ceguera (0515102)' 
+        
+        sheet['B34'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B34'].font = Font(name = 'Arial', size= 8)
+        sheet['B34'] ='Sordomudez (0515103)' 
+        
+        sheet['B35'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B35'].font = Font(name = 'Arial', size= 8)
+        sheet['B35'] ='Parálisis cerebral infantil (0515104)' 
+        
+        sheet['B36'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B36'].font = Font(name = 'Arial', size= 8)
+        sheet['B36'] ='Enfermedades cerebro vasculares (0515105)' 
+        
+        sheet['B37'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B37'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B37'] ='SUB TOTAL' 
+        ########################################################
+        ########## DISCAPACIDAD MENTAL #########################
+        ########################################################
+        sheet['B39'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B39'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B39'] ='Atención de Rehabilitación en Personas con Discapacidad de Tipo Mental (5005152)' 
+                
+        sheet['B40'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['B40'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['B40'].fill = fill
+        sheet['B40'].border = border
+        sheet['B40'] = 'Atenciones'
+        
+        sheet['C40'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C40'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['C40'].fill = fill
+        sheet['C40'].border = border
+        sheet['C40'] = 'Total'
+        
+        sheet['D40'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D40'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D40'].fill = fill
+        sheet['D40'].border = border
+        sheet['D40'] = 'Niños         (1d - 11a)'
+        
+        sheet['E40'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E40'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E40'].fill = fill
+        sheet['E40'].border = border
+        sheet['E40'] = 'Adolescentes (12a - 17a)'
+        
+        sheet['F40'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F40'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F40'].fill = fill
+        sheet['F40'].border = border
+        sheet['F40'] = 'Jóvenes (18a - 29a)'
+        
+        sheet['G40'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G40'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G40'].fill = fill
+        sheet['G40'].border = border
+        sheet['G40'] = 'Adultos (30a - 59a)'
+        
+        sheet['H40'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H40'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H40'].fill = fill
+        sheet['H40'].border = border
+        sheet['H40'] = 'A Mayores (60a +)'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=41, max_row=44, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+        sheet['B41'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B41'].font = Font(name = 'Arial', size= 8)
+        sheet['B41'] ='Trastornos de aprendizaje (0515201)' 
+        
+        sheet['B42'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B42'].font = Font(name = 'Arial', size= 8)
+        sheet['B42'] ='Retraso mental: leve, moderado, severo (0515202)' 
+        
+        sheet['B43'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B43'].font = Font(name = 'Arial', size= 8)
+        sheet['B43'] ='Trastornos del espectro autista (0515203)' 
+        
+        sheet['B44'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B44'].font = Font(name = 'Arial', size= 8)
+        sheet['B44'] ='Otros trastornos de salud mental (0515204)' 
+        
+        sheet['B45'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B45'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B45'] ='SUB TOTAL' 
+        ##################################################
+        ########## CERTIFICACION #########################
+        ##################################################
+        sheet['B47'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B47'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B47'] ='PERSONAS CON DISCAPACIDAD CERTIFICADAS EN ESTABLECIMIENTOS DE SALUD (3000689)' 
+                
+        sheet['B48'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['B48'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['B48'].fill = fill
+        sheet['B48'].border = border
+        sheet['B48'] = 'Atenciones'
+        
+        sheet['C48'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C48'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['C48'].fill = fill
+        sheet['C48'].border = border
+        sheet['C48'] = 'Total'
+        
+        sheet['D48'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D48'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D48'].fill = fill
+        sheet['D48'].border = border
+        sheet['D48'] = 'Niños         (1d - 11a)'
+        
+        sheet['E48'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E48'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E48'].fill = fill
+        sheet['E48'].border = border
+        sheet['E48'] = 'Adolescentes (12a - 17a)'
+        
+        sheet['F48'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F48'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F48'].fill = fill
+        sheet['F48'].border = border
+        sheet['F48'] = 'Jóvenes (18a - 29a)'
+        
+        sheet['G48'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G48'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G48'].fill = fill
+        sheet['G48'].border = border
+        sheet['G48'] = 'Adultos (30a - 59a)'
+        
+        sheet['H48'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H48'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H48'].fill = fill
+        sheet['H48'].border = border
+        sheet['H48'] = 'A. Mayores (60a +)'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=49, max_row=50, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+        sheet['B49'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B49'].font = Font(name = 'Arial', size= 8)
+        sheet['B49'] ='Certificación de Discapacidad (0515204)' 
+        
+        sheet['B50'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B50'].font = Font(name = 'Arial', size= 8)
+        sheet['B50'] ='Certificación de Incapacidad (0515205)' 
+        
+        sheet['B51'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B51'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B51'] ='SUB TOTAL' 
+        ################################################
+        ########## VISITAS RBC #########################
+        ################################################
+        sheet['B53'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B53'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B53'] ='PERSONAS CON DISCAPACIDAD RECIBEN SERVICIOS DE REHABILITACIÓN BASADA EN LA COMUNIDAD (3000690)' 
+                
+        sheet['B54'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['B54'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['B54'].fill = fill
+        sheet['B54'].border = border
+        sheet['B54'] = 'Visitas'
+        
+        sheet['C54'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C54'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['C54'].fill = fill
+        sheet['C54'].border = border
+        sheet['C54'] = 'Total'
+        
+        sheet['D54'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D54'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D54'].fill = fill
+        sheet['D54'].border = border
+        sheet['D54'] = 'Niños         (1d - 11a)'
+        
+        sheet['E54'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E54'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E54'].fill = fill
+        sheet['E54'].border = border
+        sheet['E54'] = 'Adolescentes (12a - 17a)'
+        
+        sheet['F54'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F54'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F54'].fill = fill
+        sheet['F54'].border = border
+        sheet['F54'] = 'Jóvenes (18a - 29a)'
+        
+        sheet['G54'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G54'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G54'].fill = fill
+        sheet['G54'].border = border
+        sheet['G54'] = 'Adultos (30a - 59a)'
+        
+        sheet['H54'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H54'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H54'].fill = fill
+        sheet['H54'].border = border
+        sheet['H54'] = 'A. Mayores (60a +)'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=55, max_row=58, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+        sheet['B55'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B55'].font = Font(name = 'Arial', size= 8)
+        sheet['B55'] ='1º Visita' 
+        
+        sheet['B56'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B56'].font = Font(name = 'Arial', size= 8)
+        sheet['B56'] ='2º Visita' 
+        
+        sheet['B57'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B57'].font = Font(name = 'Arial', size= 8)
+        sheet['B57'] ='3º Visita' 
+        
+        sheet['B58'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B58'].font = Font(name = 'Arial', size= 8)
+        sheet['B58'] ='4º a + Visitas' 
+        
+        sheet['B59'].alignment = Alignment(horizontal= "right", vertical="center")
+        sheet['B59'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B59'] ='SUB TOTAL' 
+        
+        #########################################################
+        ########## CAPACITACION AGENTES COMUNITARIOS ############
+        #########################################################
+        sheet['B61'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['B61'].font = Font(name = 'Arial', size= 8, bold = True)
+        sheet['B61'] ='CAPACITACIÓN A AGENTES COMUNITARIOS EN REHABILITACIÓN BASADA EN LA COMUNIDAD (5005155)' 
+                
+        sheet['C62'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C62'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
+        sheet['C62'].fill = fill
+        sheet['C62'].border = border
+        sheet['C62'] = '1° TALLER'
+        
+        sheet['D62'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D62'].fill = fill
+        sheet['D62'].border = border
+        sheet['D62'] = '2° TALLER'
+        
+        sheet['E62'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['E62'].fill = fill
+        sheet['E62'].border = border
+        sheet['E62'] = 'PROMSA'
+        
+        sheet['C63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['C63'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['C63'].fill = fill
+        sheet['C63'].border = border
+        sheet['C63'] = 'N°'
+        
+        sheet['D63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['D63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['D63'].fill = fill
+        sheet['D63'].border = border
+        sheet['D63'] = 'Capacitados'
+        
+        sheet['E63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E63'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
+        sheet['E63'].fill = fill
+        sheet['E63'].border = border
+        sheet['E63'] = 'N°'
+        
+        sheet['F63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['F63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['F63'].fill = fill
+        sheet['F63'].border = border
+        sheet['F63'] = 'Capacitados'
+        
+        sheet['G63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G63'].fill = fill
+        sheet['G63'].border = border
+        sheet['G63'] = 'N° '
+        
+        sheet['H63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H63'].fill = fill
+        sheet['H63'].border = border
+        sheet['H63'] = 'Capacitados'
+        
+        sheet['G63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G63'].fill = fill
+        sheet['G63'].border = border
+        sheet['G63'] = 'N°'
+        
+        sheet['H63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['H63'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['H63'].fill = fill
+        sheet['H63'].border = border
+        sheet['H63'] = 'Capacitados'
+        
+        #borde plomo
+        for row in sheet.iter_rows(min_row=55, max_row=58, min_col=2, max_col=8):
+            for cell in row:
+                # Aplicar estilos de alineación a cada celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")
+                cell.border = borde_plomo
+        
+        #############################################################################
+        #############################################################################                
+        # cambina celdas
+        sheet.merge_cells('C6:D6')
+        sheet.merge_cells('C7:D7')
+        
+        # Definir ubicaciones específicas para cada columna y su suma total
+        columnas_ubicaciones = {
+            'RED': 'D10',
+            'DIS_1': 'D16', 
+            'DIS_2': 'E16',
+            'DIS_3': 'F16',
+            'DIS_4': 'G16',
+            'DIS_5': 'H16',
+            'DIS_6': 'D17',
+            'DIS_7': 'E17',
+            'DIS_8': 'F17',
+            'DIS_9': 'G17',
+            'DIS_10': 'H17',
+            'DIS_11': 'D18',
+            'DIS_12': 'E18',
+            'DIS_13': 'F18',
+            'DIS_14': 'G18',
+            'DIS_15': 'H18',
+            'DIS_16': 'D19',
+            'DIS_17': 'E19',
+            'DIS_18': 'F19',
+            'DIS_19': 'G19',
+            'DIS_20': 'H19',
+            'DIS_21': 'D20',
+            'DIS_22': 'E20',
+            'DIS_23': 'F20',
+            'DIS_24': 'G20',
+            'DIS_25': 'H20',
+            'DIS_26': 'D21',
+            'DIS_27': 'E21',
+            'DIS_28': 'F21',
+            'DIS_29': 'G21',
+            'DIS_30': 'H21',
+            'DIS_31': 'D22',
+            'DIS_32': 'E22',
+            'DIS_33': 'F22',
+            'DIS_34': 'G22',
+            'DIS_35': 'H22',
+            'DIS_36': 'D23',
+            'DIS_37': 'E23',
+            'DIS_38': 'F23',
+            'DIS_39': 'G23',
+            'DIS_40': 'H23',
+            'DIS_41': 'D24',
+            'DIS_42': 'E24',
+            'DIS_43': 'F24',
+            'DIS_44': 'G24',
+            'DIS_45': 'H24',
+            'DIS_46': 'D25',
+            'DIS_47': 'E25',
+            'DIS_48': 'F25',
+            'DIS_49': 'G25',
+            'DIS_50': 'H25',
+            'DIS_51': 'D26',
+            'DIS_52': 'E26',
+            'DIS_53': 'F26',
+            'DIS_54': 'G26',
+            'DIS_55': 'H26',
+            'DIS_56': 'D27',
+            'DIS_57': 'E27',
+            'DIS_58': 'F27',
+            'DIS_59': 'G27',
+            'DIS_60': 'H27',           
+        }
+        
+        # Definir ubicaciones específicas para cada columna y su suma total
+        col_ubi_sensorial = {    
+            'RED': 'D10',
+            'DIS_61': 'D32',
+            'DIS_62': 'E32',
+            'DIS_63': 'F32',
+            'DIS_64': 'G32',
+            'DIS_65': 'H32',
+            'DIS_66': 'D33',
+            'DIS_67': 'E33',
+            'DIS_68': 'F33',
+            'DIS_69': 'G33',
+            'DIS_70': 'H33',
+            'DIS_71': 'D34',
+            'DIS_72': 'E34',
+            'DIS_73': 'F34',
+            'DIS_74': 'G34',
+            'DIS_75': 'H34',
+            'DIS_76': 'D35',
+            'DIS_77': 'E35',
+            'DIS_78': 'F35',
+            'DIS_79': 'G35',
+            'DIS_80': 'H35',
+            'DIS_81': 'D36',
+            'DIS_82': 'E36',
+            'DIS_83': 'F36',
+            'DIS_84': 'G36',
+            'DIS_85': 'H36',
+            'DIS_86': 'D41',
+            'DIS_87': 'E41',
+            'DIS_88': 'F41',
+            'DIS_89': 'G41',
+            'DIS_90': 'H41',
+            'DIS_91': 'D42',
+            'DIS_92': 'E42',
+            'DIS_93': 'F42',
+            'DIS_94': 'G42',
+            'DIS_95': 'H42',
+            'DIS_96': 'D43',
+            'DIS_97': 'E43',
+            'DIS_98': 'F43',
+            'DIS_99': 'G43',
+            'DIS_100': 'H43',
+            'DIS_101': 'D44',
+            'DIS_102': 'E44',
+            'DIS_103': 'F44',
+            'DIS_104': 'G44',
+            'DIS_105': 'H44'
+        }
+        
+        # Definir ubicaciones específicas para cada columna y su suma total
+        col_ubi_certificado = {    
+            'PROVINCIA': 'D10',
+            'DIS_106': 'D49',
+            'DIS_107': 'E49',
+            'DIS_108': 'F49',
+            'DIS_109': 'G49',
+            'DIS_110': 'H49',
+            'DIS_111': 'D50',
+            'DIS_112': 'E50',
+            'DIS_113': 'F50',
+            'DIS_114': 'G50',
+            'DIS_115': 'H50'
+        }
+        
+        # Definir ubicaciones específicas para cada columna y su suma total
+        col_ubi_rbc = {    
+            'PROVINCIA': 'D10',
+            'DIS_116': 'D55',
+            'DIS_117': 'E55',
+            'DIS_118': 'F55',
+            'DIS_119': 'G55',
+            'DIS_120': 'H55',
+            'DIS_121': 'D56',
+            'DIS_122': 'E56',
+            'DIS_123': 'F56',
+            'DIS_124': 'G56',
+            'DIS_125': 'H56',
+            'DIS_126': 'D57',
+            'DIS_127': 'E57',
+            'DIS_128': 'F57',
+            'DIS_129': 'G57',
+            'DIS_130': 'H57',
+            'DIS_131': 'D58',
+            'DIS_132': 'E58',
+            'DIS_133': 'F58',
+            'DIS_134': 'G58',
+            'DIS_135': 'H58'
+        }
+        
+        # Inicializar diccionario para almacenar sumas por columna
+        column_sums = {
+            'DIS_1': 0,
+            'DIS_2': 0,
+            'DIS_3': 0,
+            'DIS_4': 0,
+            'DIS_5': 0,
+            'DIS_6': 0,
+            'DIS_7': 0,
+            'DIS_8': 0,
+            'DIS_9': 0,
+            'DIS_10': 0,
+            'DIS_11': 0,
+            'DIS_12': 0,
+            'DIS_13': 0,
+            'DIS_14': 0,
+            'DIS_15': 0,
+            'DIS_16': 0,
+            'DIS_17': 0,
+            'DIS_18': 0,
+            'DIS_19': 0,
+            'DIS_20': 0,
+            'DIS_21': 0,
+            'DIS_22': 0,
+            'DIS_23': 0,
+            'DIS_24': 0,
+            'DIS_25': 0,
+            'DIS_26': 0,
+            'DIS_27': 0,
+            'DIS_28': 0,
+            'DIS_29': 0,
+            'DIS_30': 0,
+            'DIS_31': 0,
+            'DIS_32': 0,
+            'DIS_33': 0,
+            'DIS_34': 0,
+            'DIS_35': 0,
+            'DIS_36': 0,
+            'DIS_37': 0,
+            'DIS_38': 0,
+            'DIS_39': 0,
+            'DIS_40': 0,
+            'DIS_41': 0,
+            'DIS_42': 0,
+            'DIS_43': 0,
+            'DIS_44': 0,
+            'DIS_45': 0,
+            'DIS_46': 0,
+            'DIS_47': 0,
+            'DIS_48': 0,
+            'DIS_49': 0,
+            'DIS_50': 0,
+            'DIS_51': 0,
+            'DIS_52': 0,
+            'DIS_53': 0,
+            'DIS_54': 0,
+            'DIS_55': 0,
+            'DIS_56': 0,
+            'DIS_57': 0,
+            'DIS_58': 0,
+            'DIS_59': 0,
+            'DIS_60': 0,
+        }
+        # Inicializar diccionario para almacenar sumas por columna
+        col_sum_sensorial = {       
+            'DIS_61': 0,
+            'DIS_62': 0,
+            'DIS_63': 0,
+            'DIS_64': 0,
+            'DIS_65': 0,
+            'DIS_66': 0,
+            'DIS_67': 0,
+            'DIS_68': 0,
+            'DIS_69': 0,
+            'DIS_70': 0,
+            'DIS_71': 0,
+            'DIS_72': 0,
+            'DIS_73': 0,
+            'DIS_74': 0,
+            'DIS_75': 0,
+            'DIS_76': 0,
+            'DIS_77': 0,
+            'DIS_78': 0,
+            'DIS_79': 0,
+            'DIS_80': 0,
+            'DIS_81': 0,
+            'DIS_82': 0,
+            'DIS_83': 0,
+            'DIS_84': 0,
+            'DIS_85': 0,
+            'DIS_86': 0,
+            'DIS_87': 0,
+            'DIS_88': 0,
+            'DIS_89': 0,
+            'DIS_90': 0,
+            'DIS_91': 0,
+            'DIS_92': 0,
+            'DIS_93': 0,
+            'DIS_94': 0,
+            'DIS_95': 0,
+            'DIS_96': 0,
+            'DIS_97': 0,
+            'DIS_98': 0,
+            'DIS_99': 0,
+            'DIS_100': 0,
+            'DIS_101': 0,
+            'DIS_102': 0,
+            'DIS_103': 0,
+            'DIS_104': 0,
+            'DIS_105': 0
+        }      
+        # Inicializar diccionario para almacenar sumas por columna
+        col_sum_certificado = {       
+            'DIS_106': 0,
+            'DIS_107': 0,
+            'DIS_108': 0,
+            'DIS_109': 0,
+            'DIS_110': 0,
+            'DIS_111': 0,
+            'DIS_112': 0,
+            'DIS_113': 0,
+            'DIS_114': 0,
+            'DIS_115': 0
+        }  
+        # Inicializar diccionario para almacenar sumas por columna
+        col_sum_rbc = {       
+            'DIS_116': 0,
+            'DIS_117': 0,
+            'DIS_118': 0,
+            'DIS_119': 0,
+            'DIS_120': 0,
+            'DIS_121': 0,
+            'DIS_122': 0,
+            'DIS_123': 0,
+            'DIS_124': 0,
+            'DIS_125': 0,
+            'DIS_126': 0,
+            'DIS_127': 0,
+            'DIS_128': 0,
+            'DIS_129': 0,
+            'DIS_130': 0,
+            'DIS_131': 0,
+            'DIS_132': 0,
+            'DIS_133': 0,
+            'DIS_134': 0,
+            'DIS_135': 0
+        }             
+        ############################
+        ###  DISCAPACIDAD FISICA ###
+        ############################
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_red:
+            for col_name in column_sums:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(columnas_ubicaciones.keys()).index(col_name) + 1
+                    column_sums[col_name] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila: {row}")                        
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_name, total_cell in columnas_ubicaciones.items():
+            if col_name in column_sums:
+                # Obtener la celda correspondiente según la ubicación
+                cell = sheet[total_cell]
+                # Asignar el valor de la suma a la celda
+                cell.value = column_sums[col_name]
+                # Aplicar formato a la celda
+                cell.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+        # Sumar los valores del diccionario      
+        total_sum_cat_1 =  sum([column_sums['DIS_1'], column_sums['DIS_2'], column_sums['DIS_3'],column_sums['DIS_4'],column_sums['DIS_5']])
+        total_sum_cat_2 =  sum([column_sums['DIS_6'], column_sums['DIS_7'], column_sums['DIS_8'],column_sums['DIS_9'],column_sums['DIS_10']])
+        total_sum_cat_3 =  sum([column_sums['DIS_11'], column_sums['DIS_12'], column_sums['DIS_13'],column_sums['DIS_14'],column_sums['DIS_15']])
+        total_sum_cat_4 =  sum([column_sums['DIS_16'], column_sums['DIS_17'], column_sums['DIS_18'],column_sums['DIS_19'],column_sums['DIS_20']])
+        total_sum_cat_5 =  sum([column_sums['DIS_21'], column_sums['DIS_22'], column_sums['DIS_23'],column_sums['DIS_24'],column_sums['DIS_25']])
+        total_sum_cat_6 =  sum([column_sums['DIS_26'], column_sums['DIS_27'], column_sums['DIS_28'],column_sums['DIS_29'],column_sums['DIS_30']])
+        total_sum_cat_7 =  sum([column_sums['DIS_31'], column_sums['DIS_32'], column_sums['DIS_33'],column_sums['DIS_34'],column_sums['DIS_35']])
+        total_sum_cat_8 =  sum([column_sums['DIS_36'], column_sums['DIS_37'], column_sums['DIS_38'],column_sums['DIS_39'],column_sums['DIS_40']])
+        total_sum_cat_9 =  sum([column_sums['DIS_41'], column_sums['DIS_42'], column_sums['DIS_43'],column_sums['DIS_44'],column_sums['DIS_45']])
+        total_sum_cat_10 =  sum([column_sums['DIS_46'], column_sums['DIS_47'], column_sums['DIS_48'],column_sums['DIS_49'],column_sums['DIS_50']])
+        total_sum_cat_11 =  sum([column_sums['DIS_51'], column_sums['DIS_52'], column_sums['DIS_53'],column_sums['DIS_54'],column_sums['DIS_55']])
+        total_sum_cat_12 =  sum([column_sums['DIS_56'], column_sums['DIS_57'], column_sums['DIS_58'],column_sums['DIS_59'],column_sums['DIS_60']])
+
+        sheet['C16'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C16'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C16'] = total_sum_cat_1     
+        
+        sheet['C17'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C17'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C17'] = total_sum_cat_2 
+        
+        sheet['C18'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C18'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C18'] = total_sum_cat_3    
+        
+        sheet['C19'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C19'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C19'] = total_sum_cat_4    
+        
+        sheet['C20'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C20'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C20'] = total_sum_cat_5    
+        
+        sheet['C21'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C21'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C21'] = total_sum_cat_6    
+        
+        sheet['C22'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C22'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C22'] = total_sum_cat_7    
+        
+        sheet['C23'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C23'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C23'] = total_sum_cat_8    
+        
+        sheet['C24'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C24'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C24'] = total_sum_cat_9    
+        
+        sheet['C25'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C25'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C25'] = total_sum_cat_10 
+        
+        sheet['C26'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C26'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C26'] = total_sum_cat_11
+        
+        sheet['C27'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C27'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C27'] = total_sum_cat_12           
+       
+        # Sumar los valores del VERTICAL      
+        total_sum_cat_vertical_1 =  sum([column_sums['DIS_1'],column_sums['DIS_6'],column_sums['DIS_11'],column_sums['DIS_16'],column_sums['DIS_21'],column_sums['DIS_26'],column_sums['DIS_31'],column_sums['DIS_36'],column_sums['DIS_41'],column_sums['DIS_46'],column_sums['DIS_51'],column_sums['DIS_56']])
+        total_sum_cat_vertical_2 =  sum([column_sums['DIS_2'],column_sums['DIS_7'],column_sums['DIS_12'],column_sums['DIS_17'],column_sums['DIS_22'],column_sums['DIS_27'],column_sums['DIS_32'],column_sums['DIS_37'],column_sums['DIS_42'],column_sums['DIS_47'],column_sums['DIS_52'],column_sums['DIS_57']])
+        total_sum_cat_vertical_3 =  sum([column_sums['DIS_3'],column_sums['DIS_8'], column_sums['DIS_13'],column_sums['DIS_18'],column_sums['DIS_23'],column_sums['DIS_28'],column_sums['DIS_33'],column_sums['DIS_38'],column_sums['DIS_43'],column_sums['DIS_48'],column_sums['DIS_53'],column_sums['DIS_58']])
+        total_sum_cat_vertical_4 =  sum([column_sums['DIS_4'],column_sums['DIS_9'],column_sums['DIS_14'],column_sums['DIS_19'],column_sums['DIS_24'],column_sums['DIS_29'],column_sums['DIS_34'],column_sums['DIS_39'],column_sums['DIS_44'],column_sums['DIS_49'],column_sums['DIS_54'],column_sums['DIS_59']])
+        total_sum_cat_vertical_5 =  sum([column_sums['DIS_5'],column_sums['DIS_10'],column_sums['DIS_15'],column_sums['DIS_20'],column_sums['DIS_25'],column_sums['DIS_30'],column_sums['DIS_35'],column_sums['DIS_40'],column_sums['DIS_45'],column_sums['DIS_50'],column_sums['DIS_55'],column_sums['DIS_60']])
+
+        sheet['D28'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D28'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D28'] = total_sum_cat_vertical_1     
+        
+        sheet['E28'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E28'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E28'] = total_sum_cat_vertical_2 
+        
+        sheet['F28'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F28'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F28'] = total_sum_cat_vertical_3    
+        
+        sheet['G28'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G28'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G28'] = total_sum_cat_vertical_4    
+        
+        sheet['H28'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H28'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H28'] = total_sum_cat_vertical_5    
+        ##########################################################################
+        ###############################
+        ###  DISCAPACIDAD SENSORIAL ###
+        ###############################
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_dist_sensorial:
+            for col_sensorial in col_sum_sensorial:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_sensorial.keys()).index(col_sensorial)
+                    col_sum_sensorial[col_sensorial] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+        
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_sensorial, total_cell_sensorial in col_ubi_sensorial.items():
+            if col_sensorial in col_sum_sensorial:
+                # Obtener la celda correspondiente según la ubicación
+                cell_sensorial = sheet[total_cell_sensorial]
+                # Asignar el valor de la suma a la celda
+                cell_sensorial.value = col_sum_sensorial[col_sensorial]
+                # Aplicar formato a la celda
+                cell_sensorial.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_sensorial.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_sensorial.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+        # Sumar los valores del diccionario      
+        t_sum_cat_1 =  sum([col_sum_sensorial['DIS_61'], col_sum_sensorial['DIS_62'], col_sum_sensorial['DIS_63'], col_sum_sensorial['DIS_64'], col_sum_sensorial['DIS_65']])
+        t_sum_cat_2 =  sum([col_sum_sensorial['DIS_66'], col_sum_sensorial['DIS_67'], col_sum_sensorial['DIS_68'], col_sum_sensorial['DIS_69'], col_sum_sensorial['DIS_70']])
+        t_sum_cat_3 =  sum([col_sum_sensorial['DIS_71'], col_sum_sensorial['DIS_72'], col_sum_sensorial['DIS_73'], col_sum_sensorial['DIS_74'], col_sum_sensorial['DIS_75']])
+        t_sum_cat_4 =  sum([col_sum_sensorial['DIS_76'], col_sum_sensorial['DIS_77'], col_sum_sensorial['DIS_78'], col_sum_sensorial['DIS_79'], col_sum_sensorial['DIS_70']])
+        t_sum_cat_5 =  sum([col_sum_sensorial['DIS_81'], col_sum_sensorial['DIS_82'], col_sum_sensorial['DIS_83'], col_sum_sensorial['DIS_84'], col_sum_sensorial['DIS_85']])
+        t_sum_cat_6 =  sum([col_sum_sensorial['DIS_86'], col_sum_sensorial['DIS_87'], col_sum_sensorial['DIS_88'], col_sum_sensorial['DIS_89'], col_sum_sensorial['DIS_80']])
+        t_sum_cat_7 =  sum([col_sum_sensorial['DIS_91'], col_sum_sensorial['DIS_92'], col_sum_sensorial['DIS_93'], col_sum_sensorial['DIS_94'], col_sum_sensorial['DIS_95']])
+        t_sum_cat_8 =  sum([col_sum_sensorial['DIS_96'], col_sum_sensorial['DIS_97'], col_sum_sensorial['DIS_98'], col_sum_sensorial['DIS_99'], col_sum_sensorial['DIS_90']])
+        t_sum_cat_9 =  sum([col_sum_sensorial['DIS_101'],col_sum_sensorial['DIS_102'],col_sum_sensorial['DIS_103'],col_sum_sensorial['DIS_104'],col_sum_sensorial['DIS_105']])
+
+        sheet['C32'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C32'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C32'] = t_sum_cat_1     
+        
+        sheet['C33'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C33'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C33'] = t_sum_cat_2 
+        
+        sheet['C34'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C34'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C34'] = t_sum_cat_3    
+        
+        sheet['C35'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C35'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C35'] = t_sum_cat_4    
+        
+        sheet['C36'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C36'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C36'] = t_sum_cat_5    
+        
+        sheet['C41'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C41'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C41'] = t_sum_cat_6    
+        
+        sheet['C42'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C42'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C42'] = t_sum_cat_7    
+        
+        sheet['C43'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C43'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C43'] = t_sum_cat_8    
+        
+        sheet['C44'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C44'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C44'] = t_sum_cat_9    
+                 
+        # Sumar los valores del VERTICAL      
+        t_sum_cat_vertical_1 =  sum([col_sum_sensorial['DIS_61'],col_sum_sensorial['DIS_66'],col_sum_sensorial['DIS_71'],col_sum_sensorial['DIS_76'],col_sum_sensorial['DIS_81']])
+        t_sum_cat_vertical_2 =  sum([col_sum_sensorial['DIS_62'],col_sum_sensorial['DIS_67'],col_sum_sensorial['DIS_72'],col_sum_sensorial['DIS_77'],col_sum_sensorial['DIS_82']])
+        t_sum_cat_vertical_3 =  sum([col_sum_sensorial['DIS_63'],col_sum_sensorial['DIS_68'],col_sum_sensorial['DIS_73'],col_sum_sensorial['DIS_78'],col_sum_sensorial['DIS_83']])
+        t_sum_cat_vertical_4 =  sum([col_sum_sensorial['DIS_64'],col_sum_sensorial['DIS_69'],col_sum_sensorial['DIS_74'],col_sum_sensorial['DIS_79'],col_sum_sensorial['DIS_84']])
+        t_sum_cat_vertical_5 =  sum([col_sum_sensorial['DIS_65'],col_sum_sensorial['DIS_70'],col_sum_sensorial['DIS_75'],col_sum_sensorial['DIS_80'],col_sum_sensorial['DIS_85']])
+        
+        t_sum_cat_vertical_6 =  sum([col_sum_sensorial['DIS_86'],col_sum_sensorial['DIS_91'],col_sum_sensorial['DIS_96'],col_sum_sensorial['DIS_101']])
+        t_sum_cat_vertical_7 =  sum([col_sum_sensorial['DIS_87'],col_sum_sensorial['DIS_92'],col_sum_sensorial['DIS_97'],col_sum_sensorial['DIS_102']])
+        t_sum_cat_vertical_8 =  sum([col_sum_sensorial['DIS_88'],col_sum_sensorial['DIS_93'],col_sum_sensorial['DIS_98'],col_sum_sensorial['DIS_103']])
+        t_sum_cat_vertical_9 =  sum([col_sum_sensorial['DIS_89'],col_sum_sensorial['DIS_94'],col_sum_sensorial['DIS_99'],col_sum_sensorial['DIS_104']])
+        t_sum_cat_vertical_10 = sum([col_sum_sensorial['DIS_90'],col_sum_sensorial['DIS_95'],col_sum_sensorial['DIS_100'],col_sum_sensorial['DIS_105']])
+
+        sheet['D37'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D37'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D37'] = t_sum_cat_vertical_1     
+        
+        sheet['E37'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E37'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E37'] = t_sum_cat_vertical_2 
+        
+        sheet['F37'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F37'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F37'] = t_sum_cat_vertical_3    
+        
+        sheet['G37'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G37'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G37'] = t_sum_cat_vertical_4    
+        
+        sheet['H37'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H37'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H37'] = t_sum_cat_vertical_5    
+        
+        sheet['D45'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D45'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D45'] = t_sum_cat_vertical_6     
+        
+        sheet['E45'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E45'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E45'] = t_sum_cat_vertical_7 
+        
+        sheet['F45'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F45'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F45'] = t_sum_cat_vertical_8    
+        
+        sheet['G45'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G45'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G45'] = t_sum_cat_vertical_9    
+        
+        sheet['H45'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H45'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H45'] = t_sum_cat_vertical_10    
+        ##########################################################################
+        
+        #################################
+        ###  DISCAPACIDAD CERTIFICADO ###
+        #################################
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_dist_certificado:
+            for col_certificado in col_sum_certificado:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_certificado.keys()).index(col_certificado)
+                    col_sum_certificado[col_certificado] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+             
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_certificado, total_cell_certificado in col_ubi_certificado.items():
+            if col_certificado in col_sum_certificado:
+                # Obtener la celda correspondiente según la ubicación
+                cell_certificado = sheet[total_cell_certificado]
+                # Asignar el valor de la suma a la celda
+                cell_certificado.value = col_sum_certificado[col_certificado]
+                # Aplicar formato a la celda
+                cell_certificado.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_certificado.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_certificado.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+                
+        # Sumar los valores del diccionario      
+        t_sum_cat_cert_1 =  sum([col_sum_certificado['DIS_106'], col_sum_certificado['DIS_107'], col_sum_certificado['DIS_108'], col_sum_certificado['DIS_109'], col_sum_certificado['DIS_110']])
+        t_sum_cat_cert_2 =  sum([col_sum_certificado['DIS_111'], col_sum_certificado['DIS_112'], col_sum_certificado['DIS_113'], col_sum_certificado['DIS_114'], col_sum_certificado['DIS_115']])
+
+        sheet['C49'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C49'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C49'] = t_sum_cat_cert_1     
+        
+        sheet['C50'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C50'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C50'] = t_sum_cat_cert_2 
+       
+        # Sumar los valores del VERTICAL      
+        t_sum_cat_vert_1 =  sum([col_sum_certificado['DIS_106'],col_sum_certificado['DIS_111']])
+        t_sum_cat_vert_2 =  sum([col_sum_certificado['DIS_107'],col_sum_certificado['DIS_112']])
+        t_sum_cat_vert_3 =  sum([col_sum_certificado['DIS_108'],col_sum_certificado['DIS_113']])
+        t_sum_cat_vert_4 =  sum([col_sum_certificado['DIS_109'],col_sum_certificado['DIS_114']])
+        t_sum_cat_vert_5 =  sum([col_sum_certificado['DIS_110'],col_sum_certificado['DIS_115']])
+        
+        sheet['D51'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D51'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D51'] = t_sum_cat_vert_1     
+        
+        sheet['E51'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E51'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E51'] = t_sum_cat_vert_2 
+        
+        sheet['F51'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F51'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F51'] = t_sum_cat_vert_3    
+        
+        sheet['G51'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G51'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G51'] = t_sum_cat_vert_4    
+        
+        sheet['H51'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H51'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H51'] = t_sum_cat_vert_5    
+        
+        #################################
+        ###  DISCAPACIDAD RBC ###########
+        #################################
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_dist_rbc:
+            for col_rbc in col_sum_rbc:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_rbc.keys()).index(col_rbc)
+                    col_sum_rbc[col_rbc] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+             
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_rbc, total_cell_rbc in col_ubi_rbc.items():
+            if col_rbc in col_sum_rbc:
+                # Obtener la celda correspondiente según la ubicación
+                cell_rbc = sheet[total_cell_rbc]
+                # Asignar el valor de la suma a la celda
+                cell_rbc.value = col_sum_rbc[col_rbc]
+                # Aplicar formato a la celda
+                cell_rbc.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_rbc.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_rbc.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+               
+                
+        # Sumar los valores del diccionario      
+        t_sum_cat_rbc_1 =  sum([col_sum_rbc['DIS_116'], col_sum_rbc['DIS_117'], col_sum_rbc['DIS_118'], col_sum_rbc['DIS_119'], col_sum_rbc['DIS_120']])
+        t_sum_cat_rbc_2 =  sum([col_sum_rbc['DIS_121'], col_sum_rbc['DIS_122'], col_sum_rbc['DIS_123'], col_sum_rbc['DIS_124'], col_sum_rbc['DIS_125']])
+        t_sum_cat_rbc_3 =  sum([col_sum_rbc['DIS_126'], col_sum_rbc['DIS_127'], col_sum_rbc['DIS_128'], col_sum_rbc['DIS_129'], col_sum_rbc['DIS_130']])
+        t_sum_cat_rbc_4 =  sum([col_sum_rbc['DIS_131'], col_sum_rbc['DIS_132'], col_sum_rbc['DIS_133'], col_sum_rbc['DIS_134'], col_sum_rbc['DIS_135']])
+
+        sheet['C55'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C55'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C55'] = t_sum_cat_rbc_1     
+        
+        sheet['C56'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C56'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C56'] = t_sum_cat_rbc_2 
+        
+        sheet['C57'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C57'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C57'] = t_sum_cat_rbc_3     
+        
+        sheet['C58'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C58'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['C58'] = t_sum_cat_rbc_4 
+       
+        # Sumar los valores del VERTICAL      
+        t_sum_vert_rbc_1 =  sum([col_sum_rbc['DIS_116'],col_sum_rbc['DIS_121'],col_sum_rbc['DIS_126'],col_sum_rbc['DIS_131']])
+        t_sum_vert_rbc_2 =  sum([col_sum_rbc['DIS_117'],col_sum_rbc['DIS_122'],col_sum_rbc['DIS_127'],col_sum_rbc['DIS_132']])
+        t_sum_vert_rbc_3 =  sum([col_sum_rbc['DIS_118'],col_sum_rbc['DIS_123'],col_sum_rbc['DIS_128'],col_sum_rbc['DIS_133']])
+        t_sum_vert_rbc_4 =  sum([col_sum_rbc['DIS_119'],col_sum_rbc['DIS_124'],col_sum_rbc['DIS_129'],col_sum_rbc['DIS_134']])
+        t_sum_vert_rbc_5 =  sum([col_sum_rbc['DIS_120'],col_sum_rbc['DIS_125'],col_sum_rbc['DIS_130'],col_sum_rbc['DIS_135']])
+        
+        sheet['D59'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D59'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D59'] = t_sum_vert_rbc_1     
+        
+        sheet['E59'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E59'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E59'] = t_sum_vert_rbc_2 
+        
+        sheet['F59'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F59'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F59'] = t_sum_vert_rbc_3    
+        
+        sheet['G59'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G59'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G59'] = t_sum_vert_rbc_4    
+        
+        sheet['H59'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H59'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H59'] = t_sum_vert_rbc_5  
+        
+        
+         
+        
+        ##########################################################################          
+        # Establecer el nombre del archivo
+        nombre_archivo = "rpt_operacional_redes.xlsx"
+
+        # Definir el tipo de respuesta que se va a dar
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        workbook.save(response)
+
+        return response
 ################################################
 # REPORTE POR MICRO-REDES
 ################################################
