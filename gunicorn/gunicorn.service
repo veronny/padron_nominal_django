@@ -6,11 +6,11 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/django-aws-ec2-nginx-gunicorn
-ExecStart=/home/ubuntu/django-aws-ec2-nginx-gunicorn/venv/bin/gunicorn \
+WorkingDirectory=/home/ubuntu/discapacidad_django
+ExecStart=/home/ubuntu/discapacidad_django/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
-          core.wsgi:application
+          config.wsgi:application
 [Install]
 WantedBy=multi-user.target

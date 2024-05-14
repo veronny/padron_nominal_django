@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     
     # app locales
     'base',
-    'discapacidad'
+    'discapacidad',
+    'whitenoise.runserver_nostatic',
 
 ]
 
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.csrf.CsrfViewMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
