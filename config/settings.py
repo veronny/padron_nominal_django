@@ -80,18 +80,26 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+#DATABASES = {
+#    "default": {
+#        "ENGINE": "mssql",
+#        "NAME": "BD_REPORTEOPERACIONALES",
+#        "USER" : "django",
+#        "PASSWORD" : "Veronny2*2*",
+#        "HOST" : "localhost",
+#        "PORT" : "",
+#        "OPTIONS" :{"driver": "ODBC Driver 17 for SQL Server"}
+#    }
+#}
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": "mssql",
-        "NAME": "BD_REPORTEOPERACIONALES",
-        "USER" : "django",
-        "PASSWORD" : "Veronny2*2*",
-        "HOST" : "localhost",
-        "PORT" : "",
-        "OPTIONS" :{"driver": "ODBC Driver 17 for SQL Server"}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        'CONN_MAX_AGE': 60,  # Tiempo de vida máximo de la conexión en segundos
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
