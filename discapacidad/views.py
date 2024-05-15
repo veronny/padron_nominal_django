@@ -996,17 +996,17 @@ class RptOperacinalProv(TemplateView):
         sheet['C62'].border = border
         sheet['C62'] = '1° TALLER'
         
-        sheet['D62'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['D62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
-        sheet['D62'].fill = fill
-        sheet['D62'].border = border
-        sheet['D62'] = '2° TALLER'
-        
-        sheet['E62'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['E62'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['E62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
         sheet['E62'].fill = fill
         sheet['E62'].border = border
-        sheet['E62'] = 'PROMSA'
+        sheet['E62'] = '2° TALLER'
+        
+        sheet['G62'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+        sheet['G62'].font = Font(name = 'Arial', size= 7, bold = True, color='FFFFFF')
+        sheet['G62'].fill = fill
+        sheet['G62'].border = border
+        sheet['G62'] = 'PROMSA'
         
         sheet['C63'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
         sheet['C63'].font = Font(name = 'Arial', size= 7, bold = True,color='FFFFFF')
@@ -1057,7 +1057,7 @@ class RptOperacinalProv(TemplateView):
         sheet['H63'] = 'Capacitados'
         
         #borde plomo
-        for row in sheet.iter_rows(min_row=55, max_row=58, min_col=2, max_col=8):
+        for row in sheet.iter_rows(min_row=64, max_row=64, min_col=3, max_col=8):
             for cell in row:
                 # Aplicar estilos de alineación a cada celda
                 cell.alignment = Alignment(horizontal="center", vertical="center")
@@ -1066,9 +1066,11 @@ class RptOperacinalProv(TemplateView):
         #############################################################################
         #############################################################################                
         # cambina celdas
-        #sheet.merge_cells('C6:D6')
-        #sheet.merge_cells('C7:D7')
-        
+        sheet.merge_cells('C6:D6')
+        sheet.merge_cells('C7:E7')
+        sheet.merge_cells('C62:D62')
+        sheet.merge_cells('E62:F62')
+        sheet.merge_cells('G62:H62')
         # Definir ubicaciones específicas para cada columna y su suma total
         columnas_ubicaciones = {
             'PROVINCIA': 'D10',
@@ -2809,7 +2811,7 @@ class RptOperacinalDist(TemplateView):
         #############################################################################                
         # cambina celdas
         sheet.merge_cells('C6:D6')
-        sheet.merge_cells('C7:D7')
+        sheet.merge_cells('C7:E7')
         
         # Definir ubicaciones específicas para cada columna y su suma total
         columnas_ubicaciones = {
@@ -4539,7 +4541,7 @@ class RptOperacinalRed(TemplateView):
         #############################################################################                
         # cambina celdas
         sheet.merge_cells('C6:D6')
-        sheet.merge_cells('C7:D7')
+        sheet.merge_cells('C7:E7')
         
         # Definir ubicaciones específicas para cada columna y su suma total
         columnas_ubicaciones = {
@@ -6294,7 +6296,7 @@ class RptOperacinalMicroRed(TemplateView):
         #############################################################################                
         # cambina celdas
         sheet.merge_cells('C6:D6')
-        sheet.merge_cells('C7:D7')
+        sheet.merge_cells('C7:E7')
         
         # Definir ubicaciones específicas para cada columna y su suma total
         columnas_ubicaciones = {
@@ -8026,7 +8028,7 @@ class RptOperacinalEstablec(TemplateView):
         #############################################################################                
         # cambina celdas
         sheet.merge_cells('C6:D6')
-        sheet.merge_cells('C7:D7')
+        sheet.merge_cells('C7:E7')
         
         # Definir ubicaciones específicas para cada columna y su suma total
         columnas_ubicaciones = {
