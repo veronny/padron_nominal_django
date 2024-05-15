@@ -41,6 +41,7 @@ def get_provincias(request,provincias_id):
                  .annotate(ubigueo_filtrado=Substr('Ubigueo_Establecimiento', 1, 4))
                  .values('Provincia','ubigueo_filtrado')
                  .distinct()
+                 .order_by('Provincia')
     )
     mes_inicio = (
                 DimPeriodo
@@ -69,543 +70,362 @@ def get_provincias(request,provincias_id):
 #--- FUNCIONES OPERACIONALES PARTES REPORTE -----------------------------------------
 def rpt_operacional_fisico(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados (
-                ubigeo_filtrado VARCHAR(4),
-                renaes VARCHAR(20),
-                dis_1 INT,
-                dis_2 INT,
-                dis_3 INT,
-                dis_4 INT,
-                dis_5 INT,
-                dis_6 INT,
-                dis_7 INT,
-                dis_8 INT,
-                dis_9 INT,
-                dis_10 INT,
-                dis_11 INT,
-                dis_12 INT,
-                dis_13 INT,
-                dis_14 INT,
-                dis_15 INT,
-                dis_16 INT,
-                dis_17 INT,
-                dis_18 INT,
-                dis_19 INT,
-                dis_20 INT,
-                dis_21 INT,
-                dis_22 INT,
-                dis_23 INT,
-                dis_24 INT,
-                dis_25 INT,
-                dis_26 INT,
-                dis_27 INT,
-                dis_28 INT,
-                dis_29 INT,
-                dis_30 INT,
-                dis_31 INT,
-                dis_32 INT,
-                dis_33 INT,
-                dis_34 INT,
-                dis_35 INT,
-                dis_36 INT,
-                dis_37 INT,
-                dis_38 INT,
-                dis_39 INT,
-                dis_40 INT,
-                dis_41 INT,
-                dis_42 INT,
-                dis_43 INT,
-                dis_44 INT,
-                dis_45 INT,
-                dis_46 INT,
-                dis_47 INT,
-                dis_48 INT,
-                dis_49 INT,
-                dis_50 INT,
-                dis_51 INT,
-                dis_52 INT,
-                dis_53 INT,
-                dis_54 INT,
-                dis_55 INT,
-                dis_56 INT,
-                dis_57 INT,
-                dis_58 INT,
-                dis_59 INT,
-                dis_60 INT,           
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_1,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_2,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_3,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_4,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_5,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_6,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_7,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_8,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_9,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_10,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_11,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_12,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_13,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_14,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_15,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_16,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_17,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_18,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_19,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_20,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_21,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_22,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_23,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_24,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_25,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_26,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_27,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_28,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_29,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_30,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_31,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_32,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_33,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_34,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_35,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_36,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_37,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_38,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_39,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_40,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_41,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_42,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_43,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_44,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_45,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_46,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_47,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_48,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_49,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_50,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_51,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_52,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_53,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_54,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_55,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_56,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_57,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_58,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_59,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_60
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4), renaes
+                SELECT
+                    SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                    renaes,                   
+                    SUM(dis_1) AS dis_1,
+                    SUM(dis_2) AS dis_2,
+                    SUM(dis_3) AS dis_3,
+                    SUM(dis_4) AS dis_4,
+                    SUM(dis_5) AS dis_5,
+                    SUM(dis_6) AS dis_6,
+                    SUM(dis_7) AS dis_7,
+                    SUM(dis_8) AS dis_8,
+                    SUM(dis_9) AS dis_9,
+                    SUM(dis_10) AS dis_10,
+                    SUM(dis_11) AS dis_11,
+                    SUM(dis_12) AS dis_12,
+                    SUM(dis_13) AS dis_13,
+                    SUM(dis_14) AS dis_14,
+                    SUM(dis_15) AS dis_15,
+                    SUM(dis_16) AS dis_16,
+                    SUM(dis_17) AS dis_17,
+                    SUM(dis_18) AS dis_18,
+                    SUM(dis_19) AS dis_19,
+                    SUM(dis_20) AS dis_20,
+                    SUM(dis_21) AS dis_21,
+                    SUM(dis_22) AS dis_22,
+                    SUM(dis_23) AS dis_23,
+                    SUM(dis_24) AS dis_24,
+                    SUM(dis_25) AS dis_25,
+                    SUM(dis_26) AS dis_26,
+                    SUM(dis_27) AS dis_27,
+                    SUM(dis_28) AS dis_28,
+                    SUM(dis_29) AS dis_29,
+                    SUM(dis_30) AS dis_30,
+                    SUM(dis_31) AS dis_31,
+                    SUM(dis_32) AS dis_32,
+                    SUM(dis_33) AS dis_33,
+                    SUM(dis_34) AS dis_34,
+                    SUM(dis_35) AS dis_35,
+                    SUM(dis_36) AS dis_36,
+                    SUM(dis_37) AS dis_37,
+                    SUM(dis_38) AS dis_38,
+                    SUM(dis_39) AS dis_39,
+                    SUM(dis_40) AS dis_40,
+                    SUM(dis_41) AS dis_41,
+                    SUM(dis_42) AS dis_42,
+                    SUM(dis_43) AS dis_43,
+                    SUM(dis_44) AS dis_44,
+                    SUM(dis_45) AS dis_45,
+                    SUM(dis_46) AS dis_46,
+                    SUM(dis_47) AS dis_47,
+                    SUM(dis_48) AS dis_48,
+                    SUM(dis_49) AS dis_49,
+                    SUM(dis_50) AS dis_50,
+                    SUM(dis_51) AS dis_51,
+                    SUM(dis_52) AS dis_52,
+                    SUM(dis_53) AS dis_53,
+                    SUM(dis_54) AS dis_54,
+                    SUM(dis_55) AS dis_55,
+                    SUM(dis_56) AS dis_56,
+                    SUM(dis_57) AS dis_57,
+                    SUM(dis_58) AS dis_58,
+                    SUM(dis_59) AS dis_59,
+                    SUM(dis_60) AS dis_60 
+                FROM (
+                    SELECT
+                        SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_1,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_2,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_3,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_4,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_5,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_6,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_7,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_8,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_9,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_10,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_11,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_12,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_13,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_14,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_15,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_16,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_17,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_18,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_19,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_20,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_21,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_22,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_23,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_24,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_25,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_26,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_27,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_28,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_29,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_30,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_31,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_32,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_33,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_34,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_35,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_36,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_37,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_38,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_39,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_40,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_41,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_42,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_43,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_44,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_45,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_46,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_47,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_48,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_49,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_50,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_51,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_52,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_53,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_54,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_55,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_56,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_57,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_58,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_59,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_60
+                    FROM TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL
+                    LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                    WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s
+                    AND TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                    GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                ) subquery
+                GROUP BY renaes, ubigeo_filtrado
         """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
 
         # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Provincia) AS nombre_provincia_ubigeo_filtrado,
-                #temp_resultados.dis_1,
-                #temp_resultados.dis_2,
-                #temp_resultados.dis_3,
-                #temp_resultados.dis_4,
-                #temp_resultados.dis_5,
-                #temp_resultados.dis_6,
-                #temp_resultados.dis_7,
-                #temp_resultados.dis_8,
-                #temp_resultados.dis_9,
-                #temp_resultados.dis_10,
-                #temp_resultados.dis_11,
-                #temp_resultados.dis_12,
-                #temp_resultados.dis_13,
-                #temp_resultados.dis_14,
-                #temp_resultados.dis_15,
-                #temp_resultados.dis_16,
-                #temp_resultados.dis_17,
-                #temp_resultados.dis_18,
-                #temp_resultados.dis_19,
-                #temp_resultados.dis_20,
-                #temp_resultados.dis_21,
-                #temp_resultados.dis_22,
-                #temp_resultados.dis_23,
-                #temp_resultados.dis_24,
-                #temp_resultados.dis_25,
-                #temp_resultados.dis_26,
-                #temp_resultados.dis_27,
-                #temp_resultados.dis_28,
-                #temp_resultados.dis_29,
-                #temp_resultados.dis_30,
-                #temp_resultados.dis_31,
-                #temp_resultados.dis_32,
-                #temp_resultados.dis_33,
-                #temp_resultados.dis_34,
-                #temp_resultados.dis_35,
-                #temp_resultados.dis_36,
-                #temp_resultados.dis_37,
-                #temp_resultados.dis_38,
-                #temp_resultados.dis_39,
-                #temp_resultados.dis_40,
-                #temp_resultados.dis_41,
-                #temp_resultados.dis_42,
-                #temp_resultados.dis_43,
-                #temp_resultados.dis_44,
-                #temp_resultados.dis_45,
-                #temp_resultados.dis_46,
-                #temp_resultados.dis_47,
-                #temp_resultados.dis_48,
-                #temp_resultados.dis_49,
-                #temp_resultados.dis_50,
-                #temp_resultados.dis_51,
-                #temp_resultados.dis_52,
-                #temp_resultados.dis_53,
-                #temp_resultados.dis_54,
-                #temp_resultados.dis_55,
-                #temp_resultados.dis_56,
-                #temp_resultados.dis_57,
-                #temp_resultados.dis_58,
-                #temp_resultados.dis_59,
-                #temp_resultados.dis_60
-            FROM #temp_resultados
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados.renaes
-        """)
-
         resultado_prov = cursor.fetchall()
-
     return resultado_prov
 
 def rpt_operacional_sensorial(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados_sensoriales (
-                ubigeo_filtrado VARCHAR(4),
-                renaes VARCHAR(20),
-                dis_61 INT,
-                dis_62 INT,
-                dis_63 INT,
-                dis_64 INT,
-                dis_65 INT,
-                dis_66 INT,
-                dis_67 INT,
-                dis_68 INT,
-                dis_69 INT,
-                dis_70 INT,
-                dis_71 INT,
-                dis_72 INT,
-                dis_73 INT,
-                dis_74 INT,
-                dis_75 INT,
-                dis_76 INT,
-                dis_77 INT,
-                dis_78 INT,
-                dis_79 INT,
-                dis_80 INT,
-                dis_81 INT,
-                dis_82 INT,
-                dis_83 INT,
-                dis_84 INT,
-                dis_85 INT,
-                dis_86 INT,
-                dis_87 INT,
-                dis_88 INT,
-                dis_89 INT,
-                dis_90 INT,
-                dis_91 INT,
-                dis_92 INT,
-                dis_93 INT,
-                dis_94 INT,
-                dis_95 INT,
-                dis_96 INT,
-                dis_97 INT,
-                dis_98 INT,
-                dis_99 INT,
-                dis_100 INT,
-                dis_101 INT,
-                dis_102 INT,
-                dis_103 INT,
-                dis_104 INT,
-                dis_105 INT           
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados_sensoriales
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_61,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_62,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_63,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_64,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_65,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_66,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_67,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_68,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_69,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_70,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_71,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_72,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_73,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_74,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_75,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_76,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_77,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_78,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_79,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_80,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_81,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_82,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_83,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_84,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_85,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_86,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_87,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_88,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_89,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_90,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_91,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_92,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_93,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_94,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_95,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_96,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_97,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_98,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_99,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_100,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_101,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_102,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_103,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_104,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_105
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4), renaes
-        """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
-
-        # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados_sensoriales.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Provincia) AS nombre_provincia_ubigeo_filtrado,
-                #temp_resultados_sensoriales.dis_61,
-                #temp_resultados_sensoriales.dis_62,
-                #temp_resultados_sensoriales.dis_63,
-                #temp_resultados_sensoriales.dis_64,
-                #temp_resultados_sensoriales.dis_65,
-                #temp_resultados_sensoriales.dis_66,
-                #temp_resultados_sensoriales.dis_67,
-                #temp_resultados_sensoriales.dis_68,
-                #temp_resultados_sensoriales.dis_69,
-                #temp_resultados_sensoriales.dis_70,
-                #temp_resultados_sensoriales.dis_71,
-                #temp_resultados_sensoriales.dis_72,
-                #temp_resultados_sensoriales.dis_73,
-                #temp_resultados_sensoriales.dis_74,
-                #temp_resultados_sensoriales.dis_75,
-                #temp_resultados_sensoriales.dis_76,
-                #temp_resultados_sensoriales.dis_77,
-                #temp_resultados_sensoriales.dis_78,
-                #temp_resultados_sensoriales.dis_79,
-                #temp_resultados_sensoriales.dis_80,
-                #temp_resultados_sensoriales.dis_81,
-                #temp_resultados_sensoriales.dis_82,
-                #temp_resultados_sensoriales.dis_83,
-                #temp_resultados_sensoriales.dis_84,
-                #temp_resultados_sensoriales.dis_85,
-                #temp_resultados_sensoriales.dis_86,
-                #temp_resultados_sensoriales.dis_87,
-                #temp_resultados_sensoriales.dis_88,
-                #temp_resultados_sensoriales.dis_89,
-                #temp_resultados_sensoriales.dis_90,
-                #temp_resultados_sensoriales.dis_91,
-                #temp_resultados_sensoriales.dis_92,
-                #temp_resultados_sensoriales.dis_93,
-                #temp_resultados_sensoriales.dis_94,
-                #temp_resultados_sensoriales.dis_95,
-                #temp_resultados_sensoriales.dis_96,
-                #temp_resultados_sensoriales.dis_97,
-                #temp_resultados_sensoriales.dis_98,
-                #temp_resultados_sensoriales.dis_99,
-                #temp_resultados_sensoriales.dis_100,
-                #temp_resultados_sensoriales.dis_101,
-                #temp_resultados_sensoriales.dis_102,
-                #temp_resultados_sensoriales.dis_103,
-                #temp_resultados_sensoriales.dis_104,
-                #temp_resultados_sensoriales.dis_105
-            FROM #temp_resultados_sensoriales
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados_sensoriales.renaes
-        """)
-
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,   
+                        SUM(dis_61) AS dis_61,
+                        SUM(dis_62) AS dis_62,
+                        SUM(dis_63) AS dis_63,
+                        SUM(dis_64) AS dis_64,
+                        SUM(dis_65) AS dis_65,
+                        SUM(dis_66) AS dis_66,
+                        SUM(dis_67) AS dis_67,
+                        SUM(dis_68) AS dis_68,
+                        SUM(dis_69) AS dis_69,
+                        SUM(dis_70) AS dis_70,
+                        SUM(dis_71) AS dis_71,
+                        SUM(dis_72) AS dis_72,
+                        SUM(dis_73) AS dis_73,
+                        SUM(dis_74) AS dis_74,
+                        SUM(dis_75) AS dis_75,
+                        SUM(dis_76) AS dis_76,
+                        SUM(dis_77) AS dis_77,
+                        SUM(dis_78) AS dis_78,
+                        SUM(dis_79) AS dis_79,
+                        SUM(dis_80) AS dis_80,
+                        SUM(dis_81) AS dis_81,
+                        SUM(dis_82) AS dis_82,
+                        SUM(dis_83) AS dis_83,
+                        SUM(dis_84) AS dis_84,
+                        SUM(dis_85) AS dis_85,
+                        SUM(dis_86) AS dis_86,
+                        SUM(dis_87) AS dis_87,
+                        SUM(dis_88) AS dis_88,
+                        SUM(dis_89) AS dis_89,
+                        SUM(dis_90) AS dis_90,
+                        SUM(dis_91) AS dis_91,
+                        SUM(dis_92) AS dis_92,
+                        SUM(dis_93) AS dis_93,
+                        SUM(dis_94) AS dis_94,
+                        SUM(dis_95) AS dis_95,
+                        SUM(dis_96) AS dis_96,
+                        SUM(dis_97) AS dis_97,
+                        SUM(dis_98) AS dis_98,
+                        SUM(dis_99) AS dis_99,
+                        SUM(dis_100) AS dis_100,
+                        SUM(dis_101) AS dis_101,
+                        SUM(dis_102) AS dis_102,
+                        SUM(dis_103) AS dis_103,
+                        SUM(dis_104) AS dis_104,
+                        SUM(dis_105) AS dis_105
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_61,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_62,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_63,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_64,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_65,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_66,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_67,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_68,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_69,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_70,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_71,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_72,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_73,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_74,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_75,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_76,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_77,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_78,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_79,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_80,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_81,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_82,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_83,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_84,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_85,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_86,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_87,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_88,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_89,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_90,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_91,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_92,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_93,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_94,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_95,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_96,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_97,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_98,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_99,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_100,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_101,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_102,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_103,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_104,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_105
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s   
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+            """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
         resultado_prov_sensorial = cursor.fetchall()
-
     return resultado_prov_sensorial
 
 def rpt_operacional_certificado(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados_certificado (
-                ubigeo_filtrado VARCHAR(4),
-                renaes VARCHAR(20),
-                dis_106 INT,
-                dis_107 INT,
-                dis_108 INT,
-                dis_109 INT,
-                dis_110 INT,
-                dis_111 INT,
-                dis_112 INT,
-                dis_113 INT,
-                dis_114 INT,
-                dis_115 INT     
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados_certificado
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_106,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_107,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_108,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_109,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_110,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_111,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_112,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_113,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_114,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_115
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4), renaes
-        """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
-
-        # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados_certificado.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Provincia) AS nombre_provincia_ubigeo_filtrado,
-                #temp_resultados_certificado.dis_106,
-                #temp_resultados_certificado.dis_107,
-                #temp_resultados_certificado.dis_108,
-                #temp_resultados_certificado.dis_109,
-                #temp_resultados_certificado.dis_110,
-                #temp_resultados_certificado.dis_111,
-                #temp_resultados_certificado.dis_112,
-                #temp_resultados_certificado.dis_113,
-                #temp_resultados_certificado.dis_114,
-                #temp_resultados_certificado.dis_115
-            FROM #temp_resultados_certificado
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados_certificado.renaes
-        """)
-
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,   
+                        SUM(dis_106) AS dis_106,
+                        SUM(dis_107) AS dis_107,
+                        SUM(dis_108) AS dis_108,
+                        SUM(dis_109) AS dis_109,
+                        SUM(dis_110) AS dis_110,
+                        SUM(dis_111) AS dis_111,
+                        SUM(dis_112) AS dis_112,
+                        SUM(dis_113) AS dis_113,
+                        SUM(dis_114) AS dis_114,
+                        SUM(dis_115) AS dis_115 
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_106,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_107,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_108,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_109,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_110,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_111,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_112,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_113,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_114,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_115
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s  
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+                    """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
         resultado_prov_certificado = cursor.fetchall()
-
     return resultado_prov_certificado
 
 def rpt_operacional_rbc(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados_rbc (
-                ubigeo_filtrado VARCHAR(4),
-                renaes VARCHAR(20),
-                dis_116 INT,
-                dis_117 INT,
-                dis_118 INT,
-                dis_119 INT,
-                dis_120 INT,
-                dis_121 INT,
-                dis_122 INT,
-                dis_123 INT,
-                dis_124 INT,
-                dis_125 INT,     
-                dis_126 INT,    
-                dis_127 INT,    
-                dis_128 INT,    
-                dis_129 INT,    
-                dis_130 INT,    
-                dis_131 INT,    
-                dis_132 INT,
-                dis_133 INT,   
-                dis_134 INT, 
-                dis_135 INT  
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados_rbc
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_116,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_117,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_118,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_119,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_120,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_121,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_122,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_123,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_124,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_125,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_126,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_127,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_128,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_129,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_130,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_131,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_132,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_133,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_134,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_135
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 4), renaes
-        """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
-
-        # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados_rbc.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Provincia) AS nombre_provincia_ubigeo_filtrado,
-                #temp_resultados_rbc.dis_116,
-                #temp_resultados_rbc.dis_117,
-                #temp_resultados_rbc.dis_118,
-                #temp_resultados_rbc.dis_119,
-                #temp_resultados_rbc.dis_120,
-                #temp_resultados_rbc.dis_121,
-                #temp_resultados_rbc.dis_122,
-                #temp_resultados_rbc.dis_123,
-                #temp_resultados_rbc.dis_124,
-                #temp_resultados_rbc.dis_125,
-                #temp_resultados_rbc.dis_126,
-                #temp_resultados_rbc.dis_127,
-                #temp_resultados_rbc.dis_128,
-                #temp_resultados_rbc.dis_129,
-                #temp_resultados_rbc.dis_130,
-                #temp_resultados_rbc.dis_131,
-                #temp_resultados_rbc.dis_132,
-                #temp_resultados_rbc.dis_133,
-                #temp_resultados_rbc.dis_134,
-                #temp_resultados_rbc.dis_135        
-            FROM #temp_resultados_rbc
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados_rbc.renaes
-        """)
-
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,     
+                        SUM(dis_116) AS dis_116,
+                        SUM(dis_117) AS dis_117,
+                        SUM(dis_118) AS dis_118,
+                        SUM(dis_119) AS dis_119,
+                        SUM(dis_120) AS dis_120,
+                        SUM(dis_121) AS dis_121,
+                        SUM(dis_122) AS dis_122,
+                        SUM(dis_123) AS dis_123,
+                        SUM(dis_124) AS dis_124,
+                        SUM(dis_125) AS dis_125,
+                        SUM(dis_126) AS dis_126,
+                        SUM(dis_127) AS dis_127,
+                        SUM(dis_128) AS dis_128,
+                        SUM(dis_129) AS dis_129,
+                        SUM(dis_130) AS dis_130,
+                        SUM(dis_131) AS dis_131,
+                        SUM(dis_132) AS dis_132,
+                        SUM(dis_133) AS dis_133,
+                        SUM(dis_134) AS dis_134,
+                        SUM(dis_135) AS dis_135 
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_116,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_117,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_118,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_119,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_120,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_121,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_122,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_123,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_124,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_125,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_126,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_127,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_128,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_129,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_130,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_131,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_132,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_133,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_134,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_135
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE MAESTRO_HIS_ESTABLECIMIENTO.codigo_unico = %s   
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+                    """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
         resultado_prov_rbc = cursor.fetchall()
-
     return resultado_prov_rbc
 
 # validar matriz
@@ -1932,6 +1752,7 @@ def get_distritos(request, distritos_id):
                  .annotate(ubigueo_filtrado=Substr('Ubigueo_Establecimiento', 1, 4))
                  .values('Provincia','ubigueo_filtrado')
                  .distinct()
+                 .order_by('Provincia')
     )
     mes_inicio = (
                 DimPeriodo
@@ -1967,7 +1788,7 @@ def p_distritos(request):
     if provincia_param:
         establecimientos = establecimientos.filter(Ubigueo_Establecimiento__startswith=provincia_param[:4])
     # Selecciona el distrito y el código Ubigueo
-    distritos = establecimientos.values('Distrito', 'Ubigueo_Establecimiento').distinct()
+    distritos = establecimientos.values('Distrito', 'Ubigueo_Establecimiento').distinct().order_by('Distrito')
     
     context = {
         'provincia': provincia_param,
@@ -1977,545 +1798,367 @@ def p_distritos(request):
 
 def rpt_operacional_fisico_dist(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados (
-                ubigeo_filtrado VARCHAR(6),
-                renaes VARCHAR(20),
-                dis_1 INT,
-                dis_2 INT,
-                dis_3 INT,
-                dis_4 INT,
-                dis_5 INT,
-                dis_6 INT,
-                dis_7 INT,
-                dis_8 INT,
-                dis_9 INT,
-                dis_10 INT,
-                dis_11 INT,
-                dis_12 INT,
-                dis_13 INT,
-                dis_14 INT,
-                dis_15 INT,
-                dis_16 INT,
-                dis_17 INT,
-                dis_18 INT,
-                dis_19 INT,
-                dis_20 INT,
-                dis_21 INT,
-                dis_22 INT,
-                dis_23 INT,
-                dis_24 INT,
-                dis_25 INT,
-                dis_26 INT,
-                dis_27 INT,
-                dis_28 INT,
-                dis_29 INT,
-                dis_30 INT,
-                dis_31 INT,
-                dis_32 INT,
-                dis_33 INT,
-                dis_34 INT,
-                dis_35 INT,
-                dis_36 INT,
-                dis_37 INT,
-                dis_38 INT,
-                dis_39 INT,
-                dis_40 INT,
-                dis_41 INT,
-                dis_42 INT,
-                dis_43 INT,
-                dis_44 INT,
-                dis_45 INT,
-                dis_46 INT,
-                dis_47 INT,
-                dis_48 INT,
-                dis_49 INT,
-                dis_50 INT,
-                dis_51 INT,
-                dis_52 INT,
-                dis_53 INT,
-                dis_54 INT,
-                dis_55 INT,
-                dis_56 INT,
-                dis_57 INT,
-                dis_58 INT,
-                dis_59 INT,
-                dis_60 INT,           
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_1,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_2,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_3,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_4,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_5,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_6,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_7,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_8,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_9,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_10,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_11,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_12,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_13,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_14,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_15,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_16,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_17,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_18,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_19,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_20,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_21,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_22,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_23,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_24,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_25,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_26,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_27,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_28,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_29,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_30,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_31,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_32,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_33,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_34,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_35,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_36,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_37,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_38,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_39,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_40,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_41,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_42,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_43,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_44,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_45,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_46,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_47,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_48,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_49,
-                SUM(CASE WHEN Categoria = 10 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_50,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_51,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_52,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_53,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_54,
-                SUM(CASE WHEN Categoria = 11 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_55,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_56,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_57,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_58,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_59,
-                SUM(CASE WHEN Categoria = 12 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_60
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6), renaes
+                SELECT
+                    SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                    renaes,                   
+                    SUM(dis_1) AS dis_1,
+                    SUM(dis_2) AS dis_2,
+                    SUM(dis_3) AS dis_3,
+                    SUM(dis_4) AS dis_4,
+                    SUM(dis_5) AS dis_5,
+                    SUM(dis_6) AS dis_6,
+                    SUM(dis_7) AS dis_7,
+                    SUM(dis_8) AS dis_8,
+                    SUM(dis_9) AS dis_9,
+                    SUM(dis_10) AS dis_10,
+                    SUM(dis_11) AS dis_11,
+                    SUM(dis_12) AS dis_12,
+                    SUM(dis_13) AS dis_13,
+                    SUM(dis_14) AS dis_14,
+                    SUM(dis_15) AS dis_15,
+                    SUM(dis_16) AS dis_16,
+                    SUM(dis_17) AS dis_17,
+                    SUM(dis_18) AS dis_18,
+                    SUM(dis_19) AS dis_19,
+                    SUM(dis_20) AS dis_20,
+                    SUM(dis_21) AS dis_21,
+                    SUM(dis_22) AS dis_22,
+                    SUM(dis_23) AS dis_23,
+                    SUM(dis_24) AS dis_24,
+                    SUM(dis_25) AS dis_25,
+                    SUM(dis_26) AS dis_26,
+                    SUM(dis_27) AS dis_27,
+                    SUM(dis_28) AS dis_28,
+                    SUM(dis_29) AS dis_29,
+                    SUM(dis_30) AS dis_30,
+                    SUM(dis_31) AS dis_31,
+                    SUM(dis_32) AS dis_32,
+                    SUM(dis_33) AS dis_33,
+                    SUM(dis_34) AS dis_34,
+                    SUM(dis_35) AS dis_35,
+                    SUM(dis_36) AS dis_36,
+                    SUM(dis_37) AS dis_37,
+                    SUM(dis_38) AS dis_38,
+                    SUM(dis_39) AS dis_39,
+                    SUM(dis_40) AS dis_40,
+                    SUM(dis_41) AS dis_41,
+                    SUM(dis_42) AS dis_42,
+                    SUM(dis_43) AS dis_43,
+                    SUM(dis_44) AS dis_44,
+                    SUM(dis_45) AS dis_45,
+                    SUM(dis_46) AS dis_46,
+                    SUM(dis_47) AS dis_47,
+                    SUM(dis_48) AS dis_48,
+                    SUM(dis_49) AS dis_49,
+                    SUM(dis_50) AS dis_50,
+                    SUM(dis_51) AS dis_51,
+                    SUM(dis_52) AS dis_52,
+                    SUM(dis_53) AS dis_53,
+                    SUM(dis_54) AS dis_54,
+                    SUM(dis_55) AS dis_55,
+                    SUM(dis_56) AS dis_56,
+                    SUM(dis_57) AS dis_57,
+                    SUM(dis_58) AS dis_58,
+                    SUM(dis_59) AS dis_59,
+                    SUM(dis_60) AS dis_60 
+                FROM (
+                    SELECT
+                        SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                        renaes,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_1,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_2,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_3,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_4,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_5,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_6,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_7,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_8,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_9,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_10,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_11,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_12,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_13,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_14,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_15,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_16,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_17,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_18,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_19,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_20,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_21,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_22,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_23,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_24,
+                        SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_25,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_26,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_27,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_28,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_29,
+                        SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_30,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_31,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_32,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_33,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_34,
+                        SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_35,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_36,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_37,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_38,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_39,
+                        SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_40,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_41,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_42,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_43,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_44,
+                        SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_45,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_46,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_47,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_48,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_49,
+                        SUM(CASE WHEN Categoria = 10 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_50,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_51,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_52,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_53,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_54,
+                        SUM(CASE WHEN Categoria = 11 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_55,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_56,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_57,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_58,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_59,
+                        SUM(CASE WHEN Categoria = 12 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_60
+                    FROM TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL
+                    LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                    WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) = %s
+                    AND TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                    GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6), renaes
+                ) subquery
+                GROUP BY renaes, ubigeo_filtrado
         """, [str(ubigeo)[:6], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
 
-        # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados.ubigeo_filtrado,'-',MAESTRO_HIS_ESTABLECIMIENTO.Distrito) AS nombre_distrito_ubigeo_filtrado,
-                #temp_resultados.dis_1,
-                #temp_resultados.dis_2,
-                #temp_resultados.dis_3,
-                #temp_resultados.dis_4,
-                #temp_resultados.dis_5,
-                #temp_resultados.dis_6,
-                #temp_resultados.dis_7,
-                #temp_resultados.dis_8,
-                #temp_resultados.dis_9,
-                #temp_resultados.dis_10,
-                #temp_resultados.dis_11,
-                #temp_resultados.dis_12,
-                #temp_resultados.dis_13,
-                #temp_resultados.dis_14,
-                #temp_resultados.dis_15,
-                #temp_resultados.dis_16,
-                #temp_resultados.dis_17,
-                #temp_resultados.dis_18,
-                #temp_resultados.dis_19,
-                #temp_resultados.dis_20,
-                #temp_resultados.dis_21,
-                #temp_resultados.dis_22,
-                #temp_resultados.dis_23,
-                #temp_resultados.dis_24,
-                #temp_resultados.dis_25,
-                #temp_resultados.dis_26,
-                #temp_resultados.dis_27,
-                #temp_resultados.dis_28,
-                #temp_resultados.dis_29,
-                #temp_resultados.dis_30,
-                #temp_resultados.dis_31,
-                #temp_resultados.dis_32,
-                #temp_resultados.dis_33,
-                #temp_resultados.dis_34,
-                #temp_resultados.dis_35,
-                #temp_resultados.dis_36,
-                #temp_resultados.dis_37,
-                #temp_resultados.dis_38,
-                #temp_resultados.dis_39,
-                #temp_resultados.dis_40,
-                #temp_resultados.dis_41,
-                #temp_resultados.dis_42,
-                #temp_resultados.dis_43,
-                #temp_resultados.dis_44,
-                #temp_resultados.dis_45,
-                #temp_resultados.dis_46,
-                #temp_resultados.dis_47,
-                #temp_resultados.dis_48,
-                #temp_resultados.dis_49,
-                #temp_resultados.dis_50,
-                #temp_resultados.dis_51,
-                #temp_resultados.dis_52,
-                #temp_resultados.dis_53,
-                #temp_resultados.dis_54,
-                #temp_resultados.dis_55,
-                #temp_resultados.dis_56,
-                #temp_resultados.dis_57,
-                #temp_resultados.dis_58,
-                #temp_resultados.dis_59,
-                #temp_resultados.dis_60
-            FROM #temp_resultados
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados.renaes
-        """)
-
         resultado_dist = cursor.fetchall()
-
     return resultado_dist
 
 def rpt_operacional_sensorial_dist(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados_sensoriales (
-                ubigeo_filtrado VARCHAR(6),
-                renaes VARCHAR(20),
-                dis_61 INT,
-                dis_62 INT,
-                dis_63 INT,
-                dis_64 INT,
-                dis_65 INT,
-                dis_66 INT,
-                dis_67 INT,
-                dis_68 INT,
-                dis_69 INT,
-                dis_70 INT,
-                dis_71 INT,
-                dis_72 INT,
-                dis_73 INT,
-                dis_74 INT,
-                dis_75 INT,
-                dis_76 INT,
-                dis_77 INT,
-                dis_78 INT,
-                dis_79 INT,
-                dis_80 INT,
-                dis_81 INT,
-                dis_82 INT,
-                dis_83 INT,
-                dis_84 INT,
-                dis_85 INT,
-                dis_86 INT,
-                dis_87 INT,
-                dis_88 INT,
-                dis_89 INT,
-                dis_90 INT,
-                dis_91 INT,
-                dis_92 INT,
-                dis_93 INT,
-                dis_94 INT,
-                dis_95 INT,
-                dis_96 INT,
-                dis_97 INT,
-                dis_98 INT,
-                dis_99 INT,
-                dis_100 INT,
-                dis_101 INT,
-                dis_102 INT,
-                dis_103 INT,
-                dis_104 INT,
-                dis_105 INT           
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados_sensoriales
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_61,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_62,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_63,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_64,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_65,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_66,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_67,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_68,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_69,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_70,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_71,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_72,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_73,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_74,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_75,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_76,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_77,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_78,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_79,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_80,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_81,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_82,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_83,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_84,
-                SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_85,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_86,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_87,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_88,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_89,
-                SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_90,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_91,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_92,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_93,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_94,
-                SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_95,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_96,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_97,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_98,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_99,
-                SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_100,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_101,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_102,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_103,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_104,
-                SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_105
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6), renaes
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                        renaes,   
+                        SUM(dis_61) AS dis_61,
+                        SUM(dis_62) AS dis_62,
+                        SUM(dis_63) AS dis_63,
+                        SUM(dis_64) AS dis_64,
+                        SUM(dis_65) AS dis_65,
+                        SUM(dis_66) AS dis_66,
+                        SUM(dis_67) AS dis_67,
+                        SUM(dis_68) AS dis_68,
+                        SUM(dis_69) AS dis_69,
+                        SUM(dis_70) AS dis_70,
+                        SUM(dis_71) AS dis_71,
+                        SUM(dis_72) AS dis_72,
+                        SUM(dis_73) AS dis_73,
+                        SUM(dis_74) AS dis_74,
+                        SUM(dis_75) AS dis_75,
+                        SUM(dis_76) AS dis_76,
+                        SUM(dis_77) AS dis_77,
+                        SUM(dis_78) AS dis_78,
+                        SUM(dis_79) AS dis_79,
+                        SUM(dis_80) AS dis_80,
+                        SUM(dis_81) AS dis_81,
+                        SUM(dis_82) AS dis_82,
+                        SUM(dis_83) AS dis_83,
+                        SUM(dis_84) AS dis_84,
+                        SUM(dis_85) AS dis_85,
+                        SUM(dis_86) AS dis_86,
+                        SUM(dis_87) AS dis_87,
+                        SUM(dis_88) AS dis_88,
+                        SUM(dis_89) AS dis_89,
+                        SUM(dis_90) AS dis_90,
+                        SUM(dis_91) AS dis_91,
+                        SUM(dis_92) AS dis_92,
+                        SUM(dis_93) AS dis_93,
+                        SUM(dis_94) AS dis_94,
+                        SUM(dis_95) AS dis_95,
+                        SUM(dis_96) AS dis_96,
+                        SUM(dis_97) AS dis_97,
+                        SUM(dis_98) AS dis_98,
+                        SUM(dis_99) AS dis_99,
+                        SUM(dis_100) AS dis_100,
+                        SUM(dis_101) AS dis_101,
+                        SUM(dis_102) AS dis_102,
+                        SUM(dis_103) AS dis_103,
+                        SUM(dis_104) AS dis_104,
+                        SUM(dis_105) AS dis_105
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_61,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_62,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_63,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_64,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_65,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_66,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_67,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_68,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_69,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_70,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_71,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_72,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_73,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_74,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_75,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_76,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_77,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_78,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_79,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_80,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_81,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_82,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_83,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_84,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_85,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_86,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_87,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_88,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_89,
+                            SUM(CASE WHEN Categoria = 6 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_90,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_91,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_92,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_93,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_94,
+                            SUM(CASE WHEN Categoria = 7 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_95,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_96,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_97,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_98,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_99,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_100,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_101,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_102,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_103,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_104,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_105
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) = %s   
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
         """, [str(ubigeo)[:6], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
 
-        # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados_sensoriales.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Distrito) AS nombre_distrito_ubigeo_filtrado,
-                #temp_resultados_sensoriales.dis_61,
-                #temp_resultados_sensoriales.dis_62,
-                #temp_resultados_sensoriales.dis_63,
-                #temp_resultados_sensoriales.dis_64,
-                #temp_resultados_sensoriales.dis_65,
-                #temp_resultados_sensoriales.dis_66,
-                #temp_resultados_sensoriales.dis_67,
-                #temp_resultados_sensoriales.dis_68,
-                #temp_resultados_sensoriales.dis_69,
-                #temp_resultados_sensoriales.dis_70,
-                #temp_resultados_sensoriales.dis_71,
-                #temp_resultados_sensoriales.dis_72,
-                #temp_resultados_sensoriales.dis_73,
-                #temp_resultados_sensoriales.dis_74,
-                #temp_resultados_sensoriales.dis_75,
-                #temp_resultados_sensoriales.dis_76,
-                #temp_resultados_sensoriales.dis_77,
-                #temp_resultados_sensoriales.dis_78,
-                #temp_resultados_sensoriales.dis_79,
-                #temp_resultados_sensoriales.dis_80,
-                #temp_resultados_sensoriales.dis_81,
-                #temp_resultados_sensoriales.dis_82,
-                #temp_resultados_sensoriales.dis_83,
-                #temp_resultados_sensoriales.dis_84,
-                #temp_resultados_sensoriales.dis_85,
-                #temp_resultados_sensoriales.dis_86,
-                #temp_resultados_sensoriales.dis_87,
-                #temp_resultados_sensoriales.dis_88,
-                #temp_resultados_sensoriales.dis_89,
-                #temp_resultados_sensoriales.dis_90,
-                #temp_resultados_sensoriales.dis_91,
-                #temp_resultados_sensoriales.dis_92,
-                #temp_resultados_sensoriales.dis_93,
-                #temp_resultados_sensoriales.dis_94,
-                #temp_resultados_sensoriales.dis_95,
-                #temp_resultados_sensoriales.dis_96,
-                #temp_resultados_sensoriales.dis_97,
-                #temp_resultados_sensoriales.dis_98,
-                #temp_resultados_sensoriales.dis_99,
-                #temp_resultados_sensoriales.dis_100,
-                #temp_resultados_sensoriales.dis_101,
-                #temp_resultados_sensoriales.dis_102,
-                #temp_resultados_sensoriales.dis_103,
-                #temp_resultados_sensoriales.dis_104,
-                #temp_resultados_sensoriales.dis_105
-            FROM #temp_resultados_sensoriales
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados_sensoriales.renaes
-        """)
-
         resultado_dist_sensorial = cursor.fetchall()
-
     return resultado_dist_sensorial
 
 def rpt_operacional_certificado_dist(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados_certificado (
-                ubigeo_filtrado VARCHAR(6),
-                renaes VARCHAR(20),
-                dis_106 INT,
-                dis_107 INT,
-                dis_108 INT,
-                dis_109 INT,
-                dis_110 INT,
-                dis_111 INT,
-                dis_112 INT,
-                dis_113 INT,
-                dis_114 INT,
-                dis_115 INT     
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados_certificado
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_106,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_107,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_108,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_109,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_110,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_111,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_112,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_113,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_114,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_115
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6), renaes
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                        renaes,   
+                        SUM(dis_106) AS dis_106,
+                        SUM(dis_107) AS dis_107,
+                        SUM(dis_108) AS dis_108,
+                        SUM(dis_109) AS dis_109,
+                        SUM(dis_110) AS dis_110,
+                        SUM(dis_111) AS dis_111,
+                        SUM(dis_112) AS dis_112,
+                        SUM(dis_113) AS dis_113,
+                        SUM(dis_114) AS dis_114,
+                        SUM(dis_115) AS dis_115 
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_106,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_107,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_108,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_109,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_110,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_111,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_112,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_113,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_114,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_115
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) = %s  
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
         """, [str(ubigeo)[:6], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
 
         # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados_certificado.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Distrito) AS nombre_provincia_ubigeo_filtrado,
-                #temp_resultados_certificado.dis_106,
-                #temp_resultados_certificado.dis_107,
-                #temp_resultados_certificado.dis_108,
-                #temp_resultados_certificado.dis_109,
-                #temp_resultados_certificado.dis_110,
-                #temp_resultados_certificado.dis_111,
-                #temp_resultados_certificado.dis_112,
-                #temp_resultados_certificado.dis_113,
-                #temp_resultados_certificado.dis_114,
-                #temp_resultados_certificado.dis_115
-            FROM #temp_resultados_certificado
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados_certificado.renaes
-        """)
-
         resultado_dist_certificado = cursor.fetchall()
-
     return resultado_dist_certificado
 
 def rpt_operacional_rbc_dist(ubigeo, fecha_inicio, fecha_fin):
     with connection.cursor() as cursor:
-        # Crear una tabla temporal
-        cursor.execute("""
-            CREATE TABLE #temp_resultados_rbc (
-                ubigeo_filtrado VARCHAR(6),
-                renaes VARCHAR(20),
-                dis_116 INT,
-                dis_117 INT,
-                dis_118 INT,
-                dis_119 INT,
-                dis_120 INT,
-                dis_121 INT,
-                dis_122 INT,
-                dis_123 INT,
-                dis_124 INT,
-                dis_125 INT,     
-                dis_126 INT,    
-                dis_127 INT,    
-                dis_128 INT,    
-                dis_129 INT,    
-                dis_130 INT,    
-                dis_131 INT,    
-                dis_132 INT,
-                dis_133 INT,   
-                dis_134 INT, 
-                dis_135 INT  
-            )
-        """)
-
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
-            INSERT INTO #temp_resultados_rbc
-            SELECT
-                SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
-                renaes,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_116,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_117,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_118,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_119,
-                SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_120,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_121,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_122,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_123,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_124,
-                SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_125,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_126,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_127,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_128,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_129,
-                SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_130,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_131,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_132,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_133,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_134,
-                SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_135
-            FROM TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL
-            WHERE SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6) = %s
-                AND periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-            GROUP BY SUBSTRING(CAST(ubigeo AS VARCHAR(10)), 1, 6), renaes
+                SELECT
+                    SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                    renaes,     
+                    SUM(dis_116) AS dis_116,
+                    SUM(dis_117) AS dis_117,
+                    SUM(dis_118) AS dis_118,
+                    SUM(dis_119) AS dis_119,
+                    SUM(dis_120) AS dis_120,
+                    SUM(dis_121) AS dis_121,
+                    SUM(dis_122) AS dis_122,
+                    SUM(dis_123) AS dis_123,
+                    SUM(dis_124) AS dis_124,
+                    SUM(dis_125) AS dis_125,
+                    SUM(dis_126) AS dis_126,
+                    SUM(dis_127) AS dis_127,
+                    SUM(dis_128) AS dis_128,
+                    SUM(dis_129) AS dis_129,
+                    SUM(dis_130) AS dis_130,
+                    SUM(dis_131) AS dis_131,
+                    SUM(dis_132) AS dis_132,
+                    SUM(dis_133) AS dis_133,
+                    SUM(dis_134) AS dis_134,
+                    SUM(dis_135) AS dis_135 
+                FROM (
+                    SELECT
+                        SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6) AS ubigeo_filtrado,
+                        renaes,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_116,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_117,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_118,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_119,
+                        SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_120,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_121,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_122,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_123,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_124,
+                        SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_125,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_126,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_127,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_128,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_129,
+                        SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_130,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_131,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_132,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_133,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_134,
+                        SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_135
+                    FROM TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL
+                    LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                    WHERE MAESTRO_HIS_ESTABLECIMIENTO.codigo_unico = %s   
+                    AND TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                    GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 6), renaes
+                ) subquery
+                GROUP BY renaes, ubigeo_filtrado
         """, [str(ubigeo)[:6], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
 
         # Consultar los resultados finales desde la tabla temporal
-        cursor.execute("""
-            SELECT
-                CONCAT(#temp_resultados_rbc.ubigeo_filtrado, '-',MAESTRO_HIS_ESTABLECIMIENTO.Distrito) AS nombre_distrito_ubigeo_filtrado,
-                #temp_resultados_rbc.dis_116,
-                #temp_resultados_rbc.dis_117,
-                #temp_resultados_rbc.dis_118,
-                #temp_resultados_rbc.dis_119,
-                #temp_resultados_rbc.dis_120,
-                #temp_resultados_rbc.dis_121,
-                #temp_resultados_rbc.dis_122,
-                #temp_resultados_rbc.dis_123,
-                #temp_resultados_rbc.dis_124,
-                #temp_resultados_rbc.dis_125,
-                #temp_resultados_rbc.dis_126,
-                #temp_resultados_rbc.dis_127,
-                #temp_resultados_rbc.dis_128,
-                #temp_resultados_rbc.dis_129,
-                #temp_resultados_rbc.dis_130,
-                #temp_resultados_rbc.dis_131,
-                #temp_resultados_rbc.dis_132,
-                #temp_resultados_rbc.dis_133,
-                #temp_resultados_rbc.dis_134,
-                #temp_resultados_rbc.dis_135        
-            FROM #temp_resultados_rbc
-            JOIN MAESTRO_HIS_ESTABLECIMIENTO ON MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico = #temp_resultados_rbc.renaes
-        """)
-
         resultado_dist_rbc = cursor.fetchall()
-
     return resultado_dist_rbc
-
 
 class RptOperacinalDist(TemplateView):
     def get(self, request, *args, **kwargs):
