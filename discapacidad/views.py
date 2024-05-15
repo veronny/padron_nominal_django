@@ -11,7 +11,7 @@ from base.models import DimPeriodo, DimDiscapacidadEtapa, MAESTRO_HIS_ESTABLECIM
 from .models import DimDisFisicaCie,TramaBaseDiscapacidadRpt02FisicaNominal
 from django.db.models import Case, When, Value, IntegerField, Sum, OuterRef, Subquery
 from django.db.models.functions import Substr, Cast, Concat, Replace
-from django.db.models import CharField
+from django.db.models import CharField, F
 
 # report excel
 from django.http.response import HttpResponse
@@ -451,6 +451,18 @@ class RptOperacinalProv(TemplateView):
         resultado_prov_certificado = rpt_operacional_certificado(provincia, fecha_inicio, fecha_fin)
         resultado_prov_rbc = rpt_operacional_rbc(provincia, fecha_inicio, fecha_fin)
 
+        provincia_codigo = list(MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(
+            Ubigueo_Establecimiento__startswith=provincia
+        ).values_list('Provincia', flat=True).distinct())
+        
+        fecha_inicio_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_inicio
+        ).values_list('Mes', flat=True).distinct())
+        
+        fecha_fin_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_fin
+        ).values_list('Mes', flat=True).distinct())
+
         # Crear un nuevo libro de Excel
         workbook = openpyxl.Workbook()
         sheet = workbook.active
@@ -500,33 +512,39 @@ class RptOperacinalProv(TemplateView):
         
         sheet['B6'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['B6'] ='DIRESA / GERESA / DISA:'
+        sheet['B6'] ='DIRESA / GERESA / DISA'
+        
+        sheet['C6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C6'].font = Font(name = 'Arial', size= 7)
+        sheet['C6'] ='JUNIN'
 
         sheet['B7'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B7'].font = Font(name = 'Arial', size= 7, bold = True)
         sheet['B7'] ='HOSPITAL Y/O RED DE SALUD'
         
-        sheet['F6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C7'].font = Font(name = 'Arial', size= 7)
+        sheet['C7'] = provincia_codigo[0]
+        
+        sheet['E6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['E6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['E6'] ='PERIODO'
+        
+        sheet['F6'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['F6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['F6'] ='PERIODO'
+        sheet['F6'] ='MES INICIO'
         
-        sheet['G6'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G6'] ='AÑO:'
+        sheet['F7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['F7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['F7'] ='MES FIN'
         
-        sheet['G7'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G7'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G7'] ='MES:'
+        sheet['G6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G6'].font = Font(name = 'Arial', size= 8)
+        sheet['G6'] = fecha_inicio_codigo[0]
         
-        sheet['H6'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H6'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H6'].border = borde_plomo
-        sheet['H6'] = ''
-        
-        sheet['H7'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H7'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H7'].border = borde_plomo
-        sheet['H7'] = ''
+        sheet['G7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G7'].font = Font(name = 'Arial', size= 8)
+        sheet['G7'] = fecha_fin_codigo[0]
         
         sheet['B9'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['B9'].font = Font(name = 'Arial', size= 9, bold = True)
@@ -1048,8 +1066,8 @@ class RptOperacinalProv(TemplateView):
         #############################################################################
         #############################################################################                
         # cambina celdas
-        sheet.merge_cells('C6:D6')
-        sheet.merge_cells('C7:D7')
+        #sheet.merge_cells('C6:D6')
+        #sheet.merge_cells('C7:D7')
         
         # Definir ubicaciones específicas para cada columna y su suma total
         columnas_ubicaciones = {
@@ -1726,7 +1744,7 @@ class RptOperacinalProv(TemplateView):
         
         sheet['H59'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['H59'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['H59'] = t_sum_vert_rbc_5  
+        sheet['H59'] = t_sum_vert_rbc_5        
         
               
         ##########################################################################          
@@ -2174,8 +2192,17 @@ class RptOperacinalDist(TemplateView):
         resultado_dist_certificado = rpt_operacional_certificado_dist(distritos, fecha_inicio, fecha_fin)
         resultado_dist_rbc = rpt_operacional_rbc_dist(distritos, fecha_inicio, fecha_fin)
 
-        print(distritos)
-        print(resultado_dist_rbc)
+        distrito_codigo = list(MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(
+            Ubigueo_Establecimiento__startswith=distritos
+        ).values_list('Distrito', flat=True).distinct())
+        
+        fecha_inicio_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_inicio
+        ).values_list('Mes', flat=True).distinct())
+        
+        fecha_fin_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_fin
+        ).values_list('Mes', flat=True).distinct())
         
         # Crear un nuevo libro de Excel
         workbook = openpyxl.Workbook()
@@ -2226,33 +2253,39 @@ class RptOperacinalDist(TemplateView):
         
         sheet['B6'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['B6'] ='DIRESA / GERESA / DISA:'
+        sheet['B6'] ='DIRESA / GERESA / DISA'
+        
+        sheet['C6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C6'].font = Font(name = 'Arial', size= 7)
+        sheet['C6'] ='JUNIN'
 
         sheet['B7'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B7'].font = Font(name = 'Arial', size= 7, bold = True)
         sheet['B7'] ='HOSPITAL Y/O RED DE SALUD'
         
-        sheet['F6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C7'].font = Font(name = 'Arial', size= 7)
+        sheet['C7'] = distrito_codigo[0]
+        
+        sheet['E6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['E6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['E6'] ='PERIODO'
+        
+        sheet['F6'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['F6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['F6'] ='PERIODO'
+        sheet['F6'] ='MES INICIO'
         
-        sheet['G6'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G6'] ='AÑO:'
+        sheet['F7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['F7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['F7'] ='MES FIN'
         
-        sheet['G7'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G7'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G7'] ='MES:'
+        sheet['G6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G6'].font = Font(name = 'Arial', size= 8)
+        sheet['G6'] = fecha_inicio_codigo[0]
         
-        sheet['H6'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H6'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H6'].border = borde_plomo
-        sheet['H6'] = ''
-        
-        sheet['H7'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H7'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H7'].border = borde_plomo
-        sheet['H7'] = ''
+        sheet['G7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G7'].font = Font(name = 'Arial', size= 8)
+        sheet['G7'] = fecha_fin_codigo[0]
         
         sheet['B9'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['B9'].font = Font(name = 'Arial', size= 9, bold = True)
@@ -3890,6 +3923,19 @@ class RptOperacinalRed(TemplateView):
         resultado_certificado_red = rpt_operacional_certificado_red(red, fecha_inicio, fecha_fin)
         resultado_rbc_red = rpt_operacional_rbc_red(red, fecha_inicio, fecha_fin)
         
+        red_codigo = list(MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(
+            Codigo_Red=red
+        ).values_list('Red', flat=True).distinct())
+        
+        fecha_inicio_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_inicio
+        ).values_list('Mes', flat=True).distinct())
+        
+        fecha_fin_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_fin
+        ).values_list('Mes', flat=True).distinct())
+        
+        
         # Crear un nuevo libro de Excel
         workbook = openpyxl.Workbook()
         sheet = workbook.active
@@ -3939,33 +3985,39 @@ class RptOperacinalRed(TemplateView):
         
         sheet['B6'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['B6'] ='DIRESA / GERESA / DISA:'
+        sheet['B6'] ='DIRESA / GERESA / DISA'
+        
+        sheet['C6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C6'].font = Font(name = 'Arial', size= 7)
+        sheet['C6'] ='JUNIN'
 
         sheet['B7'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B7'].font = Font(name = 'Arial', size= 7, bold = True)
         sheet['B7'] ='HOSPITAL Y/O RED DE SALUD'
         
-        sheet['F6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C7'].font = Font(name = 'Arial', size= 7)
+        sheet['C7'] = red_codigo[0]
+        
+        sheet['E6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['E6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['E6'] ='PERIODO'
+        
+        sheet['F6'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['F6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['F6'] ='PERIODO'
+        sheet['F6'] ='MES INICIO'
         
-        sheet['G6'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G6'] ='AÑO:'
+        sheet['F7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['F7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['F7'] ='MES FIN'
         
-        sheet['G7'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G7'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G7'] ='MES:'
+        sheet['G6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G6'].font = Font(name = 'Arial', size= 8)
+        sheet['G6'] = fecha_inicio_codigo[0]
         
-        sheet['H6'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H6'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H6'].border = borde_plomo
-        sheet['H6'] = ''
-        
-        sheet['H7'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H7'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H7'].border = borde_plomo
-        sheet['H7'] = ''
+        sheet['G7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G7'].font = Font(name = 'Arial', size= 8)
+        sheet['G7'] = fecha_fin_codigo[0]
         
         sheet['B9'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['B9'].font = Font(name = 'Arial', size= 9, bold = True)
@@ -5626,6 +5678,19 @@ class RptOperacinalMicroRed(TemplateView):
         resultado_certificado_microred = rpt_operacional_certificado_microred(red, microred, fecha_inicio, fecha_fin)
         resultado_rbc_microred = rpt_operacional_rbc_microred(red, microred, fecha_inicio, fecha_fin)
         
+        microred_codigo = list(MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(
+            Codigo_Red=red,Codigo_MicroRed=microred
+        ).values_list('MicroRed', flat=True).distinct())
+        
+        fecha_inicio_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_inicio
+        ).values_list('Mes', flat=True).distinct())
+        
+        fecha_fin_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_fin
+        ).values_list('Mes', flat=True).distinct())
+        
+        
         # Crear un nuevo libro de Excel
         workbook = openpyxl.Workbook()
         sheet = workbook.active
@@ -5675,33 +5740,39 @@ class RptOperacinalMicroRed(TemplateView):
         
         sheet['B6'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['B6'] ='DIRESA / GERESA / DISA:'
+        sheet['B6'] ='DIRESA / GERESA / DISA'
+        
+        sheet['C6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C6'].font = Font(name = 'Arial', size= 7)
+        sheet['C6'] ='JUNIN'
 
         sheet['B7'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B7'].font = Font(name = 'Arial', size= 7, bold = True)
         sheet['B7'] ='HOSPITAL Y/O RED DE SALUD'
         
-        sheet['F6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C7'].font = Font(name = 'Arial', size= 7)
+        sheet['C7'] = microred_codigo[0]
+        
+        sheet['E6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['E6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['E6'] ='PERIODO'
+        
+        sheet['F6'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['F6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['F6'] ='PERIODO'
+        sheet['F6'] ='MES INICIO'
         
-        sheet['G6'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G6'] ='AÑO:'
+        sheet['F7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['F7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['F7'] ='MES FIN'
         
-        sheet['G7'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G7'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G7'] ='MES:'
+        sheet['G6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G6'].font = Font(name = 'Arial', size= 8)
+        sheet['G6'] = fecha_inicio_codigo[0]
         
-        sheet['H6'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H6'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H6'].border = borde_plomo
-        sheet['H6'] = ''
-        
-        sheet['H7'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H7'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H7'].border = borde_plomo
-        sheet['H7'] = ''
+        sheet['G7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G7'].font = Font(name = 'Arial', size= 8)
+        sheet['G7'] = fecha_fin_codigo[0]
         
         sheet['B9'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['B9'].font = Font(name = 'Arial', size= 9, bold = True)
@@ -7340,6 +7411,17 @@ class RptOperacinalEstablec(TemplateView):
         resultado_certificado_establec = rpt_operacional_certificado_establec(establec, fecha_inicio, fecha_fin)
         resultado_rbc_establec = rpt_operacional_rbc_establec(establec, fecha_inicio, fecha_fin)
               
+        establec_codigo = list(MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(
+            Codigo_Unico=establec
+        ).values_list('Nombre_Establecimiento', flat=True).distinct())
+        
+        fecha_inicio_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_inicio
+        ).values_list('Mes', flat=True).distinct())
+        
+        fecha_fin_codigo = list(DimPeriodo.objects.filter(
+            Periodo__startswith=fecha_fin
+        ).values_list('Mes', flat=True).distinct())
          
         # Crear un nuevo libro de Excel
         workbook = openpyxl.Workbook()
@@ -7390,33 +7472,39 @@ class RptOperacinalEstablec(TemplateView):
         
         sheet['B6'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['B6'] ='DIRESA / GERESA / DISA:'
+        sheet['B6'] ='DIRESA / GERESA / DISA'
+        
+        sheet['C6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C6'].font = Font(name = 'Arial', size= 7)
+        sheet['C6'] ='JUNIN'
 
         sheet['B7'].alignment = Alignment(horizontal= "right", vertical="center")
         sheet['B7'].font = Font(name = 'Arial', size= 7, bold = True)
         sheet['B7'] ='HOSPITAL Y/O RED DE SALUD'
         
-        sheet['F6'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['C7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['C7'].font = Font(name = 'Arial', size= 7)
+        sheet['C7'] = establec_codigo[0]
+        
+        sheet['E6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['E6'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['E6'] ='PERIODO'
+        
+        sheet['F6'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['F6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['F6'] ='PERIODO'
+        sheet['F6'] ='MES INICIO'
         
-        sheet['G6'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G6'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G6'] ='AÑO:'
+        sheet['F7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['F7'].font = Font(name = 'Arial', size= 7, bold = True)
+        sheet['F7'] ='MES FIN'
         
-        sheet['G7'].alignment = Alignment(horizontal= "right", vertical="center")
-        sheet['G7'].font = Font(name = 'Arial', size= 7, bold = True)
-        sheet['G7'] ='MES:'
+        sheet['G6'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G6'].font = Font(name = 'Arial', size= 8)
+        sheet['G6'] = fecha_inicio_codigo[0]
         
-        sheet['H6'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H6'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H6'].border = borde_plomo
-        sheet['H6'] = ''
-        
-        sheet['H7'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H7'].font = Font(name = 'Arial', size= 8, bold = True, color='FFFFFF')
-        sheet['H7'].border = borde_plomo
-        sheet['H7'] = ''
+        sheet['G7'].alignment = Alignment(horizontal= "left", vertical="center")
+        sheet['G7'].font = Font(name = 'Arial', size= 8)
+        sheet['G7'] = fecha_fin_codigo[0]
         
         sheet['B9'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['B9'].font = Font(name = 'Arial', size= 9, bold = True)
