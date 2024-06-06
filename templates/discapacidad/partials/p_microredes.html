@@ -3,6 +3,7 @@
 
     <label class="text-primary" for="p_microredes" name="p_microredes">Microred : </label>
     <select class="form-control custom-select" name="microredes" hx-trigger="change" hx-target={% url 'rpt_operacional_microred_xls' %}>
+        <option value="">--- SELECCIONAR ---</option>
         {% for m in microredes %}
         <option value="{{ m.Codigo_MicroRed }}">{{ m.MicroRed }}</option>
         {% endfor %}
