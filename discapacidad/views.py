@@ -520,7 +520,17 @@ def rpt_operacional_certificado(ubigeo, fecha_inicio, fecha_fin):
                         SUM(dis_222) AS dis_222,
                         SUM(dis_223) AS dis_223,
                         SUM(dis_224) AS dis_224,
-                        SUM(dis_225) AS dis_225 
+                        SUM(dis_225) AS dis_225,
+                        SUM(dis_226) AS dis_226,
+                        SUM(dis_227) AS dis_227,
+                        SUM(dis_228) AS dis_228,
+                        SUM(dis_229) AS dis_229,
+                        SUM(dis_230) AS dis_230,
+                        SUM(dis_231) AS dis_231,
+                        SUM(dis_232) AS dis_232,
+                        SUM(dis_233) AS dis_233,
+                        SUM(dis_234) AS dis_234,
+                        SUM(dis_235) AS dis_235
                     FROM (
                         SELECT
                             SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
@@ -534,7 +544,17 @@ def rpt_operacional_certificado(ubigeo, fecha_inicio, fecha_fin):
                             SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_222,
                             SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_223,
                             SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_224,
-                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_225
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_225,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_226,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_227,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_228,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_229,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_230,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_231,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_232,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_233,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_234,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_235
                         FROM TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL
                         LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_04_CERTIFICADO_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
                         WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s  
@@ -553,6 +573,7 @@ def rpt_operacional_rbc(ubigeo, fecha_inicio, fecha_fin):
                     SELECT
                         SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
                         renaes,     
+                        SUM(dis_242) AS dis_242,
                         SUM(dis_243) AS dis_243,
                         SUM(dis_244) AS dis_244,
                         SUM(dis_245) AS dis_245,
@@ -561,8 +582,6 @@ def rpt_operacional_rbc(ubigeo, fecha_inicio, fecha_fin):
                         SUM(dis_248) AS dis_248,
                         SUM(dis_249) AS dis_249,
                         SUM(dis_250) AS dis_250,
-                        SUM(dis_251) AS dis_251,
-                        SUM(dis_252) AS dis_252,
                         SUM(dis_251) AS dis_251,
                         SUM(dis_252) AS dis_252,
                         SUM(dis_253) AS dis_253,
@@ -578,42 +597,39 @@ def rpt_operacional_rbc(ubigeo, fecha_inicio, fecha_fin):
                         SUM(dis_263) AS dis_263, 
                         SUM(dis_264) AS dis_264, 
                         SUM(dis_265) AS dis_265, 
-                        SUM(dis_266) AS dis_266, 
-                        SUM(dis_267) AS dis_267 
+                        SUM(dis_266) AS dis_266
                     FROM (
                         SELECT
                             SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
                             renaes,
-                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_243,
-                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_244,
-                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_245,
-                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_246,
-                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_247,
-                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_248,
-                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_249,
-                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_250,
-                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_251,
-                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_252,
-                            SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_251,
-                            SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_252,
-                            SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_253,
-                            SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_254,
-                            SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_255,
-                            SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_256,
-                            SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_257,
-                            SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_258,
-                            SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_259,
-                            SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_260,
-                            SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_261,
-                            SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_262,
-                            SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_263,
-                            SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_264,
-                            SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_265,
-                            SUM(CASE WHEN Categoria = 6 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_266,
-                            SUM(CASE WHEN Categoria = 6 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_267
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_242,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_243,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_244,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_245,
+                            SUM(CASE WHEN Categoria = 1 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_246,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_247,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_248,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_249,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_250,
+                            SUM(CASE WHEN Categoria = 2 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_251,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_252,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_253,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_254,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_255,
+                            SUM(CASE WHEN Categoria = 3 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_256,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_257,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_258,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_259,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_260,
+                            SUM(CASE WHEN Categoria = 4 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_261,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_262,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_263,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_264,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_265,
+                            SUM(CASE WHEN Categoria = 5 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_266
                         FROM TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL
                         LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
-                        WHERE MAESTRO_HIS_ESTABLECIMIENTO.codigo_unico = %s   
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s     
                         AND TRAMA_BASE_DISCAPACIDAD_RPT_05_RBC_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
                         GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
                     ) subquery
@@ -621,6 +637,163 @@ def rpt_operacional_rbc(ubigeo, fecha_inicio, fecha_fin):
                     """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
         resultado_prov_rbc = cursor.fetchall()
     return resultado_prov_rbc
+
+def rpt_operacional_mental(ubigeo, fecha_inicio, fecha_fin):
+    with connection.cursor() as cursor:
+        # Insertar los datos agrupados y las sumas en la tabla temporal
+        cursor.execute("""
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,     
+                        SUM(dis_196) AS dis_196,
+                        SUM(dis_197) AS dis_197,
+                        SUM(dis_198) AS dis_198,
+                        SUM(dis_199) AS dis_199,
+                        SUM(dis_200) AS dis_200,
+                        SUM(dis_201) AS dis_201,
+                        SUM(dis_202) AS dis_202,
+                        SUM(dis_203) AS dis_203,
+                        SUM(dis_204) AS dis_204,
+                        SUM(dis_205) AS dis_205,
+                        SUM(dis_206) AS dis_206,
+                        SUM(dis_207) AS dis_207,
+                        SUM(dis_208) AS dis_208,
+                        SUM(dis_209) AS dis_209,
+                        SUM(dis_210) AS dis_210, 
+                        SUM(dis_211) AS dis_211, 
+                        SUM(dis_212) AS dis_212, 
+                        SUM(dis_213) AS dis_213, 
+                        SUM(dis_214) AS dis_214, 
+                        SUM(dis_215) AS dis_215
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_196,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_197,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_198,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_199,
+                            SUM(CASE WHEN Categoria = 8 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_200,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_201,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_202,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_203,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_204,
+                            SUM(CASE WHEN Categoria = 9 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_205,
+                            SUM(CASE WHEN Categoria = 10 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_206,
+                            SUM(CASE WHEN Categoria = 10 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_207,
+                            SUM(CASE WHEN Categoria = 10 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_208,
+                            SUM(CASE WHEN Categoria = 10 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_209,
+                            SUM(CASE WHEN Categoria = 10 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_210,
+                            SUM(CASE WHEN Categoria = 11 AND gedad = 1 THEN 1 ELSE 0 END) AS dis_211,
+                            SUM(CASE WHEN Categoria = 11 AND gedad = 2 THEN 1 ELSE 0 END) AS dis_212,
+                            SUM(CASE WHEN Categoria = 11 AND gedad = 3 THEN 1 ELSE 0 END) AS dis_213,
+                            SUM(CASE WHEN Categoria = 11 AND gedad = 4 THEN 1 ELSE 0 END) AS dis_214,
+                            SUM(CASE WHEN Categoria = 11 AND gedad = 5 THEN 1 ELSE 0 END) AS dis_215
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s     
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_03_SENSORIAL_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+                    """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
+        resultado_prov_mental = cursor.fetchall()
+    return resultado_prov_mental
+
+def rpt_operacional_capacitacion(ubigeo, fecha_inicio, fecha_fin):
+    with connection.cursor() as cursor:
+        # Insertar los datos agrupados y las sumas en la tabla temporal
+        cursor.execute("""
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,     
+                        SUM(dis_273) AS dis_273,
+                        SUM(dis_274) AS dis_274
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            COUNT(Categoria) AS dis_273,
+                            SUM(gedad) AS dis_274
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_01_CAPACITACION_MEDICINA_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_01_CAPACITACION_MEDICINA_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s     
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_01_CAPACITACION_MEDICINA_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+                    """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
+        resultado_prov_capacitacion = cursor.fetchall()
+    return resultado_prov_capacitacion
+
+def rpt_operacional_agente(ubigeo, fecha_inicio, fecha_fin):
+    with connection.cursor() as cursor:
+        # Insertar los datos agrupados y las sumas en la tabla temporal
+        cursor.execute("""
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,     
+                        SUM(dis_236) AS dis_236,
+                        SUM(dis_237) AS dis_237,
+                        SUM(dis_238) AS dis_238,
+                        SUM(dis_239) AS dis_239,
+                        SUM(dis_240) AS dis_240,
+                        SUM(dis_241) AS dis_241
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Categoria = 1 THEN 1 ELSE 0 END) 		 AS dis_236,
+                            SUM(CASE WHEN Categoria = 1 THEN gedad ELSE 0 END)   AS dis_237,
+                            SUM(CASE WHEN Categoria = 2 THEN 1 ELSE 0 END)     AS dis_238,
+                            SUM(CASE WHEN Categoria = 2 THEN gedad ELSE 0 END)   AS dis_239,
+                            SUM(CASE WHEN Categoria = 3 THEN 1 ELSE 0 END)     AS dis_240,
+                            SUM(CASE WHEN Categoria = 3 THEN gedad ELSE 0 END)   AS dis_241
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_06_CAPACITACION_AGENTE_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_06_CAPACITACION_AGENTE_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s     
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_06_CAPACITACION_AGENTE_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+                    """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
+        resultado_prov_agente = cursor.fetchall()
+    return resultado_prov_agente
+
+def rpt_operacional_comite(ubigeo, fecha_inicio, fecha_fin):
+    with connection.cursor() as cursor:
+        # Insertar los datos agrupados y las sumas en la tabla temporal
+        cursor.execute("""
+                    SELECT
+                        SUBSTRING(CAST(ubigeo_filtrado AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                        renaes,     
+                        SUM(dis_267) AS dis_267,
+                        SUM(dis_268) AS dis_268,
+                        SUM(dis_269) AS dis_269,
+                        SUM(dis_270) AS dis_270,
+                        SUM(dis_271) AS dis_271,
+                        SUM(dis_272) AS dis_272
+                    FROM (
+                        SELECT
+                            SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) AS ubigeo_filtrado,
+                            renaes,
+                            SUM(CASE WHEN Actividad = 1 THEN 1 ELSE 0 END) 		AS dis_267,
+                            SUM(CASE WHEN Actividad = 1 THEN Partic ELSE 0 END) AS dis_268,
+                            SUM(CASE WHEN Actividad = 2 THEN 1 ELSE 0 END)      AS dis_269,
+                            SUM(CASE WHEN Actividad = 2 THEN Partic ELSE 0 END) AS dis_270,
+                            SUM(CASE WHEN Actividad = 3 THEN 1 ELSE 0 END)      AS dis_271,
+                            SUM(CASE WHEN Actividad = 3 THEN Partic ELSE 0 END) AS dis_272
+                        FROM TRAMA_BASE_DISCAPACIDAD_RPT_08_PREV_TALLER_EESS_NOMINAL
+                        LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_08_PREV_TALLER_EESS_NOMINAL.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
+                        WHERE SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4) = %s     
+                        AND TRAMA_BASE_DISCAPACIDAD_RPT_08_PREV_TALLER_EESS_NOMINAL.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
+                        GROUP BY SUBSTRING(CAST(MAESTRO_HIS_ESTABLECIMIENTO.Ubigueo_Establecimiento AS VARCHAR(10)), 1, 4), renaes
+                    ) subquery
+                    GROUP BY renaes, ubigeo_filtrado
+                    """, [str(ubigeo)[:4], str(fecha_inicio) + '01', str(fecha_fin) + '31'])
+        resultado_prov_comite = cursor.fetchall()
+    return resultado_prov_comite
+
 
 # validar matriz
 def crear_matriz(request):    
@@ -643,7 +816,11 @@ class RptOperacinalProv(TemplateView):
         resultado_prov = rpt_operacional_fisico(provincia, fecha_inicio, fecha_fin)
         resultado_prov_sensorial = rpt_operacional_sensorial(provincia, fecha_inicio, fecha_fin)
         resultado_prov_certificado = rpt_operacional_certificado(provincia, fecha_inicio, fecha_fin)
-        resultado_prov_rbc = rpt_operacional_rbc(provincia, fecha_inicio, fecha_fin)
+        resultado_prov_rbc = rpt_operacional_rbc(provincia, fecha_inicio, fecha_fin)       
+        resultado_prov_mental = rpt_operacional_mental(provincia, fecha_inicio, fecha_fin)
+        resultado_prov_capacitacion = rpt_operacional_capacitacion(provincia, fecha_inicio, fecha_fin)
+        resultado_prov_agente = rpt_operacional_agente(provincia, fecha_inicio, fecha_fin)
+        resultado_prov_comite = rpt_operacional_comite(provincia, fecha_inicio, fecha_fin)
 
         provincia_codigo = list(MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(
             Ubigueo_Establecimiento__startswith=provincia
@@ -690,9 +867,9 @@ class RptOperacinalProv(TemplateView):
                         bottom=Side(style='thin', color='00B0F0'))
 
         borde_plomo = Border(left=Side(style='thin', color='A9A9A9'), # Plomo
-                right=Side(style='thin', color='A9A9A9'), # Plomo
-                top=Side(style='thin', color='A9A9A9'), # Plomo
-                bottom=Side(style='thin', color='A9A9A9')) # Plomo
+                        right=Side(style='thin', color='A9A9A9'), # Plomo
+                        top=Side(style='thin', color='A9A9A9'), # Plomo
+                        bottom=Side(style='thin', color='A9A9A9')) # Plomo
 
         # crea titulo del reporte
         sheet['B1'].alignment = Alignment(horizontal= "left", vertical="center")
@@ -1307,7 +1484,7 @@ class RptOperacinalProv(TemplateView):
         sheet['C73'].alignment = Alignment(horizontal= "left", vertical="center")
         sheet['C73'].font = Font(name = 'Arial', size= 7)
         sheet['C73'] ='Certificación' 
-        
+
         #########################################################
         ########## CAPACITACION AGENTES COMUNITARIOS ############
         #########################################################
@@ -1841,58 +2018,59 @@ class RptOperacinalProv(TemplateView):
             'DIS_235': 'I74',
         }
         
-        col_ubi_cap_personal = {    
+        col_ubi_capacitacion = {    
             'PROVINCIA': 'D10',
-            'DIS_236': 'D12',
-            'DIS_237': 'E12',
+            'DIS_273': 'D12',
+            'DIS_274': 'E12',
         }
         
-        col_ubi_cap_agente = {    
+        col_ubi_agente = {    
             'PROVINCIA': 'D10',
-            'DIS_238': 'E82',
-            'DIS_239': 'F82',
-            'DIS_240': 'G82',
-            'DIS_241': 'H82',
-            'DIS_242': 'I82',
+            'DIS_236': 'D82',
+            'DIS_237': 'E82',
+            'DIS_238': 'F82',
+            'DIS_239': 'G82',
+            'DIS_240': 'H82',
+            'DIS_241': 'I82',
         }      
         
         col_ubi_rbc = {    
             'PROVINCIA': 'D10',
-            'DIS_243': 'E86',
-            'DIS_244': 'F86',
-            'DIS_245': 'G86',
-            'DIS_246': 'H86',
-            'DIS_247': 'I86',
-            'DIS_248': 'E87',
-            'DIS_249': 'F87',
-            'DIS_250': 'G87',
-            'DIS_251': 'H87',
-            'DIS_252': 'I87',
-            'DIS_253': 'E88',
-            'DIS_254': 'F88',
-            'DIS_255': 'G88',
-            'DIS_256': 'H88',
-            'DIS_257': 'I88',
-            'DIS_258': 'E89',
-            'DIS_259': 'F89',
-            'DIS_260': 'G89',
-            'DIS_261': 'H89',
-            'DIS_262': 'I89',
-            'DIS_263': 'E90',
-            'DIS_264': 'F90',
-            'DIS_265': 'G90',
-            'DIS_266': 'H90',
-            'DIS_267': 'I90'
+            'DIS_242': 'E86',
+            'DIS_243': 'F86',
+            'DIS_244': 'G86',
+            'DIS_245': 'H86',
+            'DIS_246': 'I86',
+            'DIS_247': 'E87',
+            'DIS_248': 'F87',
+            'DIS_249': 'G87',
+            'DIS_250': 'H87',
+            'DIS_251': 'I87',
+            'DIS_252': 'E88',
+            'DIS_253': 'F88',
+            'DIS_254': 'G88',
+            'DIS_255': 'H88',
+            'DIS_256': 'I88',
+            'DIS_257': 'E89',
+            'DIS_258': 'F89',
+            'DIS_259': 'G89',
+            'DIS_260': 'H89',
+            'DIS_261': 'I89',
+            'DIS_262': 'E90',
+            'DIS_263': 'F90',
+            'DIS_264': 'G90',
+            'DIS_265': 'H90',
+            'DIS_266': 'I90'
         }
         
-        col_ubi_cap_comite = {    
+        col_ubi_comite = {    
             'PROVINCIA': 'D10',
-            'DIS_105': 'D97',
-            'DIS_106': 'E97',
-            'DIS_107': 'F97',
-            'DIS_108': 'G97',
-            'DIS_109': 'H97',
-            'DIS_110': 'I97',
+            'DIS_267': 'D97',
+            'DIS_268': 'E97',
+            'DIS_269': 'F97',
+            'DIS_270': 'G97',
+            'DIS_271': 'H97',
+            'DIS_272': 'I97',
         }
         
         # Inicializar diccionario para almacenar sumas por columna
@@ -2098,7 +2276,6 @@ class RptOperacinalProv(TemplateView):
         } 
 
         col_sum_mental = {    
-            'PROVINCIA': 'D10',
             'DIS_196': 0,
             'DIS_197': 0,
             'DIS_198': 0,
@@ -2144,21 +2321,23 @@ class RptOperacinalProv(TemplateView):
             'DIS_235': 0,
         }  
         
-        col_ubi_cap_personal = {    
-            'DIS_236': 0,
-            'DIS_237': 0,
+        col_sum_capacitacion = {    
+            'DIS_273': 0,
+            'DIS_274': 0,
         }
         
-        col_ubi_cap_agente = {    
+        col_sum_agente = {    
+            'DIS_236': 0,
+            'DIS_237': 0,
             'DIS_238': 0,
             'DIS_239': 0,
             'DIS_240': 0,
             'DIS_241': 0,
-            'DIS_242': 0,
         }      
         
         # Inicializar diccionario para almacenar sumas por columna
         col_sum_rbc = {       
+            'DIS_242': 0,
             'DIS_243': 0,
             'DIS_244': 0,
             'DIS_245': 0,
@@ -2183,16 +2362,15 @@ class RptOperacinalProv(TemplateView):
             'DIS_264': 0,
             'DIS_265': 0,
             'DIS_266': 0,
-            'DIS_267': 0
         } 
         
-        col_sum_cap_comite = {    
-            'DIS_105': 0,
-            'DIS_106': 0,
-            'DIS_107': 0,
-            'DIS_108': 0,
-            'DIS_109': 0,
-            'DIS_110': 0,
+        col_sum_comite = {    
+            'DIS_267': 0,
+            'DIS_268': 0,
+            'DIS_269': 0,
+            'DIS_270': 0,
+            'DIS_271': 0,
+            'DIS_272': 0,
         }
                     
         ############################
@@ -2252,7 +2430,6 @@ class RptOperacinalProv(TemplateView):
         total_sum_cat_30 =  sum([column_sums['DIS_146'], column_sums['DIS_147'], column_sums['DIS_148'],column_sums['DIS_149'],column_sums['DIS_150']])
         total_sum_cat_31 =  sum([column_sums['DIS_151'], column_sums['DIS_152'], column_sums['DIS_153'],column_sums['DIS_154'],column_sums['DIS_155']])
         total_sum_cat_32 =  sum([column_sums['DIS_156'], column_sums['DIS_157'], column_sums['DIS_158'],column_sums['DIS_159'],column_sums['DIS_160']])
-
 
         sheet['D16'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['D16'].font = Font(name = 'Arial', size= 9, bold = True)
@@ -2497,8 +2674,82 @@ class RptOperacinalProv(TemplateView):
         sheet['I59'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['I59'].font = Font(name = 'Arial', size= 9, bold = True)
         sheet['I59'] = t_sum_cat_vertical_5    
-
         ##########################################################################
+                
+        ###############################
+        ###  DISCAPACIDAD MENTAL ######
+        ###############################
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_prov_mental:
+            for col_mental in col_sum_mental:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_mental.keys()).index(col_mental) + 1
+                    col_sum_mental[col_mental] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+        
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_mental, total_cell_mental in col_ubi_mental.items():
+            if col_mental in col_sum_mental:
+                # Obtener la celda correspondiente según la ubicación
+                cell_mental = sheet[total_cell_mental]
+                # Asignar el valor de la suma a la celda
+                cell_mental.value = col_sum_mental[col_mental]
+                # Aplicar formato a la celda
+                cell_mental.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_mental.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_mental.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+        # Sumar los valores del diccionario      
+        t_sum_cat_1 =  sum([col_sum_mental['DIS_196'], col_sum_mental['DIS_197'], col_sum_mental['DIS_198'], col_sum_mental['DIS_199'], col_sum_mental['DIS_200']])
+        t_sum_cat_2 =  sum([col_sum_mental['DIS_201'], col_sum_mental['DIS_202'], col_sum_mental['DIS_203'], col_sum_mental['DIS_204'], col_sum_mental['DIS_205']])
+        t_sum_cat_3 =  sum([col_sum_mental['DIS_206'], col_sum_mental['DIS_207'], col_sum_mental['DIS_208'], col_sum_mental['DIS_209'], col_sum_mental['DIS_210']])
+        t_sum_cat_4 =  sum([col_sum_mental['DIS_211'], col_sum_mental['DIS_212'], col_sum_mental['DIS_213'], col_sum_mental['DIS_214'], col_sum_mental['DIS_215']])
+        
+        sheet['D63'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D63'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D63'] = t_sum_cat_1     
+        
+        sheet['D64'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D64'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D64'] = t_sum_cat_2 
+        
+        sheet['D65'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D65'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D65'] = t_sum_cat_3    
+        
+        sheet['D66'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D66'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D66'] = t_sum_cat_4    
+
+        # Sumar los valores del VERTICAL      
+        t_sum_cat_vertical_1 =  sum([col_sum_mental['DIS_196'],col_sum_mental['DIS_201'],col_sum_mental['DIS_206'],col_sum_mental['DIS_211']])
+        t_sum_cat_vertical_2 =  sum([col_sum_mental['DIS_197'],col_sum_mental['DIS_202'],col_sum_mental['DIS_207'],col_sum_mental['DIS_212']])
+        t_sum_cat_vertical_3 =  sum([col_sum_mental['DIS_198'],col_sum_mental['DIS_203'],col_sum_mental['DIS_208'],col_sum_mental['DIS_213']])
+        t_sum_cat_vertical_4 =  sum([col_sum_mental['DIS_199'],col_sum_mental['DIS_204'],col_sum_mental['DIS_209'],col_sum_mental['DIS_214']])
+        t_sum_cat_vertical_5 =  sum([col_sum_mental['DIS_200'],col_sum_mental['DIS_205'],col_sum_mental['DIS_210'],col_sum_mental['DIS_215']])
+        
+        sheet['E67'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E67'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E67'] = t_sum_cat_vertical_1     
+        
+        sheet['F67'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F67'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F67'] = t_sum_cat_vertical_2 
+        
+        sheet['G67'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G67'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G67'] = t_sum_cat_vertical_3    
+        
+        sheet['H67'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H67'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H67'] = t_sum_cat_vertical_4    
+        
+        sheet['I67'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['I67'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['I67'] = t_sum_cat_vertical_5    
+        ##########################################################################
+        
         
         #################################
         ###  DISCAPACIDAD CERTIFICADO ###
@@ -2527,52 +2778,61 @@ class RptOperacinalProv(TemplateView):
         # Sumar los valores del diccionario      
         t_sum_cat_cert_1 =  sum([col_sum_certificado['DIS_216'], col_sum_certificado['DIS_217'], col_sum_certificado['DIS_218'], col_sum_certificado['DIS_219'], col_sum_certificado['DIS_220']])
         t_sum_cat_cert_2 =  sum([col_sum_certificado['DIS_221'], col_sum_certificado['DIS_222'], col_sum_certificado['DIS_223'], col_sum_certificado['DIS_224'], col_sum_certificado['DIS_225']])
+        t_sum_cat_cert_3 =  sum([col_sum_certificado['DIS_226'], col_sum_certificado['DIS_227'], col_sum_certificado['DIS_228'], col_sum_certificado['DIS_229'], col_sum_certificado['DIS_230']])
+        t_sum_cat_cert_4 =  sum([col_sum_certificado['DIS_231'], col_sum_certificado['DIS_232'], col_sum_certificado['DIS_233'], col_sum_certificado['DIS_234'], col_sum_certificado['DIS_235']])
 
-        sheet['C169'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['C169'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['C169'] = t_sum_cat_cert_1     
+        sheet['D71'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D71'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D71'] = t_sum_cat_cert_1     
         
-        sheet['C170'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['C170'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['C170'] = t_sum_cat_cert_2 
+        sheet['D72'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D72'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D72'] = t_sum_cat_cert_2 
+        
+        sheet['D73'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D73'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D73'] = t_sum_cat_cert_3 
+        
+        sheet['D74'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D74'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D74'] = t_sum_cat_cert_4 
         
         # Sumar los valores del VERTICAL      
-        t_sum_cat_vert_1 =  sum([col_sum_certificado['DIS_216'],col_sum_certificado['DIS_221']])
-        t_sum_cat_vert_2 =  sum([col_sum_certificado['DIS_217'],col_sum_certificado['DIS_222']])
-        t_sum_cat_vert_3 =  sum([col_sum_certificado['DIS_218'],col_sum_certificado['DIS_223']])
-        t_sum_cat_vert_4 =  sum([col_sum_certificado['DIS_219'],col_sum_certificado['DIS_224']])
-        t_sum_cat_vert_5 =  sum([col_sum_certificado['DIS_220'],col_sum_certificado['DIS_225']])
+        t_sum_cat_vert_1 =  sum([col_sum_certificado['DIS_216'],col_sum_certificado['DIS_221'],col_sum_certificado['DIS_226'],col_sum_certificado['DIS_231']])
+        t_sum_cat_vert_2 =  sum([col_sum_certificado['DIS_217'],col_sum_certificado['DIS_222'],col_sum_certificado['DIS_227'],col_sum_certificado['DIS_232']])
+        t_sum_cat_vert_3 =  sum([col_sum_certificado['DIS_218'],col_sum_certificado['DIS_223'],col_sum_certificado['DIS_228'],col_sum_certificado['DIS_233']])
+        t_sum_cat_vert_4 =  sum([col_sum_certificado['DIS_219'],col_sum_certificado['DIS_224'],col_sum_certificado['DIS_229'],col_sum_certificado['DIS_234']])
+        t_sum_cat_vert_5 =  sum([col_sum_certificado['DIS_220'],col_sum_certificado['DIS_225'],col_sum_certificado['DIS_230'],col_sum_certificado['DIS_235']])
         
-        sheet['D171'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['D171'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['D171'] = t_sum_cat_vert_1     
+        sheet['E75'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E75'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E75'] = t_sum_cat_vert_1     
         
-        sheet['E171'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['E171'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['E171'] = t_sum_cat_vert_2 
+        sheet['F75'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F75'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F75'] = t_sum_cat_vert_2 
         
-        sheet['F171'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['F171'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['F171'] = t_sum_cat_vert_3    
+        sheet['G75'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G75'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G75'] = t_sum_cat_vert_3    
         
-        sheet['G171'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['G171'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['G171'] = t_sum_cat_vert_4    
+        sheet['H75'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H75'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H75'] = t_sum_cat_vert_4    
         
-        sheet['H171'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['H171'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['H171'] = t_sum_cat_vert_5    
+        sheet['I75'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['I75'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['I75'] = t_sum_cat_vert_5    
         
         #################################
         ###  DISCAPACIDAD RBC ###########
-        #################################
-        
+        #################################       
         # Procesar los datos y calcular las sumas por columna
         for row in resultado_prov_rbc:
             for col_rbc in col_sum_rbc:
                 try:
                     # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
-                    col_index = list(col_ubi_rbc.keys()).index(col_rbc)
+                    col_index = list(col_ubi_rbc.keys()).index(col_rbc) + 1
                     col_sum_rbc[col_rbc] += int(row[col_index])
                 except IndexError:
                     print(f"Error al procesar la fila sensorial: {row}")
@@ -2590,11 +2850,11 @@ class RptOperacinalProv(TemplateView):
                 cell_rbc.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
                 
         ## Sumar los valores del diccionario      
-        t_sum_cat_rbc_1 =  sum([col_sum_rbc['DIS_243'], col_sum_rbc['DIS_244'], col_sum_rbc['DIS_245'], col_sum_rbc['DIS_246'], col_sum_rbc['DIS_247']])
-        t_sum_cat_rbc_2 =  sum([col_sum_rbc['DIS_248'], col_sum_rbc['DIS_249'], col_sum_rbc['DIS_250'], col_sum_rbc['DIS_251'], col_sum_rbc['DIS_252']])
-        t_sum_cat_rbc_3 =  sum([col_sum_rbc['DIS_253'], col_sum_rbc['DIS_254'], col_sum_rbc['DIS_255'], col_sum_rbc['DIS_256'], col_sum_rbc['DIS_257']])
-        t_sum_cat_rbc_4 =  sum([col_sum_rbc['DIS_258'], col_sum_rbc['DIS_259'], col_sum_rbc['DIS_260'], col_sum_rbc['DIS_261'], col_sum_rbc['DIS_262']])
-        t_sum_cat_rbc_5 =  sum([col_sum_rbc['DIS_263'], col_sum_rbc['DIS_264'], col_sum_rbc['DIS_265'], col_sum_rbc['DIS_266'], col_sum_rbc['DIS_267']])
+        t_sum_cat_rbc_1 =  sum([col_sum_rbc['DIS_242'], col_sum_rbc['DIS_243'], col_sum_rbc['DIS_244'], col_sum_rbc['DIS_245'], col_sum_rbc['DIS_246']])
+        t_sum_cat_rbc_2 =  sum([col_sum_rbc['DIS_247'], col_sum_rbc['DIS_248'], col_sum_rbc['DIS_249'], col_sum_rbc['DIS_250'], col_sum_rbc['DIS_251']])
+        t_sum_cat_rbc_3 =  sum([col_sum_rbc['DIS_252'], col_sum_rbc['DIS_253'], col_sum_rbc['DIS_254'], col_sum_rbc['DIS_255'], col_sum_rbc['DIS_256']])
+        t_sum_cat_rbc_4 =  sum([col_sum_rbc['DIS_257'], col_sum_rbc['DIS_258'], col_sum_rbc['DIS_259'], col_sum_rbc['DIS_260'], col_sum_rbc['DIS_261']])
+        t_sum_cat_rbc_5 =  sum([col_sum_rbc['DIS_262'], col_sum_rbc['DIS_263'], col_sum_rbc['DIS_264'], col_sum_rbc['DIS_265'], col_sum_rbc['DIS_266']])
 
         sheet['D86'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['D86'].font = Font(name = 'Arial', size= 9, bold = True)
@@ -2614,38 +2874,186 @@ class RptOperacinalProv(TemplateView):
         
         sheet['D90'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['D90'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['D90'] = t_sum_cat_rbc_4 
-        
-        sheet['D90'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['D90'].font = Font(name = 'Arial', size= 9, bold = True)
         sheet['D90'] = t_sum_cat_rbc_5 
-        # Sumar los valores del VERTICAL      
-        t_sum_vert_rbc_1 =  sum([col_sum_rbc['DIS_243'],col_sum_rbc['DIS_248'],col_sum_rbc['DIS_253'],col_sum_rbc['DIS_258'],col_sum_rbc['DIS_263']])
-        t_sum_vert_rbc_2 =  sum([col_sum_rbc['DIS_244'],col_sum_rbc['DIS_249'],col_sum_rbc['DIS_254'],col_sum_rbc['DIS_259'],col_sum_rbc['DIS_264']])
-        t_sum_vert_rbc_3 =  sum([col_sum_rbc['DIS_245'],col_sum_rbc['DIS_250'],col_sum_rbc['DIS_255'],col_sum_rbc['DIS_260'],col_sum_rbc['DIS_265']])
-        t_sum_vert_rbc_4 =  sum([col_sum_rbc['DIS_246'],col_sum_rbc['DIS_251'],col_sum_rbc['DIS_256'],col_sum_rbc['DIS_261'],col_sum_rbc['DIS_266']])
-        t_sum_vert_rbc_5 =  sum([col_sum_rbc['DIS_247'],col_sum_rbc['DIS_252'],col_sum_rbc['DIS_257'],col_sum_rbc['DIS_262'],col_sum_rbc['DIS_267']])
         
-        sheet['D91'].alignment = Alignment(horizontal= "center", vertical="center")
-        sheet['D91'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['D91'] = t_sum_vert_rbc_1     
+        # Sumar los valores del VERTICAL      
+        t_sum_vert_rbc_1 =  sum([col_sum_rbc['DIS_242'],col_sum_rbc['DIS_247'],col_sum_rbc['DIS_252'],col_sum_rbc['DIS_257'],col_sum_rbc['DIS_262']])
+        t_sum_vert_rbc_2 =  sum([col_sum_rbc['DIS_243'],col_sum_rbc['DIS_248'],col_sum_rbc['DIS_253'],col_sum_rbc['DIS_258'],col_sum_rbc['DIS_263']])
+        t_sum_vert_rbc_3 =  sum([col_sum_rbc['DIS_244'],col_sum_rbc['DIS_249'],col_sum_rbc['DIS_254'],col_sum_rbc['DIS_259'],col_sum_rbc['DIS_264']])
+        t_sum_vert_rbc_4 =  sum([col_sum_rbc['DIS_245'],col_sum_rbc['DIS_250'],col_sum_rbc['DIS_255'],col_sum_rbc['DIS_260'],col_sum_rbc['DIS_265']])
+        t_sum_vert_rbc_5 =  sum([col_sum_rbc['DIS_246'],col_sum_rbc['DIS_251'],col_sum_rbc['DIS_256'],col_sum_rbc['DIS_261'],col_sum_rbc['DIS_266']])
         
         sheet['E91'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['E91'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['E91'] = t_sum_vert_rbc_2 
+        sheet['E91'] = t_sum_vert_rbc_1
         
         sheet['F91'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['F91'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['F91'] = t_sum_vert_rbc_3    
+        sheet['F91'] = t_sum_vert_rbc_2 
         
         sheet['G91'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['G91'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['G91'] = t_sum_vert_rbc_4    
+        sheet['G91'] = t_sum_vert_rbc_3    
         
         sheet['H91'].alignment = Alignment(horizontal= "center", vertical="center")
         sheet['H91'].font = Font(name = 'Arial', size= 9, bold = True)
-        sheet['H91'] = t_sum_vert_rbc_5        
-
+        sheet['H91'] = t_sum_vert_rbc_4    
+        
+        sheet['I91'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['I91'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['I91'] = t_sum_vert_rbc_5   
+        
+        #################################
+        ###  CAPACITACION PERSONAL ######
+        #################################
+        
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_prov_capacitacion:
+            for col_capacitacion in col_sum_capacitacion:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_capacitacion.keys()).index(col_capacitacion) + 1
+                    col_sum_capacitacion[col_capacitacion] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+        
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_capacitacion, total_cell_capacitacion in col_ubi_capacitacion.items():
+            if col_capacitacion in col_sum_capacitacion:
+                # Obtener la celda correspondiente según la ubicación
+                cell_capacitacion = sheet[total_cell_capacitacion]
+                # Asignar el valor de la suma a la celda
+                cell_capacitacion.value = col_sum_capacitacion[col_capacitacion]
+                # Aplicar formato a la celda
+                cell_capacitacion.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_capacitacion.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_capacitacion.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+        # Sumar los valores del diccionario      
+        t_sum_cat_1 = sum([col_sum_capacitacion['DIS_273']])
+        t_sum_cat_2 = sum([col_sum_capacitacion['DIS_274']])
+        
+        sheet['D12'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D12'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D12'] = t_sum_cat_1     
+        
+        sheet['E12'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E12'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E12'] = t_sum_cat_2 
+        
+        ###############################
+        ###  CAPACITACION AGENTE ######
+        ###############################
+                
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_prov_agente:
+            for col_agente in col_sum_agente:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_agente.keys()).index(col_agente) + 1
+                    col_sum_agente[col_agente] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+        
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_agente, total_cell_agente in col_ubi_agente.items():
+            if col_agente in col_sum_agente:
+                # Obtener la celda correspondiente según la ubicación
+                cell_agente = sheet[total_cell_agente]
+                # Asignar el valor de la suma a la celda
+                cell_agente.value = col_sum_agente[col_agente]
+                # Aplicar formato a la celda
+                cell_agente.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_agente.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_agente.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+        # Sumar los valores del diccionario      
+        t_sum_cat_1 = sum([col_sum_agente['DIS_236']])
+        t_sum_cat_2 = sum([col_sum_agente['DIS_237']])
+        t_sum_cat_3 = sum([col_sum_agente['DIS_238']])
+        t_sum_cat_4 = sum([col_sum_agente['DIS_239']])
+        t_sum_cat_5 = sum([col_sum_agente['DIS_240']])
+        t_sum_cat_6 = sum([col_sum_agente['DIS_241']])
+        
+        sheet['D82'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D82'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D82'] = t_sum_cat_1     
+        
+        sheet['E82'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E82'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E82'] = t_sum_cat_2 
+        
+        sheet['F82'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F82'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F82'] = t_sum_cat_3
+        
+        sheet['G82'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G82'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G82'] = t_sum_cat_4 
+        
+        sheet['H82'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H82'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H82'] = t_sum_cat_5
+        
+        sheet['I82'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['I82'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['I82'] = t_sum_cat_6 
+        
+        ############################
+        ###  CAPACITACION COMITE ###
+        #############################
+        
+        # Procesar los datos y calcular las sumas por columna
+        for row in resultado_prov_comite:
+            for col_comite in col_sum_comite:
+                try:
+                    # Obtener el índice de la columna según el nombre (DIS_1 -> 1, DIS_2 -> 2, etc.)
+                    col_index = list(col_ubi_comite.keys()).index(col_comite) + 1
+                    col_sum_comite[col_comite] += int(row[col_index])
+                except IndexError:
+                    print(f"Error al procesar la fila sensorial: {row}")
+        
+        # Escribir las sumas totales por columna en la hoja de cálculo
+        for col_comite, total_cell_comite in col_ubi_comite.items():
+            if col_comite in col_sum_comite:
+                # Obtener la celda correspondiente según la ubicación
+                cell_comite = sheet[total_cell_comite]
+                # Asignar el valor de la suma a la celda
+                cell_comite.value = col_sum_comite[col_comite]
+                # Aplicar formato a la celda
+                cell_comite.alignment = Alignment(horizontal="center", vertical="center")  # Alinear al centro
+                cell_comite.font = Font(name='Arial', size=9)  # Establecer fuente, tamaño y negrita
+                cell_comite.number_format = '0'  # Formato de número para mostrar como entero sin decimales       
+        # Sumar los valores del diccionario      
+        t_sum_cat_1 = sum([col_sum_comite['DIS_267']])
+        t_sum_cat_2 = sum([col_sum_comite['DIS_268']])
+        t_sum_cat_3 = sum([col_sum_comite['DIS_269']])
+        t_sum_cat_4 = sum([col_sum_comite['DIS_270']])
+        t_sum_cat_5 = sum([col_sum_comite['DIS_271']])
+        t_sum_cat_6 = sum([col_sum_comite['DIS_272']])
+        
+        sheet['D97'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['D97'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['D97'] = t_sum_cat_1     
+        
+        sheet['E97'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['E97'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['E97'] = t_sum_cat_2 
+        
+        sheet['F97'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['F97'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['F97'] = t_sum_cat_3
+        
+        sheet['G97'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['G97'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['G97'] = t_sum_cat_4 
+        
+        sheet['H97'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['H97'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['H97'] = t_sum_cat_5
+        
+        sheet['I97'].alignment = Alignment(horizontal= "center", vertical="center")
+        sheet['I97'].font = Font(name = 'Arial', size= 9, bold = True)
+        sheet['I97'] = t_sum_cat_6 
+        
         ##########################################################################          
         # Establecer el nombre del archivo
         nombre_archivo = "rpt_operacional_provincia.xlsx"
@@ -2657,7 +3065,6 @@ class RptOperacinalProv(TemplateView):
         workbook.save(response)
 
         return response
-
 
 ################################################
 # REPORTE DE DISTRITO
@@ -5742,6 +6149,9 @@ class RptOperacinalRed(TemplateView):
             'DIS_134': 0,
             'DIS_135': 0
         }             
+        
+        
+        
         ############################
         ###  DISCAPACIDAD FISICA ###
         ############################
