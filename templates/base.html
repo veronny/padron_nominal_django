@@ -26,6 +26,14 @@
   <link rel="stylesheet" href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}">
   <!-- summernote -->
   <link rel="stylesheet" href="{% static 'assets/plugins/summernote/summernote-bs4.min.css' %}">
+  <style>
+    /* Estilo adicional para el marquee #cff4fc;*/
+    marquee {
+        background-color: #007BFF;
+        padding: 2px;
+        border-radius: 5px;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
   {% if user.is_authenticated %}
@@ -169,10 +177,16 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-      <strong>Todos los derechos reservados &copy; 2024 <a href="#"></a></strong>
-      <div class="float-right d-none d-sm-inline-block">
-        <b>Desarrollado por :</b> Dirección Regional de Salud Junín.
-      </div>
+        <div class="row">
+            <div class="col-md-6 float-right d-none d-sm-inline-block">
+              <b>Desarrollado por :</b> Dirección Regional de Salud Junín | Copyright &copy; 2024 <a href="#"></a>
+            </div>
+            <div class="col-md-6 marquee-container float-left d-none d-sm-inline-block text-white">
+              <marquee direction="Left" behavior="scroll" scrollamount="5">
+                  <strong>ULTIMA ACTUALIZACION:</strong> 21/06/2014 4:00pm <strong> - FUENTE INFORMACION:</strong> BD HISMINSA |  Script REGION JUNIN   
+              </marquee>
+          </div>
+        </div>
     </footer>
 
     <!-- Control Sidebar -->

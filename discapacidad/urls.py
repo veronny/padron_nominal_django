@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views 
+from . import views , poi_views
 from .views import RptOperacinalProv, RptOperacinalDist, RptOperacinalRed, RptOperacinalMicroRed, RptOperacinalEstablec
 
 urlpatterns = [
@@ -40,6 +40,12 @@ urlpatterns = [
    #path('obtener_microredes/', views.obtener_microredes, name='obtener_microredes'),
    #path('obtener_establecimientos/', views.obtener_establecimientos, name='obtener_establecimientos'),
     
+    #-- POI
+    path('registro/', poi_views.registro_actividad_poi, name='registro_actividad_poi'),
+    path('lista/', poi_views.lista_actividades_poi, name='lista_actividades_poi'),
+    path('detalle_registro/<int:registro_actividad_id>/', poi_views.registro_actividad_detail, name='registro_actividad_detail'),
+    path('registrar_tarea/', poi_views.registrar_tarea, name='registrar_tarea'),
     
+        
     path('matrizes/', views.crear_matriz, name='matrizes'),
 ]
