@@ -32,6 +32,7 @@ class ActividadPOI(models.Model):
 
     # Actividad Operativa
     actividad_operativa = models.CharField(max_length=255,null=True, blank=True)
+    actividad_poi = models.CharField(max_length=255,null=True, blank=True)
     unidad_medida = models.CharField(max_length=50, choices=UNIDAD_MEDIDA,null=True, blank=True)
     total_meta_fisica = models.IntegerField(verbose_name="Total Meta Física",null=True, blank=True)
     meta_presupuestal = models.DecimalField(max_digits=12, decimal_places=2,null=True, blank=True)
@@ -75,7 +76,7 @@ class ActividadPOI(models.Model):
             db_table = 'POI_META_FISICA'
     
     def __str__(self):
-        return self.actividad_poi
+        return self.actividad_presupuestal
 
 
 

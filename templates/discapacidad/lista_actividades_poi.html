@@ -57,8 +57,9 @@
             <th>Producto</th>
             <th>Cod.Act</th>
             <th>Actividad/Sub Producto</th>
-            <th>Meta Física Total</th>
-            <th>Meta Presupuestal</th>
+            <th>Meta Física Anual</th>
+            <th>Avance MF Anual</th>
+            <th>Avance %</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -72,7 +73,8 @@
             <td>{{ actividad.tipo_actividad_obra }}</td>
             <td>{{ actividad.actividad_presupuestal }}</td>
             <td>{{ actividad.total_meta_fisica }}</td>
-            <td>S/. {{ actividad.meta_presupuestal|floatformat:2 }}</td>
+            <td>{{ actividad.meta_presupuestal }}</td>
+            <td>{{ actividad.meta_presupuestal }}</td>
             <td>
                 <a href="{% url 'registro_actividad_detail' actividad.id %}" class="btn btn-info btn-sm">Detalle</a>
             </td>
