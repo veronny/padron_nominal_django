@@ -1,6 +1,7 @@
 from django.urls import path
-from . import views , poi_views
+from . import views, poi_views, ate_atc_views
 from .views import RptOperacinalProv, RptOperacinalDist, RptOperacinalRed, RptOperacinalMicroRed, RptOperacinalEstablec
+from .ate_atc_views import Atc_Ate_RptOperacinalProv , Atc_Ate_RptOperacinalDist, Atc_Ate_RptOperacinalRed, Atc_Ate_RptOperacinalMicroRed, Atc_Ate_RptOperacinalEstablec
 
 urlpatterns = [
     #discapacidad
@@ -16,7 +17,7 @@ urlpatterns = [
     path('p_distritos/', views.p_distritos, name='p_distritos'),
     #-- distrito excel
     path('rpt_operacional_distrito_excel/', RptOperacinalDist.as_view(), name = 'rpt_operacional_dist_xls'),
-        
+    
     # redes
     path('get_redes/<int:redes_id>/', views.get_redes, name='get_redes'),
     #-- redes excel
@@ -47,4 +48,32 @@ urlpatterns = [
     path('registrar_tarea/', poi_views.registrar_tarea, name='registrar_tarea'),
     
     path('matrizes/', views.crear_matriz, name='matrizes'),
+    
+    #-- ATENDIDOS Y ATENCIONES
+    path('ate_atc_discapacidad/', ate_atc_views.ate_atc_discapacidad, name='ate_atc_discapacidad'),
+    # provincia
+    path('ate_atc_get_provincias/<int:provincias_id>/', ate_atc_views.ate_atc_get_provincias, name='ate_atc_get_provincias'),
+    #-- provincia excel
+    path('rpt_ate_atc_prov_excel/', Atc_Ate_RptOperacinalProv.as_view(), name = 'ate_atc_rpt_operacional_prov_xls'),
+    
+    # distrito
+    path('ate_atc_get_distritos/<int:distritos_id>/', ate_atc_views.ate_atc_get_distritos, name='ate_atc_get_distritos'),
+    #-- distrito excel
+    path('rpt_ate_atc_dist_excel/', Atc_Ate_RptOperacinalDist.as_view(), name = 'ate_atc_rpt_operacional_dist_xls'),
+    
+    # redes
+    path('ate_atc_get_redes/<int:redes_id>/', ate_atc_views.ate_atc_get_redes, name='ate_atc_get_redes'),
+    #-- redes excel
+    path('rpt_ate_atc_operacional_red_excel/', Atc_Ate_RptOperacinalRed.as_view(), name = 'ate_atec_rpt_operacional_red_xls'),
+    
+    #microredes
+    path('ate_atc_get_microredes/<int:microredes_id>/', ate_atc_views.ate_atc_get_microredes, name='ate_atc_get_microredes'),
+    #-- microredes excel
+    path('rpt_ate_atc_operacional_microred_excel/', Atc_Ate_RptOperacinalMicroRed.as_view(), name = 'ate_atc_rpt_operacional_microred_xls'),
+    
+    # establecimientos
+    path('ate_atc_get_establecimientos/<int:establecimiento_id>/', ate_atc_views.ate_atc_get_establecimientos, name='ate_atc_get_establecimientos'), 
+    #-- estableccimiento excel
+    path('rpt_ate_atc_operacional_establec_excel/', Atc_Ate_RptOperacinalEstablec.as_view(), name = 'ate_atc_rpt_operacional_establec_xls'),
+
 ]

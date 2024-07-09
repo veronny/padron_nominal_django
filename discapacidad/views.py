@@ -36,12 +36,12 @@ def operacional(request):
 #--- PROVINCIAS -------------------------------------------------------------
 def get_provincias(request,provincias_id):
     provincias = (
-                 MAESTRO_HIS_ESTABLECIMIENTO
-                 .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
-                 .annotate(ubigueo_filtrado=Substr('Ubigueo_Establecimiento', 1, 4))
-                 .values('Provincia','ubigueo_filtrado')
-                 .distinct()
-                 .order_by('Provincia')
+                MAESTRO_HIS_ESTABLECIMIENTO
+                .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
+                .annotate(ubigueo_filtrado=Substr('Ubigueo_Establecimiento', 1, 4))
+                .values('Provincia','ubigueo_filtrado')
+                .distinct()
+                .order_by('Provincia')
     )
     mes_inicio = (
                 DimPeriodo
@@ -63,7 +63,7 @@ def get_provincias(request,provincias_id):
                 'provincias': provincias,
                 'mes_inicio':mes_inicio,
                 'mes_fin':mes_fin,
-              }
+            }
     
     return render(request, 'discapacidad/provincias.html', context)
 
