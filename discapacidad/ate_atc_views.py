@@ -1547,33 +1547,33 @@ def rpt_operacional_fisico_microred(codigo_red,codigo_microred,fecha_inicio, fec
         # Insertar los datos agrupados y las sumas en la tabla temporal
         cursor.execute("""
                         SELECT DISTINCT
-                            MAESTRO_HIS_ESTABLECIMIENTO.MicroRed AS microred,                  
-                            renaes,
-                            Categoria,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240101 AND 20240131 AND ATE=1) then 1 else 0 end)ATE1,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240201 AND 20240229 AND ATE=1) then 1 else 0 end)ATE2,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240301 AND 20240331 AND ATE=1) then 1 else 0 end)ATE3,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240401 AND 20240431 AND ATE=1) then 1 else 0 end)ATE4,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240501 AND 20240531 AND ATE=1) then 1 else 0 end)ATE5,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240601 AND 20240631 AND ATE=1) then 1 else 0 end)ATE6,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240701 AND 20240731 AND ATE=1) then 1 else 0 end)ATE7,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240801 AND 20240831 AND ATE=1) then 1 else 0 end)ATE8,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240901 AND 20240931 AND ATE=1) then 1 else 0 end)ATE9,
-                        	SUM(CASE WHEN (periodo BETWEEN 20241001 AND 20241031 AND ATE=1) then 1 else 0 end)ATE10,
-                        	SUM(CASE WHEN (periodo BETWEEN 20241101 AND 20241131 AND ATE=1) then 1 else 0 end)ATE11,
-                        	SUM(CASE WHEN (periodo BETWEEN 20241201 AND 20241231 AND ATE=1) then 1 else 0 end)ATE12,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240101 AND 20240131 AND ATC=1) then 1 else 0 end)ATES1,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240201 AND 20240229 AND ATC=1) then 1 else 0 end)ATES2,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240301 AND 20240331 AND ATC=1) then 1 else 0 end)ATES3,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240401 AND 20240431 AND ATC=1) then 1 else 0 end)ATES4,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240501 AND 20240531 AND ATC=1) then 1 else 0 end)ATES5,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240601 AND 20240631 AND ATC=1) then 1 else 0 end)ATES6,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240701 AND 20240731 AND ATC=1) then 1 else 0 end)ATES7,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240801 AND 20240831 AND ATC=1) then 1 else 0 end)ATES8,
-                        	SUM(CASE WHEN (periodo BETWEEN 20240901 AND 20240931 AND ATC=1) then 1 else 0 end)ATES9,
-                        	SUM(CASE WHEN (periodo BETWEEN 20241001 AND 20241031 AND ATC=1) then 1 else 0 end)ATES10,
-                        	SUM(CASE WHEN (periodo BETWEEN 20241101 AND 20241131 AND ATC=1) then 1 else 0 end)ATES11,
-                        	SUM(CASE WHEN (periodo BETWEEN 20241201 AND 20241231 AND ATC=1) then 1 else 0 end)ATES12
+                        MAESTRO_HIS_ESTABLECIMIENTO.MicroRed AS microred,                  
+                        renaes,
+                        Categoria,
+                        SUM(CASE WHEN (periodo BETWEEN 20240101 AND 20240131 AND ATE=1) then 1 else 0 end)ATE1,
+                        SUM(CASE WHEN (periodo BETWEEN 20240201 AND 20240229 AND ATE=1) then 1 else 0 end)ATE2,
+                        SUM(CASE WHEN (periodo BETWEEN 20240301 AND 20240331 AND ATE=1) then 1 else 0 end)ATE3,
+                        SUM(CASE WHEN (periodo BETWEEN 20240401 AND 20240431 AND ATE=1) then 1 else 0 end)ATE4,
+                        SUM(CASE WHEN (periodo BETWEEN 20240501 AND 20240531 AND ATE=1) then 1 else 0 end)ATE5,
+                        SUM(CASE WHEN (periodo BETWEEN 20240601 AND 20240631 AND ATE=1) then 1 else 0 end)ATE6,
+                        SUM(CASE WHEN (periodo BETWEEN 20240701 AND 20240731 AND ATE=1) then 1 else 0 end)ATE7,
+                        SUM(CASE WHEN (periodo BETWEEN 20240801 AND 20240831 AND ATE=1) then 1 else 0 end)ATE8,
+                        SUM(CASE WHEN (periodo BETWEEN 20240901 AND 20240931 AND ATE=1) then 1 else 0 end)ATE9,
+                        SUM(CASE WHEN (periodo BETWEEN 20241001 AND 20241031 AND ATE=1) then 1 else 0 end)ATE10,
+                        SUM(CASE WHEN (periodo BETWEEN 20241101 AND 20241131 AND ATE=1) then 1 else 0 end)ATE11,
+                        SUM(CASE WHEN (periodo BETWEEN 20241201 AND 20241231 AND ATE=1) then 1 else 0 end)ATE12,
+                        SUM(CASE WHEN (periodo BETWEEN 20240101 AND 20240131 AND ATC=1) then 1 else 0 end)ATES1,
+                        SUM(CASE WHEN (periodo BETWEEN 20240201 AND 20240229 AND ATC=1) then 1 else 0 end)ATES2,
+                        SUM(CASE WHEN (periodo BETWEEN 20240301 AND 20240331 AND ATC=1) then 1 else 0 end)ATES3,
+                        SUM(CASE WHEN (periodo BETWEEN 20240401 AND 20240431 AND ATC=1) then 1 else 0 end)ATES4,
+                        SUM(CASE WHEN (periodo BETWEEN 20240501 AND 20240531 AND ATC=1) then 1 else 0 end)ATES5,
+                        SUM(CASE WHEN (periodo BETWEEN 20240601 AND 20240631 AND ATC=1) then 1 else 0 end)ATES6,
+                        SUM(CASE WHEN (periodo BETWEEN 20240701 AND 20240731 AND ATC=1) then 1 else 0 end)ATES7,
+                        SUM(CASE WHEN (periodo BETWEEN 20240801 AND 20240831 AND ATC=1) then 1 else 0 end)ATES8,
+                        SUM(CASE WHEN (periodo BETWEEN 20240901 AND 20240931 AND ATC=1) then 1 else 0 end)ATES9,
+                        SUM(CASE WHEN (periodo BETWEEN 20241001 AND 20241031 AND ATC=1) then 1 else 0 end)ATES10,
+                        SUM(CASE WHEN (periodo BETWEEN 20241101 AND 20241131 AND ATC=1) then 1 else 0 end)ATES11,
+                        SUM(CASE WHEN (periodo BETWEEN 20241201 AND 20241231 AND ATC=1) then 1 else 0 end)ATES12
                         FROM TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL_ATE_ATC 
                         LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL_ATE_ATC.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
                         WHERE MAESTRO_HIS_ESTABLECIMIENTO.codigo_red = %s AND MAESTRO_HIS_ESTABLECIMIENTO.codigo_microred = %s
@@ -1996,7 +1996,7 @@ def rpt_operacional_fisico_establec(establec,fecha_inicio, fecha_fin):
                         LEFT JOIN MAESTRO_HIS_ESTABLECIMIENTO ON TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL_ATE_ATC.renaes = MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico
                         WHERE MAESTRO_HIS_ESTABLECIMIENTO.codigo_unico = %s   
                         AND TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL_ATE_ATC.periodo BETWEEN CAST(%s AS INT) AND CAST(%s AS INT)
-                        GROUP BY MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico, renaes, Categoria
+                        GROUP BY MAESTRO_HIS_ESTABLECIMIENTO.Codigo_Unico, TRAMA_BASE_DISCAPACIDAD_RPT_02_FISICA_NOMINAL_ATE_ATC.renaes,Categoria
                 """, [str(establec), str(fecha_inicio) + '01', str(fecha_fin) + '31'])       
         resultado_establec = cursor.fetchall()
     return resultado_establec
