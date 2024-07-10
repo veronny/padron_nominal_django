@@ -487,7 +487,7 @@ class Atc_Ate_RptOperacinalProv(TemplateView):
         ]
         
         # Configurar locale para español
-        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        # locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
         
         # Obtener nombres de meses en español
         #meses_espanol = [datetime(2024, m, 1).strftime('%b').capitalize() for m in range(1, 13)]
@@ -1067,7 +1067,7 @@ class Atc_Ate_RptOperacinalDist(TemplateView):
         ]
         
         # Configurar locale para español
-        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        # locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
         
         # Obtener nombres de meses en español
         #meses_espanol = [datetime(2024, m, 1).strftime('%b').capitalize() for m in range(1, 13)]
@@ -1470,7 +1470,7 @@ class Atc_Ate_RptOperacinalRed(TemplateView):
         ]
         
         # Configurar locale para español
-        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        # locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
         
         # Obtener nombres de meses en español
         #meses_espanol = [datetime(2024, m, 1).strftime('%b').capitalize() for m in range(1, 13)]
@@ -1883,7 +1883,7 @@ class Atc_Ate_RptOperacinalMicroRed(TemplateView):
         ]
         
         # Configurar locale para español
-        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        # locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
         
         # Obtener nombres de meses en español        
         for index, (sheet_name, results, get_categoria_matriz) in enumerate(consultas):
@@ -2294,7 +2294,7 @@ class Atc_Ate_RptOperacinalEstablec(TemplateView):
         ]
         
         # Configurar locale para español
-        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        # locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
         
         # Obtener nombres de meses en español
         
