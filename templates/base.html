@@ -86,7 +86,7 @@
     <!-- Brand Logo -->
       <a href="#" class="brand-link">
         <img src="{% static 'assets/dist/img/logo_2.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">ReportWeb Junin</span>
+        <span class="brand-text font-weight-light">Padron Nominal Junin</span>
       </a>
 
     <!-- Sidebar -->
@@ -96,38 +96,146 @@
       <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
               <!-- Padron Nominal -->
-              <li class="nav-header">ESTRATEGIAS SANITARIAS</li>  
+              <li class="nav-header">PADRON NOMINAL</li>  
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-wheelchair"></i>
+                  <i class="nav-icon fa fa-folder-open"></i>
                   <p>
-                    DISCAPACIDAD
+                    GESTION ADMIN
                     <i class="fas fa-angle-left right"></i>
                   </p>
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
                       <a href="{% url 'operacional' %}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Reporte Operacional</p>
+                        <i class="fa fa-id-card nav-icon"></i>
+                        <p>Respons Municipio</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a href="{% url 'lista_actividades_poi' %}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Reporte POI 2024</p>
+                        <i class="fa fa-hospital nav-icon"></i>
+                        <p>Respons Salud</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a href="{% url 'ate_atc_discapacidad' %}" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Reporte ATE - ATC</p>
+                        <i class="fa fa-address-card nav-icon"></i>
+                        <p>Comite Salud</p>
                       </a>
                     </li>
                     <li class="nav-item">
                       <a href="#" class="nav-link">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Reporte Nominal</p>
+                        <i class="fa fa-book nav-icon"></i>
+                        <p>Directorio Municipio</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        <i class="fa fa-book nav-icon"></i>
+                        <p>Directorio Salud</p>
+                      </a>
+                    </li>
+                </ul>
+              </li>
+              <!-- PADRON NOMINAL -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fa fa-address-book"></i>
+                  <p>
+                    PADRON NOMINAL
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{% url 'operacional' %}" class="nav-link">
+                        <i class="fa fa-id-card nav-icon"></i>
+                        <p>Tablero Situacion</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'lista_actividades_poi' %}" class="nav-link">
+                        <i class="fa fa-hospital nav-icon"></i>
+                        <p>Rpt General PN</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'ate_atc_discapacidad' %}" class="nav-link">
+                        <i class="fa fa-address-card nav-icon"></i>
+                        <p>Seguimiento Nominal</p>
+                      </a>
+                    </li>
+                </ul>
+              </li>
+              <!-- Compomiso 1 -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fa fa-tint"></i>
+                  <p>
+                    COMPROMISO 1
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{% url 'operacional' %}" class="nav-link">
+                        <i class="fa fa-id-card nav-icon"></i>
+                        <p>TABLERO SITUACION</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'lista_actividades_poi' %}" class="nav-link">
+                        <i class="fa fa-hospital nav-icon"></i>
+                        <p>SEGUIMIENTO NOMINAL</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'ate_atc_discapacidad' %}" class="nav-link">
+                        <i class="fa fa-address-card nav-icon"></i>
+                        <p>RPT OBSERVACIONES</p>
+                      </a>
+                    </li>
+                </ul>
+              </li>
+              <!-- Sello Municipal -->
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="nav-icon fa fa-bullseye"></i>
+                  <p>
+                    SELLO MUNICIPAL
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                      <a href="{% url 'operacional' %}" class="nav-link">
+                        <i class="fa fa-id-card nav-icon"></i>
+                        <p>RESPONS MUNICIPIO</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'lista_actividades_poi' %}" class="nav-link">
+                        <i class="fa fa-hospital nav-icon"></i>
+                        <p>COMITE SALUD</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'ate_atc_discapacidad' %}" class="nav-link">
+                        <i class="fa fa-address-card nav-icon"></i>
+                        <p>RESPONS SALUD</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        <i class="fa fa-book nav-icon"></i>
+                        <p>DIRECTORIO MUNICIPIO</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="#" class="nav-link">
+                        <i class="fa fa-book nav-icon"></i>
+                        <p>DIRECTORIO SALUD</p>
                       </a>
                     </li>
                 </ul>
