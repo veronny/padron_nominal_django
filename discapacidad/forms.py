@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import modelformset_factory
 from .poi_models import ActividadPOI, ProgramacionMensual, ProgramacionMensualMetaFinanciera,ProgramacionMetaFisica
-    
+from .padron_models import Directorio_municipio 
 class ActividadPOIForm(forms.ModelForm):
     class Meta:
        model =  ActividadPOI
@@ -131,3 +131,74 @@ class ProgramacionMensualMetaFinancieraForm(forms.ModelForm):
     class Meta:
         model = ProgramacionMensualMetaFinanciera
         fields = '__all__'
+        
+class Directorio_MunicipioForm(forms.ModelForm):
+    class Meta:
+        model =  Directorio_municipio
+        exclude = ['nombre_completo','situacion_usuario','dateTimeOfUpload_req_oficio','dateTimeOfUpload_req_resolucion','dateTimeOfUpload_req_formato_alta','dateTimeOfUpload_req_formato_excel']       
+        fields = [
+                'tipo_documento',
+                'documento_identidad',
+                'apellido_paterno',
+                'apellido_materno',
+                'nombres',
+                'telefono',                
+                'correo_electronico',
+                'provincia',
+                'distrito',
+                'ubigueo',
+                'nombre_municipio',
+                'cargo',
+                'perfil',
+                'condicion',
+                'cuenta_usuario',
+                'estado_usuario',
+                'condicion_laboral',
+                'user',
+                'req_oficio',
+                'req_resolucion',
+                'req_formato_alta',
+                'req_formato_excel',
+        ]     
+        widgets = {
+                'tipo_documento' : forms.Select(attrs={'class':'form-control','required': True}),
+                'documento_identidad' : forms.TextInput(attrs={'class':'form-control'}),
+                'apellido_paterno' : forms.TextInput(attrs={'class':'form-control'}),
+                'apellido_materno' : forms.TextInput(attrs={'class':'form-control'}),
+                'nombres' : forms.TextInput(attrs={'class':'form-control'}),
+                'telefono' : forms.TextInput(attrs={'class':'form-control'}),
+                'correo_electronico' : forms.TextInput(attrs={'class':'form-control'}),
+                'provincia' : forms.TextInput(attrs={'class':'form-control'}),
+                'distrito' : forms.TextInput(attrs={'class':'form-control'}),
+                'ubigueo' : forms.TextInput(attrs={'class':'form-control'}),
+                'nombre_municipio' : forms.TextInput(attrs={'class':'form-control'}),
+                'condicion_laboral' : forms.Select(attrs={'class':'form-control','required': True}),
+                'cargo' : forms.Select(attrs={'class':'form-control','required': True}),
+                'perfil' : forms.Select(attrs={'class':'form-control','required': True}),
+                'condicion' : forms.Select(attrs={'class':'form-control','required': True}),
+                'user' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'cuenta_usuario' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'estado_usuario' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'nombre_completo' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'estado_auditoria' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                #####################
+                'situacion_usuario': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'dateTimeOfUpload_req_oficio': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'dateTimeOfUpload_req_resolucion': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
+                'dateTimeOfUpload_req_formato_alta':forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
+                'dateTimeOfUpload_req_formato_excel': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+        }
+        labels = {
+            'tipo_documento':'Tipo Documento',
+            'documento_identidad':'Numero de Documento',
+            'correo_electronico':'Correo electronico',
+            'nombre_municipio':'Nombre de Municipio',
+            'req_oficio': 'Oficio',
+            'req_resolucion':'Resolucion',
+            'req_formato_alta':'Formato Alta/Baja',
+            'req_formato_excel':'Formato Excel',            
+            'ubigueo': '',
+            'estado_usuario': '',
+            'nombre_completo': '',
+            'situacion_usuario': '',
+        }

@@ -25,6 +25,7 @@ from .utils import generar_operacional
 
 from django.db.models.functions import Substr
 
+
 # Create your views here.
 @login_required
 def operacional(request):
@@ -43,26 +44,8 @@ def get_provincias(request,provincias_id):
                 .distinct()
                 .order_by('Provincia')
     )
-    mes_inicio = (
-                DimPeriodo
-                .objects.filter(Anio='2024')
-                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
-                .values('Mes','periodo_filtrado')
-                .order_by('NroMes')
-                .distinct()
-    ) 
-    mes_fin = (
-                DimPeriodo
-                .objects.filter(Anio='2024')
-                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
-                .values('Mes','periodo_filtrado')
-                .order_by('NroMes')
-                .distinct()
-    ) 
     context = {
                 'provincias': provincias,
-                'mes_inicio':mes_inicio,
-                'mes_fin':mes_fin,
             }
     
     return render(request, 'discapacidad/provincias.html', context)

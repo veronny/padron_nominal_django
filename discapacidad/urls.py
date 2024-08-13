@@ -1,7 +1,8 @@
 from django.urls import path
 from . import views, poi_views, ate_atc_views
-from .views import RptOperacinalProv, RptOperacinalDist, RptOperacinalRed, RptOperacinalMicroRed, RptOperacinalEstablec
+from .views import RptOperacinalProv, RptOperacinalDist, RptOperacinalRed, RptOperacinalMicroRed, RptOperacinalEstablec 
 from .ate_atc_views import Atc_Ate_RptOperacinalProv , Atc_Ate_RptOperacinalDist, Atc_Ate_RptOperacinalRed, Atc_Ate_RptOperacinalMicroRed, Atc_Ate_RptOperacinalEstablec
+
 
 urlpatterns = [
     #discapacidad
