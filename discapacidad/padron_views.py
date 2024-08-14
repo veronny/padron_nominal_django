@@ -22,10 +22,8 @@ class DirectorioMunicipioCreateView(CreateView):
         #empleados = Empleado.objects.get(user=self.request.user)
 
         initial_data = {
-            'req_oficio': '0',
-            'req_resolucion': '0',
-            'req_formato_alta': '0',
-            'req_formato_excel': '0',
+            '': '',
+            '': '',
         }
         return initial_data
 

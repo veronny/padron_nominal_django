@@ -41,8 +41,13 @@ class Directorio_municipio(models.Model):
                     ('Espera respuesta MINSA', 'Espera respuesta MINSA'),
                 ]
     SITUACION_USUARIO = [
-                    ('0', 'Activo'),
-                    ('1', 'Inactivo')
+                    ('0', 'No llega el correo con la contraseña temporal'),
+                    ('1', 'Usuario aparece bloqueado'),
+                    ('2', 'Solicitud de ALTA TEMPORAL'),
+                    ('3', 'Solicitud de USUARIO NUEVO'),
+                    ('4', 'Distrito asignado no corresponde'),
+                    ('5', 'Usuario no pertenece a un grupo válido'),
+                    ('6', 'Otros'),
                 ]
     
     TIPO_EMPLEADO = [
