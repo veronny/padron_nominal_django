@@ -3,7 +3,6 @@
 
 {% block body %}
 
-
 <main class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3 text-center py-1">
@@ -93,22 +92,29 @@
                 </div>  
 
                 <div class="row">
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <div class="form-group">
                             {{ form.cargo.label_tag }}
                             {{ form.cargo }}
                         </div>
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <div class="form-group">
                             {{ form.perfil.label_tag }}
                             {{ form.perfil }}
                         </div>
                     </div>
-                    <div class="col-md-4 form-group">
+                    <div class="col-md-3 form-group">
                         <div class="form-group">
                             {{ form.condicion.label_tag }}
                             {{ form.condicion }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 form-group">
+                        <div class="form-group">
+                            {{ form.situacion_usuario.label_tag }}
+                            {{ form.situacion_usuario }}
                         </div>
                     </div>
                 </div>
@@ -143,7 +149,7 @@
                     </div>
                 </div>
 
-                </br> {{ form.cuenta_usuario }} {{ form.estado_usuario }} {{ form.situacion_usuario }} {{ form.estado_auditoria }} {{ form.user }} 
+                </br> {{ form.cuenta_usuario }} {{ form.estado_usuario }} {{ form.estado_auditoria }} {{ form.user }} 
                 {{ form.dateTimeOfUpload_req_oficio }}  {{ form.dateTimeOfUpload_req_resolucion }} {{ form.dateTimeOfUpload_req_formato_alta }} {{ form.dateTimeOfUpload_req_formato_excel }}
                     <div class="col-md-6 offset-md-3 text-center py-1 form-group">        
                         <button class="btn btn-success btn-lg text-center"><i class="fa fa-save"></i>  Guardar</button>

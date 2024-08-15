@@ -22,16 +22,18 @@ class DirectorioMunicipioCreateView(CreateView):
         #empleados = Empleado.objects.get(user=self.request.user)
 
         initial_data = {
-            '': '',
-            '': '',
+            'estado_auditoria': '0',
         }
         return initial_data
 
 
+    
 class DirectorioMunicipioListView(ListView):
     model = Directorio_municipio
     template_name = 'municipio/directorio_list.html'
     context_object_name = 'municipios'
 
+    def get_queryset(self):
+        return Directorio_municipio.objects.filter(user=self.request.user)
 
 

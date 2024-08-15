@@ -12,11 +12,11 @@ class Directorio_municipio(models.Model):
             ]
     
     CARGO = [
-                ('1', 'responsable PN'),
-                ('2', 'responsable SELLO'),
-                ('3', 'responsable COMPROMISO 1'),
-                ('4', 'gerente desarrollo social'),
-                ('5', 'municipio'),
+                ('1', 'Responsable PN'),
+                ('2', 'Responsable SELLO'),
+                ('3', 'Responsable COMPROMISO 1'),
+                ('4', 'Gerente desarrollo social'),
+                ('5', 'Consulta Municipio'),
             ]
     
     PERFIL = [
@@ -40,14 +40,16 @@ class Directorio_municipio(models.Model):
                     ('Continuador', 'Continuador'),
                     ('Espera respuesta MINSA', 'Espera respuesta MINSA'),
                 ]
+
     SITUACION_USUARIO = [
-                    ('0', 'No llega el correo con la contraseña temporal'),
-                    ('1', 'Usuario aparece bloqueado'),
-                    ('2', 'Solicitud de ALTA TEMPORAL'),
-                    ('3', 'Solicitud de USUARIO NUEVO'),
-                    ('4', 'Distrito asignado no corresponde'),
-                    ('5', 'Usuario no pertenece a un grupo válido'),
-                    ('6', 'Otros'),
+                    ('Tengo Usuario','Tengo Usuario'),
+                    ('No llega el correo con la contraseña temporal','No llega el correo con la contraseña temporal'),
+                    ('Usuario aparece bloqueado','Usuario aparece bloqueado'),
+                    ('Solicitud de ALTA TEMPORAL','Solicitud de ALTA TEMPORAL'),
+                    ('Solicitud de USUARIO NUEVO','Solicitud de USUARIO NUEVO'),
+                    ('Distrito asignado no corresponde','Distrito asignado no corresponde'),
+                    ('Usuario no pertenece a un grupo válido','Usuario no pertenece a un grupo válido'),
+                    ('Otros','Otros'),
                 ]
     
     TIPO_EMPLEADO = [
@@ -60,13 +62,12 @@ class Directorio_municipio(models.Model):
                 ('Tercero', 'Tercero'),          
             ]
     
-    ESTADO_CHOICES = (
+    ESTADO_CHOICES = [
                 ('0', 'Pendiente'),
-                ('1', 'Aprobada'),
-                ('2', 'Rechazada'),
+                ('1', 'Aprobado'),
+                ('2', 'Proceso'),
                 ('3', 'Observado'),
-                ('4', 'Validado'),
-            )
+            ]
     
     tipo_documento = models.CharField(choices=TIPO_DOCUMENTO, max_length=100, null=True, blank=True)
     documento_identidad = models.CharField(max_length=100,null=True, blank=True)
@@ -86,9 +87,9 @@ class Directorio_municipio(models.Model):
     condicion = models.CharField(choices=CONDICION,max_length=100,null=True, blank=True)
     cuenta_usuario = models.CharField(choices=CUENTA_USUARIO,max_length=100,null=True, blank=True)
     estado_usuario = models.CharField(choices=ESTADO_USUARIO,max_length=100,null=True, blank=True)
-    situacion_usuario = models.CharField(choices=CUENTA_USUARIO,max_length=100,null=True, blank=True)
+    situacion_usuario = models.CharField(choices=SITUACION_USUARIO,max_length=100,null=True, blank=True)
     condicion_laboral = models.CharField(choices=TIPO_EMPLEADO,max_length=200,null=True, blank=True)
-    estado_auditoria = models.CharField(max_length=50, choices=ESTADO_CHOICES,null=True, blank=True)
+    estado_auditoria = models.CharField(max_length=50,choices=ESTADO_CHOICES,null=True, blank=True)
     
     user = models.ForeignKey(User, on_delete=models.CASCADE,null=True, blank=True)  
     
@@ -104,6 +105,5 @@ class Directorio_municipio(models.Model):
     req_formato_excel = models.FileField(upload_to="discapacidad/static/formato_excel",null=True, blank=True)
     dateTimeOfUpload_req_formato_excel = models.DateTimeField(auto_now = True,null=True, blank=True)
         
-    
     def __str__(self):
         return self.documento_identidad 

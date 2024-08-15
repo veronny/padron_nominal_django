@@ -135,7 +135,7 @@ class ProgramacionMensualMetaFinancieraForm(forms.ModelForm):
 class Directorio_MunicipioForm(forms.ModelForm):
     class Meta:
         model =  Directorio_municipio
-        exclude = ['nombre_completo','situacion_usuario','dateTimeOfUpload_req_oficio','dateTimeOfUpload_req_resolucion','dateTimeOfUpload_req_formato_alta','dateTimeOfUpload_req_formato_excel']       
+        exclude = ['nombre_completo','dateTimeOfUpload_req_oficio','dateTimeOfUpload_req_resolucion','dateTimeOfUpload_req_formato_alta','dateTimeOfUpload_req_formato_excel']       
         fields = [
                 'tipo_documento',
                 'documento_identidad',
@@ -154,6 +154,7 @@ class Directorio_MunicipioForm(forms.ModelForm):
                 'cuenta_usuario',
                 'estado_usuario',
                 'condicion_laboral',
+                'situacion_usuario',
                 'user',
                 'req_oficio',
                 'req_resolucion',
@@ -161,28 +162,28 @@ class Directorio_MunicipioForm(forms.ModelForm):
                 'req_formato_excel',
         ]     
         widgets = {
-                'tipo_documento' : forms.Select(attrs={'class':'form-control','required': True}),
-                'documento_identidad' : forms.TextInput(attrs={'class':'form-control'}),
-                'apellido_paterno' : forms.TextInput(attrs={'class':'form-control'}),
-                'apellido_materno' : forms.TextInput(attrs={'class':'form-control'}),
-                'nombres' : forms.TextInput(attrs={'class':'form-control'}),
-                'telefono' : forms.TextInput(attrs={'class':'form-control'}),
-                'correo_electronico' : forms.TextInput(attrs={'class':'form-control'}),
-                'provincia' : forms.TextInput(attrs={'class':'form-control'}),
-                'distrito' : forms.TextInput(attrs={'class':'form-control'}),
-                'ubigueo' : forms.TextInput(attrs={'class':'form-control'}),
-                'nombre_municipio' : forms.TextInput(attrs={'class':'form-control'}),
-                'condicion_laboral' : forms.Select(attrs={'class':'form-control','required': True}),
-                'cargo' : forms.Select(attrs={'class':'form-control','required': True}),
-                'perfil' : forms.Select(attrs={'class':'form-control','required': True}),
-                'condicion' : forms.Select(attrs={'class':'form-control','required': True}),
+                'tipo_documento' : forms.Select(attrs={'class':'form-control','required': True, 'tabindex': '1'}),
+                'documento_identidad' : forms.NumberInput(attrs={'class':'form-control','required': True,'tabindex': '2','placeholder': 'Ingrese solo números'}),
+                'apellido_paterno' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '3'}),
+                'apellido_materno' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '4'}),
+                'nombres' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '5'}),
+                'telefono' : forms.NumberInput(attrs={'class':'form-control','required': True,'tabindex': '6','placeholder': 'Ingrese solo números'}),
+                'correo_electronico' : forms.EmailInput(attrs={'class':'form-control','required': True,'tabindex': '7'}),
+                'provincia' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '8'}),
+                'distrito' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '9'}),
+                'ubigueo' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '10'}),
+                'nombre_municipio' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '11'}),
+                'condicion_laboral' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '12'}),
+                'cargo' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '13'}),
+                'perfil' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '14'}),
+                'condicion' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '15'}),
                 'user' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'cuenta_usuario' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'estado_usuario' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'nombre_completo' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'estado_auditoria' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 #####################
-                'situacion_usuario': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'situacion_usuario': forms.Select(attrs={'class':'form-control','required': True,'tabindex': '16'}),
                 'dateTimeOfUpload_req_oficio': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'dateTimeOfUpload_req_resolucion': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
                 'dateTimeOfUpload_req_formato_alta':forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
@@ -200,5 +201,5 @@ class Directorio_MunicipioForm(forms.ModelForm):
             'ubigueo': '',
             'estado_usuario': '',
             'nombre_completo': '',
-            'situacion_usuario': '',
+            'situacion_usuario': 'Situacion',
         }
