@@ -8,7 +8,7 @@ GIT_REPO_URL="https://github.com/veronny/padron_nominal_django.git"
 #GIT_REPO_URL="https://<your_username>:<your_PAT>@github.com/codewithmuh/django-aws-ec2-autoscaling.git"
 
 # Replace {YOUR_PROJECT_MAIN_DIR_NAME} with your actual project directory name
-PROJECT_MAIN_DIR_NAME="discapacidad_django"
+PROJECT_MAIN_DIR_NAME="padron_nominal_django"
 
 # Clone repository
 git clone "$GIT_REPO_URL" "/home/ubuntu/$PROJECT_MAIN_DIR_NAME"
