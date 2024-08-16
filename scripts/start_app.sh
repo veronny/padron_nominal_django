@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-PROJECT_MAIN_DIR_NAME="discapacidad_django"
+PROJECT_MAIN_DIR_NAME="padron_nominal_django"
 
 # Validate variables
 if [ -z "$PROJECT_MAIN_DIR_NAME" ]; then
