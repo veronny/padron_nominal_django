@@ -51,12 +51,13 @@ class DimDiscapacidadEtapa(models.Model):
     def __str__(self):
         return self.Etapa
 
-
-
-
-
-
-
+class Actualizacion(models.Model):
+    fecha = models.DateField(null=True, blank=True)
+    hora = models.TimeField(null=True, blank=True)
+    Descripcion = models.CharField(max_length=100,null=True, blank=True)
+    
+    def __str__(self):
+        return self.Descripcion
 
 
 

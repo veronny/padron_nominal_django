@@ -107,3 +107,5 @@ class Directorio_municipio(models.Model):
         
     def __str__(self):
         return self.documento_identidad 
+    
+    

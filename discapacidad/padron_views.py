@@ -27,7 +27,7 @@ class DirectorioMunicipioCreateView(CreateView):
         return initial_data
 
 
-    
+
 class DirectorioMunicipioListView(ListView):
     model = Directorio_municipio
     template_name = 'municipio/directorio_list.html'

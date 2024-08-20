@@ -6,18 +6,22 @@ from django.contrib.auth import login, logout, authenticate
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
 
+from base.models import Actualizacion
 
 
 # Create your views here.
 def BASE(request):
-    return render(request, 'base.html')
+    actualizacion = Actualizacion.objects.all()
+    return render(request, 'base.html', {"actualizacion": actualizacion})
 
 
 def inicio(request):
-    return render(request, 'index.html')
+    actualizacion = Actualizacion.objects.all()
+    return render(request, 'index.html', {"actualizacion": actualizacion})
 
 
 def home_redirect_view(request):
+
     return redirect('signin')
 
 # ----- INICIO DE SESION --------------------------------

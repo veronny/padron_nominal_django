@@ -8,7 +8,7 @@ from django.db import connection
 
 # filtros
 from base.models import DimPeriodo, DimDiscapacidadEtapa, MAESTRO_HIS_ESTABLECIMIENTO
-from .models import DimDisFisicaCie,TramaBaseDiscapacidadRpt02FisicaNominal
+from .models import TramaBaseDiscapacidadRpt02FisicaNominal
 from django.db.models import Case, When, Value, IntegerField, Sum, OuterRef, Subquery
 from django.db.models.functions import Substr, Cast, Concat, Replace
 from django.db.models import CharField, F
@@ -24,6 +24,7 @@ from openpyxl.utils import get_column_letter
 from .utils import generar_operacional
 
 from django.db.models.functions import Substr
+
 
 
 # Create your views here.
@@ -15256,3 +15257,4 @@ class RptOperacinalEstablec(TemplateView):
         workbook.save(response)
 
         return response
+    

@@ -7,6 +7,7 @@ from django.contrib.auth.models import Permission
 
 from .poi_models import ActividadPOI
 from .padron_models import Directorio_municipio
+from base.models import Actualizacion
 
 admin.site.register(Permission)
 
@@ -82,3 +83,26 @@ class Directorio_municipioAdmin(ImportExportModelAdmin,admin.ModelAdmin):
                 'situacion_usuario', 
                 'condicion_laboral', 
                 'estado_auditoria',)
+    
+    
+#----------- DISCAPACIDAD ---------------------------------
+class ActualizacionResources(resources.ModelResource):
+    class Meta:
+        model = Actualizacion
+
+@admin.register(Actualizacion)
+class ActualizacionAdmin(ImportExportModelAdmin,admin.ModelAdmin):
+    resource_class = ActualizacionResources
+    list_display = (
+                'id',
+                'fecha', 
+                'hora', 
+                'Descripcion', 
+
+    )
+    search_fields = (             
+                'id',
+                'fecha', 
+                'hora', 
+                'Descripcion', 
+                )    
