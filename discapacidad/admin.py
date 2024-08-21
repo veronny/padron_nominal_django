@@ -6,7 +6,7 @@ from django.contrib.auth.models import Permission
 from django.contrib.auth.models import Permission
 
 from .poi_models import ActividadPOI
-from .padron_models import Directorio_municipio
+from .padron_models import Directorio_municipio, Directorio_salud
 from base.models import Actualizacion
 
 admin.site.register(Permission)
@@ -106,3 +106,59 @@ class ActualizacionAdmin(ImportExportModelAdmin,admin.ModelAdmin):
                 'hora', 
                 'Descripcion', 
                 )    
+    
+#------------Red---------------------------------
+class Directorio_saludResources(resources.ModelResource):
+    class Meta:
+        model = Directorio_salud
+
+@admin.register(Directorio_salud)
+class Directorio_saludAdmin(ImportExportModelAdmin,admin.ModelAdmin):
+    resource_class = Directorio_saludResources
+    list_display = (
+                'id',
+                'tipo_documento', 
+                'documento_identidad', 
+                'apellido_paterno', 
+                'apellido_materno', 
+                'nombres', 
+                'telefono', 
+                'correo_electronico', 
+                'provincia', 
+                'distrito', 
+                'ubigueo', 
+                'red', 
+                'microred', 
+                'establecimiento', 
+                'cargo', 
+                'perfil', 
+                'condicion', 
+                'cuenta_usuario', 
+                'estado_usuario', 
+                'situacion_usuario', 
+                'condicion_laboral', 
+                'estado_auditoria',
+    )
+    search_fields = (                
+                'id',
+                'tipo_documento', 
+                'documento_identidad', 
+                'apellido_paterno', 
+                'apellido_materno', 
+                'nombres', 
+                'telefono', 
+                'correo_electronico', 
+                'provincia', 
+                'distrito', 
+                'ubigueo', 
+                'red', 
+                'microred', 
+                'establecimiento', 
+                'cargo', 
+                'perfil', 
+                'condicion', 
+                'cuenta_usuario', 
+                'estado_usuario', 
+                'situacion_usuario', 
+                'condicion_laboral', 
+                'estado_auditoria',)

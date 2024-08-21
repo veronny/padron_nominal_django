@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import modelformset_factory
 from .poi_models import ActividadPOI, ProgramacionMensual, ProgramacionMensualMetaFinanciera,ProgramacionMetaFisica
-from .padron_models import Directorio_municipio 
+from .padron_models import Directorio_municipio, Directorio_salud
 class ActividadPOIForm(forms.ModelForm):
     class Meta:
        model =  ActividadPOI
@@ -194,6 +194,84 @@ class Directorio_MunicipioForm(forms.ModelForm):
             'documento_identidad':'Numero de Documento',
             'correo_electronico':'Correo electronico',
             'nombre_municipio':'Nombre de Municipio',
+            'req_oficio': 'Oficio',
+            'req_resolucion':'Resolucion',
+            'req_formato_alta':'Formato Alta/Baja',
+            'req_formato_excel':'Formato Excel',            
+            'ubigueo': '',
+            'estado_usuario': '',
+            'nombre_completo': '',
+            'situacion_usuario': 'Situacion',
+        }
+        
+class Directorio_SaludForm(forms.ModelForm):
+    class Meta:
+        model =  Directorio_salud
+        exclude = ['nombre_completo','dateTimeOfUpload_req_oficio','dateTimeOfUpload_req_resolucion','dateTimeOfUpload_req_formato_alta','dateTimeOfUpload_req_formato_excel']       
+        fields = [
+                'tipo_documento',
+                'documento_identidad',
+                'apellido_paterno',
+                'apellido_materno',
+                'nombres',
+                'telefono',                
+                'correo_electronico',
+                'provincia',
+                'distrito',
+                'ubigueo',
+                'red',
+                'microred',
+                'establecimiento',
+                'cargo',
+                'perfil',
+                'condicion',
+                'cuenta_usuario',
+                'estado_usuario',
+                'condicion_laboral',
+                'situacion_usuario',
+                'user',
+                'req_oficio',
+                'req_resolucion',
+                'req_formato_alta',
+                'req_formato_excel',
+        ]     
+        widgets = {
+                'tipo_documento' : forms.Select(attrs={'class':'form-control','required': True, 'tabindex': '1'}),
+                'documento_identidad' : forms.NumberInput(attrs={'class':'form-control','required': True,'tabindex': '2','placeholder': 'Ingrese solo números'}),
+                'apellido_paterno' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '3'}),
+                'apellido_materno' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '4'}),
+                'nombres' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '5'}),
+                'telefono' : forms.NumberInput(attrs={'class':'form-control','required': True,'tabindex': '6','placeholder': 'Ingrese solo números'}),
+                'correo_electronico' : forms.EmailInput(attrs={'class':'form-control','required': True,'tabindex': '7'}),
+                'provincia' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '8','style': 'border-color: silver; color: silver;','readonly':'readonly'}),
+                'distrito' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '9','style': 'border-color: silver; color: silver;','readonly':'readonly'}),
+                'ubigueo' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '10','style': 'border-color: silver; color: silver;','readonly':'readonly'}),
+                'red' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '11','style': 'border-color: silver; color: silver;','readonly':'readonly'}),
+                'microred' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '11','style': 'border-color: silver; color: silver;','readonly':'readonly'}),
+                'establecimiento' : forms.TextInput(attrs={'class':'form-control','required': True,'tabindex': '11','style': 'border-color: silver; color: silver;','readonly':'readonly'}),
+                'condicion_laboral' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '12'}),
+                'cargo' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '13'}),
+                'perfil' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '14'}),
+                'condicion' : forms.Select(attrs={'class':'form-control','required': True,'tabindex': '15'}),
+                'user' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'cuenta_usuario' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'estado_usuario' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'nombre_completo' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'estado_auditoria' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                #####################
+                'situacion_usuario': forms.Select(attrs={'class':'form-control','required': True,'tabindex': '16'}),
+                'dateTimeOfUpload_req_oficio': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+                'dateTimeOfUpload_req_resolucion': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
+                'dateTimeOfUpload_req_formato_alta':forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
+                'dateTimeOfUpload_req_formato_excel': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
+        }
+        labels = {
+            'tipo_documento':'Tipo Documento',
+            'documento_identidad':'Numero de Documento',
+            'correo_electronico':'Correo electronico',
+            'red':'Red de Salud',
+            'microred':'Microred',
+            'establecimiento':'Establecimiento',
             'req_oficio': 'Oficio',
             'req_resolucion':'Resolucion',
             'req_formato_alta':'Formato Alta/Baja',
