@@ -119,7 +119,7 @@
                       </a>
                     </li>
                     <li class="nav-item">
-                      <a href="#" class="nav-link">
+                      <a href="{% url 'municipio-public' %}" class="nav-link">
                         <i class="fa fa-book nav-icon"></i>
                         <p>Directorio Municipio</p>
                       </a>
@@ -305,7 +305,8 @@
   {% endblock %}
   
   {% endif %}
-<!-- jQuery -->
+
+  <!-- jQuery -->
 <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{% static 'assets/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
@@ -341,5 +342,42 @@
 <script src="https://unpkg.com/htmx.org@1.9.2/dist/htmx.js"></script>
 <!-- Apache ECharts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+<!-- Datatable -->
+<script src="{% static 'assets/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+
+
+<script type="text/javascript">
+  $('#table_padron_municipal').DataTable({
+    language: {
+      "decimal": "",
+      "emptyTable": "No hay información",
+      "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+      "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+      "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+      "infoPostFix": "",
+      "thousands": ",",
+      "lengthMenu": "Mostrar _MENU_ Entradas",
+      "loadingRecords": "Cargando...",
+      "processing": "Procesando...",
+      "search": "Buscar:",
+      "zeroRecords": "Sin resultados encontrados",
+      "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+      }
+    },
+  });
+</script>
+
 </body>
 </html>

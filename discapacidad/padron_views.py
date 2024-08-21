@@ -37,3 +37,30 @@ class DirectorioMunicipioListView(ListView):
         return Directorio_municipio.objects.filter(user=self.request.user)
 
 
+def directorio_municipalidad_detail(request, municipio_directorio_id):
+    if request.method == 'GET':
+        directorio_municipalidad = get_object_or_404(Directorio_municipio, pk=municipio_directorio_id)
+        form = Directorio_MunicipioForm(instance=directorio_municipalidad)
+        context = {
+            'directorio_municipalidad': directorio_municipalidad,
+            'form': form
+        }
+        return render(request, 'municipio/directorio_detail.html', context)
+    else:
+        try:
+            directorio_municipalidad = get_object_or_404(
+                Directorio_municipio, pk=municipio_directorio_id)
+            form = Directorio_MunicipioForm(request.POST, instance=directorio_municipalidad)
+            form.save()
+            return redirect('municipio-list')
+        except ValueError:
+            return render(request, 'municipio/directorio_detail.html', {'directorio_municipalidad': directorio_municipalidad, 'form': form, 'error': 'Error actualizar'})
+        
+        
+class DirectorioMunicipioListViewPublic(ListView):
+    model = Directorio_municipio
+    template_name = 'municipio/directorio_public.html'
+    context_object_name = 'municipios'
+
+    def get_queryset(self):
+        return Directorio_municipio.objects.filter(estado_auditoria='1')
