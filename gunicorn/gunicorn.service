@@ -11,6 +11,8 @@ ExecStart=/home/ubuntu/padron_nominal_django/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
           --bind unix:/run/gunicorn.sock \
+          --timeout 300 \  # Añade esta línea
           config.wsgi:application
+
 [Install]
 WantedBy=multi-user.target

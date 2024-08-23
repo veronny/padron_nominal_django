@@ -184,6 +184,10 @@ class Directorio_MunicipioForm(forms.ModelForm):
                 'estado_auditoria' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 #####################
                 'situacion_usuario': forms.Select(attrs={'class':'form-control','required': True,'tabindex': '16'}),
+                'req_oficio': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '17'}),
+                'req_resolucion': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '18'}),
+                'req_formato_alta': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '19'}),
+                'req_formato_excel': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '20'}),
                 'dateTimeOfUpload_req_oficio': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'dateTimeOfUpload_req_resolucion': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
                 'dateTimeOfUpload_req_formato_alta':forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
@@ -260,6 +264,10 @@ class Directorio_SaludForm(forms.ModelForm):
                 'estado_auditoria' : forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 #####################
                 'situacion_usuario': forms.Select(attrs={'class':'form-control','required': True,'tabindex': '16'}),
+                'req_oficio': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '17'}),
+                'req_resolucion': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '18'}),
+                'req_formato_alta': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '19'}),
+                'req_formato_excel': forms.ClearableFileInput(attrs={'class':'form-control', 'tabindex': '20'}),
                 'dateTimeOfUpload_req_oficio': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}),
                 'dateTimeOfUpload_req_resolucion': forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 
                 'dateTimeOfUpload_req_formato_alta':forms.TextInput(attrs={'class':'form-control','style': 'display: none'}), 

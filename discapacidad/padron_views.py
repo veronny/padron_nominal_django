@@ -49,7 +49,7 @@ def directorio_municipalidad_detail(request, municipio_directorio_id):
         try:
             directorio_municipalidad = get_object_or_404(
                 Directorio_municipio, pk=municipio_directorio_id)
-            form = Directorio_MunicipioForm(request.POST, instance=directorio_municipalidad)
+            form = Directorio_MunicipioForm(request.POST, request.FILES, instance=directorio_municipalidad)
             form.save()
             return redirect('municipio-list')
         except ValueError:
@@ -104,7 +104,7 @@ def directorio_salud_detail(request, salud_directorio_id):
         try:
             directorio_salud = get_object_or_404(
                 Directorio_salud, pk=salud_directorio_id)
-            form = Directorio_SaludForm(request.POST, instance=directorio_salud)
+            form = Directorio_SaludForm(request.POST, request.FILES, instance=directorio_salud)
             form.save()
             return redirect('salud-list')
         except ValueError:

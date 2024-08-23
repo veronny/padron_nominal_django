@@ -28,28 +28,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for municipio in municipios %}
+                        {% for s in salud %}
                         <tr>
-                            <td>{{ municipio.ubigueo }}</td>
-                            <td>{{ municipio.provincia }}</td>
-                            <td>{{ municipio.distrito }}</td>
-                            <td>{{ municipio.red }}</td>
-                            <td>{{ municipio.documento_identidad }}</td>
-                            <td>{{ municipio.apellido_paterno }}</td>
-                            <td>{{ municipio.apellido_materno }}</td>
-                            <td>{{ municipio.nombres }}</td>
-                            <td>{{ municipio.telefono }}</td>
-                            <td>{{ municipio.correo_electronico }}</td>
+                            <td>{{ s.ubigueo }}</td>
+                            <td>{{ s.provincia }}</td>
+                            <td>{{ s.distrito }}</td>
+                            <td>{{ s.red }}</td>
+                            <td>{{ s.documento_identidad }}</td>
+                            <td>{{ s.apellido_paterno }}</td>
+                            <td>{{ s.apellido_materno }}</td>
+                            <td>{{ s.nombres }}</td>
+                            <td>{{ s.telefono }}</td>
+                            <td>{{ s.correo_electronico }}</td>
                             <!--- ESTADO CONDICION --->
-                            {% if municipio.estado_auditoria is None %}
+                            {% if s.estado_auditoria is None %}
                             <td>
                                 <span class="badge bg-secondary"> Enviado</span>
                             </td>
-                            {% elif municipio.estado_auditoria  == "1" %}
+                            {% elif s.estado_auditoria  == "1" %}
                             <td>
                                 <span class="badge bg-success"> Aprobado</span>
                             </td>
-                            {% elif municipio.estado_auditoria  == "2" %}
+                            {% elif s.estado_auditoria  == "2" %}
                             <td>
                                 <span class="badge bg-warning"> Proceso</span>
                             </td>
