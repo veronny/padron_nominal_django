@@ -79,7 +79,7 @@
         {% endif %}
       </ul>
     </nav>
-      <!-- /.navbar -->
+    <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -209,20 +209,14 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{% url 'index-sello' %}" class="nav-link">
                       <i class="fa fa-id-card nav-icon"></i>
-                      <p>Tablero</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="#" class="nav-link">
-                      <i class="fa fa-hospital nav-icon"></i>
                       <p>Indicador 1</p>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a href="#" class="nav-link">
-                      <i class="fa fa-address-card nav-icon"></i>
+                      <i class="fa fa-hospital nav-icon"></i>
                       <p>Indicador 2</p>
                     </a>
                   </li>
@@ -346,8 +340,10 @@
 <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
 <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
 <script src="{% static 'assets/plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<!-- ECharts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
 
-
+<!-- Date tables -->
 <script type="text/javascript">
   $('#table_padron_municipal').DataTable({
     language: {

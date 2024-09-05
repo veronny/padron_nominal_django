@@ -33,7 +33,6 @@ class DimDisFisicaCie(models.Model):
     def __str__(self):
         return self.Cie
     
-    
 class TramaBaseDiscapacidadRpt01CapacitacionMedicinaNominal(models.Model):
     id_cita = models.CharField(max_length=50, primary_key=True)
     renaes = models.CharField(max_length=9)
@@ -149,5 +148,4 @@ class TramaBaseDiscapacidadRpt06CapacitacionAgenteNominal(models.Model):
 
     def __str__(self):
         return self.id_cita
-    
     

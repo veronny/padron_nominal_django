@@ -15257,4 +15257,3 @@ class RptOperacinalEstablec(TemplateView):
         workbook.save(response)
 
         return response
-    
