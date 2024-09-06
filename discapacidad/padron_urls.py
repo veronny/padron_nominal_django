@@ -2,6 +2,7 @@ from django.urls import path
 from .padron_views import DirectorioMunicipioCreateView, DirectorioMunicipioListView, directorio_municipalidad_detail,DirectorioMunicipioListViewPublic
 from .padron_views import DirectorioSaludCreateView, DirectorioSaludListView, directorio_salud_detail,DirectorioSaludListViewPublic
 from .padron_views import index_sello, sello_get_provincias, sello_get_distritos, sello_p_distritos
+from .padron_views import RptOperacinalDist
 
 
 urlpatterns = [
@@ -34,9 +35,10 @@ urlpatterns = [
     #-- provincia excel
     #path('rpt_operacional_prov_excel/', RptOperacinalProv.as_view(), name = 'rpt_operacional_prov_xls'),
     
+    
     # distrito
     path('sello_get_distritos/<int:distritos_id>/', sello_get_distritos, name='sello_get_distritos'),
-    path('p_distritos/', sello_p_distritos, name='p_distritos'),
+    path('p_distritos_sello/', sello_p_distritos, name='p_distritos_sello'),
     #-- distrito excel
-    #path('rpt_operacional_distrito_excel/', RptOperacinalDist.as_view(), name = 'rpt_operacional_dist_xls'),
+    path('rpt_seguimiento_distrito_excel/', RptOperacinalDist.as_view(), name = 'rpt_seguimiento_dist_xls'),
 ]
