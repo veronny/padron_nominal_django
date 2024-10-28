@@ -84,10 +84,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'miprimeradb',
+        'NAME': 'dbpadron',
         'USER': 'veronny',
         'PASSWORD': 'Diresa2*2*',
-        'HOST': 'db-historiaclinica.c1qcu022q8n4.sa-east-1.rds.amazonaws.com',
+        'HOST': 'mydbpadron.c9w60u6y0519.sa-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
