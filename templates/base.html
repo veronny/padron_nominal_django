@@ -33,7 +33,25 @@
         padding: 2px;
         border-radius: 5px;
     }
+
+    .texto-mas-grande {
+      font-size: 13px; /* Ajusta el valor a tu preferencia */
+    }
+
+    .texto-titulo {
+      font-size: 15px;
+      color: red; /* Ajusta el valor a tu preferencia */
+    }
   </style>
+
+   <!-- Cargar jQuery -->
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+   <!-- Cargar Select2 CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+   <!-- Cargar Select2 JS -->
+   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
   {% if user.is_authenticated %}
@@ -84,9 +102,9 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-      <a href="#" class="brand-link">
+      <a href="/inicio/" class="brand-link">
         <img src="{% static 'assets/dist/img/logo_2.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">Padron Nominal Junin</span>
+        <span class="brand-text font-weight-light">PADRON NOMINAL</span>
       </a>
 
     <!-- Sidebar -->
@@ -143,9 +161,9 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                      <a href="#" class="nav-link">
+                      <a href="{% url 'index_situacion_padron' %}" class="nav-link">
                         <i class="fa fa-id-card nav-icon"></i>
-                        <p>Tablero Situacion</p>
+                        <p>Situacion Padron</p>
                       </a>
                     </li>
                     <li class="nav-item">
@@ -271,12 +289,6 @@
             <div class="col-md-6 float-right d-none d-sm-inline-block">
               <b>Desarrollado por :</b> Dirección Regional de Salud Junín | Copyright &copy; 2024 <a href="#"></a>
             </div>
-            <div class="col-md-6 marquee-container float-left d-none d-sm-inline-block text-white">
-              <marquee direction="Left" behavior="scroll" scrollamount="5">
-                  <strong>ULTIMA ACTUALIZACION AL:</strong>  {% for a in actualizacion %} {{ a.fecha }} {{ a.hora }} {% endfor %} <strong> - FUENTE INFORMACION:</strong> BD HISMINSA | PADRON NOMINAL |  Script REGION JUNIN
-              </marquee>
-              
-          </div>
         </div>
     </footer>
 
@@ -287,6 +299,110 @@
   <!-- /.control-sidebar -->
   </div>
 <!-- ./wrapper -->
+  <!-- ./wrapper -->
+  {% block modal_inicio %}
+  <div class="modal fade" id="modal-lg" tabindex="-1" role="dialog" aria-labelledby="modal-lgLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document"> 
+        <div class="modal-content texto-mas-grande">
+          <div class="modal-header">
+            <h5 class="modal-title texto-titulo" id="modal-lgLabel" >CUMPLIMIENTO A LA LEY DE PROTECCION DE DATOS PERSONALES</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- Primera tabla: Horario de Procesamiento -->
+            <p>En cumplimiento con la Ley N° 29733 de Protección de Datos Personales, le informamos que acceso a la aplicacion estarán protegidas con usuarios y contraseña.</p>
+            <p>Para obtener la contraseña, debe enviar un correo a <span class="text-blue">vmorales@diresajunin.gob.pe</span> solicitándola y adjuntar el acta de confidencialidad debidamente llenada.<p>
+            <p>Agradecemos su comprensión y compromiso con la protección de datos. Recuerde que la seguridad de los datos es una prioridad y agradecemos su colaboración para mantener el cumplimiento de esta normativa.</p>
+
+            <div class="row">
+              <div class="col">
+                <table class="table table-bordered">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th colspan="3" class="text-center">HORARIO DE DESCARGA Y PROCESAMIENTO DE SCRIPTS PADRON NOMINAL</th>
+                    </tr>
+                    <tr>
+                      <th>DIAS</th>
+                      <th>HORA INICIO</th>
+                      <th>HORA FIN</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Lunes y Jueves</td>
+                      <td>08:00 am</td>
+                      <td>11:30 am</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          
+            <!-- Segunda tabla: Fuentes de Información -->
+            <div class="row mt-4">
+              <div class="col">
+                <div class="d-flex align-items-center mb-2 ">
+                  <i class="fas fa-hospital" style="font-size: 1em; color: red; margin-right: 10px;" aria-hidden="true"></i>
+                  <h5 class="m-0 texto-titulo"><strong>CORTES DE INFORMACION</strong></h5>
+                </div>
+              
+                <table class="table table-bordered">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th>SISTEMA</th>
+                      <th>ARCHIVOS</th>
+                      <th>FECHA ACTUALIZACION</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for a in actualizacion %}
+                      <tr>
+                        <td>{{ a.Sistema }}</td>
+                        <td>{{ a.Descripcion }}</td>
+                        <td>{{ a.fecha }} {{ a.hora }}</td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- Fin segunda tabla -->
+            <p>Recordar que los archivos de la BD HISMINSA, presentan cortes de informacion Nacional</p>
+
+            <!-- Modal interno para detalles -->
+            <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">Información Detallada</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    {% for a in actualizacion %}
+                      <p><strong>Sistema:</strong> {{ a.Sistema }}</p>
+                      <p><strong>Descripción:</strong> {{ a.Descripcion }}</p>
+                      <p><strong>Fecha y Hora:</strong> {{ a.fecha }} {{ a.hora }}</p>
+                      <hr>
+                    {% endfor %}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal interno -->
+          </div>
+        </div>
+      </div>
+  </div>
+  {% endblock %}
+
+
   {% else %}
   
   {% block content_inicio %} 
@@ -366,6 +482,14 @@
           "previous": "Anterior"
       }
     },
+  });
+</script>
+
+<!-- Script para mostrar el modal al cargar la página -->
+<script type="text/javascript">
+  $(document).ready(function() {
+    // Muestra el modal automáticamente al cargar la página
+    $('#modal-lg').modal('show');
   });
 </script>
 
