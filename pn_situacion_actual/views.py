@@ -1,108 +1,106 @@
 import logging
 from django.shortcuts import render
 from django.http import JsonResponse
-from django.shortcuts import render
-from .queries import obtener_distritos, obtener_avance_situacion_padron, obtener_cumple_situacion_cnv, obtener_cumple_situacion_dni
-from .queries import obtener_cumple_situacion_eje_vial, obtener_cumple_situacion_direccion, obtener_cumple_situacion_referencia, obtener_cumple_situacion_visitado
-from .queries import obtener_cumple_situacion_encontrado, obtener_cumple_situacion_celular, obtener_cumple_situacion_sexo, obtener_cumple_situacion_seguro
-from .queries import obtener_cumple_situacion_eess, obtener_cumple_situacion_frecuencia, obtener_cumple_situacion_direccion_completa, obtener_cumple_situacion_visitado_no_encontrado
+from .queries import (obtener_distritos, obtener_avance_situacion_padron, obtener_cumple_situacion_cnv,
+                      obtener_cumple_situacion_dni, obtener_cumple_situacion_eje_vial,
+                      obtener_cumple_situacion_direccion, obtener_cumple_situacion_referencia,
+                      obtener_cumple_situacion_visitado, obtener_cumple_situacion_encontrado,
+                      obtener_cumple_situacion_celular, obtener_cumple_situacion_sexo,
+                      obtener_cumple_situacion_seguro, obtener_cumple_situacion_eess,
+                      obtener_cumple_situacion_frecuencia, obtener_cumple_situacion_direccion_completa,
+                      obtener_cumple_situacion_visitado_no_encontrado)
 
-from base.models import MAESTRO_HIS_ESTABLECIMIENTO, DimPeriodo, Actualizacion
+from base.models import MAESTRO_HIS_ESTABLECIMIENTO, Actualizacion
 
 logger = logging.getLogger(__name__)
 
 from django.db.models.functions import Substr
 
-def get_distritos(request, distrito):
-    provincia = (
-                MAESTRO_HIS_ESTABLECIMIENTO
-                .objects.filter(Descripcion_Sector='GOBIERNO REGIONAL')
-                .annotate(ubigueo_filtrado=Substr('Ubigueo_Establecimiento', 1, 4))
-                .values('Provincia','ubigueo_filtrado')
-                .distinct()
-                .order_by('Provincia')
-    )
-    mes_inicio = (
-                DimPeriodo
-                .objects.filter(Anio='2024')
-                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
-                .values('Mes','periodo_filtrado')
-                .order_by('NroMes')
-                .distinct()
-    ) 
-    mes_fin = (
-                DimPeriodo
-                .objects.filter(Anio='2024')
-                .annotate(periodo_filtrado=Substr('Periodo', 1, 6))
-                .values('Mes','periodo_filtrado')
-                .order_by('NroMes')
-                .distinct()
-    ) 
-    context = {
-                'provincia': provincia,
-                'mes_inicio':mes_inicio,
-                'mes_fin':mes_fin,
-    }
-    return render(request, 'discapacidad/distritos.html', context)
-
-## PANTALLA PRINCIPAL
 def index_situacion_padron(request):
     actualizacion = Actualizacion.objects.all()
 
-    ## muestra las provincias
-    provincias = MAESTRO_HIS_ESTABLECIMIENTO.objects.values_list('Provincia', flat=True).distinct().order_by('Provincia')
+    # Provincias para el primer <select>
+    provincias = (MAESTRO_HIS_ESTABLECIMIENTO.objects
+                  .values_list('Provincia', flat=True)
+                  .distinct()
+                  .order_by('Provincia'))
     
-    ## obtiene la provincia seleccionada
-    provincia_seleccionada = request.GET.get('provincia','JUNIN')
-    
+    # Obtener parámetros
+    provincia_seleccionada = request.GET.get('provincia')
     distrito_seleccionado = request.GET.get('distrito')
 
-    print(provincia_seleccionada)
-    print(distrito_seleccionado)
-    
-    # Si la solicitud es AJAX/Validamos si es AJAX
+    # -- Manejo de distritos via HTMX (retorna template parcial) --
+    if 'get_distritos' in request.GET:
+        if provincia_seleccionada:
+            distritos = obtener_distritos(provincia_seleccionada)
+        else:
+            distritos = []
+        
+        return render(request, "pn_situacion_actual/partials/_distritos_options.html", {
+            "distritos": distritos
+        })
+
+    # -- Si es una solicitud AJAX, devolvemos JsonResponse con la data --
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        # Intentamos procesar la data sin mostrar errores
         try:
-            # Verificar si se solicitan distritos
+            # Llamada redundante a get_distritos (por si la plantilla antigua lo usara)
             if 'get_distritos' in request.GET:
                 distritos = obtener_distritos(provincia_seleccionada)
                 return JsonResponse(distritos, safe=False)
             
-            print(distritos)
-            # AVANCE GRAFICO POR EDAD 
-            resultados_avance_situacion_padron = obtener_avance_situacion_padron(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR CNV 
-            resultados_cumple_situacion_cnv = obtener_cumple_situacion_cnv(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_dni = obtener_cumple_situacion_dni(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_eje_vial = obtener_cumple_situacion_eje_vial(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_direccion = obtener_cumple_situacion_direccion(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_referencia = obtener_cumple_situacion_referencia(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_visitado = obtener_cumple_situacion_visitado(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_encontrado = obtener_cumple_situacion_encontrado(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_celular = obtener_cumple_situacion_celular(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_sexo = obtener_cumple_situacion_sexo(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_seguro = obtener_cumple_situacion_seguro(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_eess = obtener_cumple_situacion_eess(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_frecuencia = obtener_cumple_situacion_frecuencia(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_direccion_completa = obtener_cumple_situacion_direccion_completa(provincia_seleccionada, distrito_seleccionado)
-            # AVANCE POR DNI 
-            resultados_cumple_situacion_visitado_no_encontrado = obtener_cumple_situacion_visitado_no_encontrado(provincia_seleccionada, distrito_seleccionado)
+            # AVANCE GRAFICO POR EDAD
+            resultados_avance_situacion_padron = obtener_avance_situacion_padron(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            # AVANCE POR CNV
+            resultados_cumple_situacion_cnv = obtener_cumple_situacion_cnv(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            # (y así con el resto de consultas...)
+            resultados_cumple_situacion_dni = obtener_cumple_situacion_dni(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_eje_vial = obtener_cumple_situacion_eje_vial(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_direccion = obtener_cumple_situacion_direccion(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_referencia = obtener_cumple_situacion_referencia(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_visitado = obtener_cumple_situacion_visitado(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_encontrado = obtener_cumple_situacion_encontrado(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_celular = obtener_cumple_situacion_celular(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_sexo = obtener_cumple_situacion_sexo(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_seguro = obtener_cumple_situacion_seguro(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_eess = obtener_cumple_situacion_eess(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_frecuencia = obtener_cumple_situacion_frecuencia(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_direccion_completa = obtener_cumple_situacion_direccion_completa(
+                provincia_seleccionada, distrito_seleccionado
+            )
+            resultados_cumple_situacion_visitado_no_encontrado = obtener_cumple_situacion_visitado_no_encontrado(
+                provincia_seleccionada, distrito_seleccionado
+            )
 
-            data = {    
-                
-                # AVANCE GRAFICO POR EDAD           
+            # Estructura de datos inicial
+            data = {
+                # EDAD
                 'N28_dias': [],
                 'N0a5meses': [],
                 'N6a11meses': [],
@@ -113,77 +111,70 @@ def index_situacion_padron(request):
                 'cuatro_anios': [],
                 'cinco_anios': [],
                 'total_den': [],
-                
-                # CUMPLE CNV
+                # CNV
                 'total_cumple_cnv': [],
                 'brecha_cumple_cnv': [],
                 'cob_cnv': [],
-                
-                # CUMPLE DNI
+                # DNI
                 'total_cumple_dni': [],
                 'brecha_cumple_dni': [],
                 'cob_dni': [],
-                
-                # CUMPLE EJE VIAL                
+                # EJE VIAL
                 'total_cumple_eje_vial': [],
                 'brecha_eje_vial': [],
                 'cob_eje_vial': [],
-                
-                # CUMPLE DIRECCION
+                # DIRECCION
                 'total_cumple_direccion': [],
                 'brecha_direccion': [],
                 'cob_direccion': [],
-                
-                
+                # REFERENCIA
                 'total_cumple_referencia': [],
                 'brecha_referencia': [],
                 'cob_referencia': [],
-                
+                # VISITADO
                 'total_cumple_visitado': [],
                 'brecha_visitado': [],
                 'cob_visitado': [],
-                
+                # ENCONTRADO
                 'total_cumple_encontrado': [],
                 'brecha_encontrado': [],
                 'cob_encontrado': [],
-                
+                # CELULAR
                 'total_cumple_celular': [],
                 'brecha_celular': [],
                 'cob_celular': [],
-                
+                # SEXO
                 'total_cumple_sexo_masculino': [],
                 'total_cumple_sexo_femenino': [],
                 'cob_sexo': [],
-                
+                # SEGURO
                 'total_cumple_seguro': [],
                 'brecha_seguro': [],
                 'cob_seguro': [],
-                
+                # EESS
                 'total_eess': [],
                 'brecha_eess': [],
                 'cob_eess': [],
-                
+                # FRECUENCIA
                 'total_frecuencia': [],
                 'brecha_frecuencia': [],
                 'cob_frecuencia': [],
-                
+                # DIRECCION COMPLETA
                 'total_direccion_completa': [],
                 'brecha_direccion_completa': [],
                 'cob_direccion_completa': [],
-                
+                # VISITADO NO ENCONTRADO
                 'total_visitado_no_encontrado': [],
                 'brecha_visitado_no_encontrado': [],
                 'cob_visitado_no_encontrado': [],
-                
             }
-            
-            #AVANCE GRAFICO MESES
-            for index, row in enumerate(resultados_avance_situacion_padron):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 10:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
 
+            # ----------------------------------------------------------------------------
+            # 1) Avance Situacion Padron (EDAD)
+            # ----------------------------------------------------------------------------
+            for row in resultados_avance_situacion_padron:
+                # En lugar de lanzar error, checamos si la tupla es la longitud esperada:
+                if len(row) == 10:
                     data['N28_dias'].append(row[0])
                     data['N0a5meses'].append(row[1])
                     data['N6a11meses'].append(row[2])
@@ -194,223 +185,109 @@ def index_situacion_padron(request):
                     data['cuatro_anios'].append(row[7])
                     data['cinco_anios'].append(row[8])
                     data['total_den'].append(row[9])
+                # Si no, lo ignoramos silenciosamente
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-            
-            #CUMPLE CNV
-            for index, row in enumerate(resultados_cumple_situacion_cnv):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            # ----------------------------------------------------------------------------
+            # 2) CNV
+            # ----------------------------------------------------------------------------
+            for row in resultados_cumple_situacion_cnv:
+                if len(row) == 3:
                     data['total_cumple_cnv'].append(row[0])
                     data['brecha_cumple_cnv'].append(row[1])
                     data['cob_cnv'].append(row[2])
+                # Si no, no hacemos nada
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-            
-            #CUMPLE DNI
-            for index, row in enumerate(resultados_cumple_situacion_dni):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            # ----------------------------------------------------------------------------
+            # 3) DNI
+            # ----------------------------------------------------------------------------
+            for row in resultados_cumple_situacion_dni:
+                if len(row) == 3:
                     data['total_cumple_dni'].append(row[0])
                     data['brecha_cumple_dni'].append(row[1])
                     data['cob_dni'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-            
-            #CUMPLE EJE VIAL
-            for index, row in enumerate(resultados_cumple_situacion_eje_vial):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            # (Repite el mismo patrón para eje vial, direccion, referencia, etc.)
+            # ----------------------------------------------------------------------------
+            for row in resultados_cumple_situacion_eje_vial:
+                if len(row) == 3:
                     data['total_cumple_eje_vial'].append(row[0])
                     data['brecha_eje_vial'].append(row[1])
                     data['cob_eje_vial'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-            
-            #CUMPLE DIRECCION
-            for index, row in enumerate(resultados_cumple_situacion_direccion):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_direccion:
+                if len(row) == 3:
                     data['total_cumple_direccion'].append(row[0])
                     data['brecha_direccion'].append(row[1])
                     data['cob_direccion'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-            #CUMPLE REFERENCIA
-            for index, row in enumerate(resultados_cumple_situacion_referencia):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_referencia:
+                if len(row) == 3:
                     data['total_cumple_referencia'].append(row[0])
                     data['brecha_referencia'].append(row[1])
                     data['cob_referencia'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-            #CUMPLE VISITADO
-            for index, row in enumerate(resultados_cumple_situacion_visitado):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_visitado:
+                if len(row) == 3:
                     data['total_cumple_visitado'].append(row[0])
                     data['brecha_visitado'].append(row[1])
                     data['cob_visitado'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-            
-            #CUMPLE ENCONTRADO
-            for index, row in enumerate(resultados_cumple_situacion_encontrado):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_encontrado:
+                if len(row) == 3:
                     data['total_cumple_encontrado'].append(row[0])
                     data['brecha_encontrado'].append(row[1])
                     data['cob_encontrado'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-            #CUMPLE CELULAR
-            for index, row in enumerate(resultados_cumple_situacion_celular):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_celular:
+                if len(row) == 3:
                     data['total_cumple_celular'].append(row[0])
                     data['brecha_celular'].append(row[1])
                     data['cob_celular'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-            #CUMPLE SEXO
-            for index, row in enumerate(resultados_cumple_situacion_sexo):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_sexo:
+                if len(row) == 3:
                     data['total_cumple_sexo_masculino'].append(row[0])
                     data['total_cumple_sexo_femenino'].append(row[1])
                     data['cob_sexo'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-            #CUMPLE SEGURO
-            for index, row in enumerate(resultados_cumple_situacion_seguro):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_seguro:
+                if len(row) == 3:
                     data['total_cumple_seguro'].append(row[0])
                     data['brecha_seguro'].append(row[1])
                     data['cob_seguro'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-            #CUMPLE EESS
-            for index, row in enumerate(resultados_cumple_situacion_eess):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_eess:
+                if len(row) == 3:
                     data['total_eess'].append(row[0])
                     data['brecha_eess'].append(row[1])
                     data['cob_eess'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-            #CUMPLE FRECUENCIA
-            for index, row in enumerate(resultados_cumple_situacion_frecuencia):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_frecuencia:
+                if len(row) == 3:
                     data['total_frecuencia'].append(row[0])
                     data['brecha_frecuencia'].append(row[1])
                     data['cob_frecuencia'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-                    
-            #CUMPLE DIRECCION COMPLETA
-            for index, row in enumerate(resultados_cumple_situacion_direccion_completa):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_direccion_completa:
+                if len(row) == 3:
                     data['total_direccion_completa'].append(row[0])
                     data['brecha_direccion_completa'].append(row[1])
                     data['cob_direccion_completa'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-                    
-                    
-            #CUMPLE VISITADO NO ENCONTRADO
-            for index, row in enumerate(resultados_cumple_situacion_visitado_no_encontrado):
-                try:
-                    # Verifica que la tupla tenga exactamente 4 elementos
-                    if len(row) != 3:
-                        raise ValueError(f"La fila {index} no tiene 14 elementos: {row}")
-
+            for row in resultados_cumple_situacion_visitado_no_encontrado:
+                if len(row) == 3:
                     data['total_visitado_no_encontrado'].append(row[0])
                     data['brecha_visitado_no_encontrado'].append(row[1])
                     data['cob_visitado_no_encontrado'].append(row[2])
 
-                except Exception as e:
-                    logger.error(f"Error procesando la fila {index}: {str(e)}")
-            
             return JsonResponse(data)
 
-        except Exception as e:
-            logger.error(f"Error al obtener datos: {str(e)}")
+        except:
+            # Si ocurre alguna excepción global, la silenciamos (no mostramos nada)
+            return JsonResponse({}, status=200)
 
-    # Si no es una solicitud AJAX, renderiza la página principal
+    # -- Si no es AJAX, render normal de la plantilla --
     return render(request, 'pn_situacion_actual/index_pn_situacion_actual.html', {
         'actualizacion': actualizacion,
         'provincias': provincias,
     })
-

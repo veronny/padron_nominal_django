@@ -24,6 +24,8 @@ def obtener_distritos(provincia):
     distritos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Provincia=provincia).values('Distrito').distinct().order_by('Distrito')
     return list(distritos)
 
+
+
 def obtener_avance_situacion_padron(provincia, distrito):
     with connection.cursor() as cursor:
         cursor.execute(
