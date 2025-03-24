@@ -2,13 +2,13 @@ import logging
 from django.shortcuts import render
 from django.http import JsonResponse
 from .queries import (obtener_distritos, obtener_avance_situacion_padron, obtener_cumple_situacion_cnv,
-                      obtener_cumple_situacion_dni, obtener_cumple_situacion_eje_vial,
-                      obtener_cumple_situacion_direccion, obtener_cumple_situacion_referencia,
-                      obtener_cumple_situacion_visitado, obtener_cumple_situacion_encontrado,
-                      obtener_cumple_situacion_celular, obtener_cumple_situacion_sexo,
-                      obtener_cumple_situacion_seguro, obtener_cumple_situacion_eess,
-                      obtener_cumple_situacion_frecuencia, obtener_cumple_situacion_direccion_completa,
-                      obtener_cumple_situacion_visitado_no_encontrado)
+                        obtener_cumple_situacion_dni, obtener_cumple_situacion_eje_vial,
+                        obtener_cumple_situacion_direccion, obtener_cumple_situacion_referencia,
+                        obtener_cumple_situacion_visitado, obtener_cumple_situacion_encontrado,
+                        obtener_cumple_situacion_celular, obtener_cumple_situacion_sexo,
+                        obtener_cumple_situacion_seguro, obtener_cumple_situacion_eess,
+                        obtener_cumple_situacion_frecuencia, obtener_cumple_situacion_direccion_completa,
+                        obtener_cumple_situacion_visitado_no_encontrado)
 
 from base.models import MAESTRO_HIS_ESTABLECIMIENTO, Actualizacion
 
@@ -21,11 +21,12 @@ def index_situacion_padron(request):
 
     # Provincias para el primer <select>
     provincias = (MAESTRO_HIS_ESTABLECIMIENTO.objects
-                  .values_list('Provincia', flat=True)
-                  .distinct()
-                  .order_by('Provincia'))
+                    .values_list('Provincia', flat=True)
+                    .distinct()
+                    .order_by('Provincia'))
     
     # Obtener parámetros
+    departamento_selecionado = request.GET.get('departamento')
     provincia_seleccionada = request.GET.get('provincia')
     distrito_seleccionado = request.GET.get('distrito')
 
@@ -51,51 +52,51 @@ def index_situacion_padron(request):
             
             # AVANCE GRAFICO POR EDAD
             resultados_avance_situacion_padron = obtener_avance_situacion_padron(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             # AVANCE POR CNV
             resultados_cumple_situacion_cnv = obtener_cumple_situacion_cnv(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             # (y así con el resto de consultas...)
             resultados_cumple_situacion_dni = obtener_cumple_situacion_dni(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_eje_vial = obtener_cumple_situacion_eje_vial(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_direccion = obtener_cumple_situacion_direccion(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_referencia = obtener_cumple_situacion_referencia(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_visitado = obtener_cumple_situacion_visitado(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_encontrado = obtener_cumple_situacion_encontrado(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_celular = obtener_cumple_situacion_celular(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_sexo = obtener_cumple_situacion_sexo(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_seguro = obtener_cumple_situacion_seguro(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_eess = obtener_cumple_situacion_eess(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_frecuencia = obtener_cumple_situacion_frecuencia(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_direccion_completa = obtener_cumple_situacion_direccion_completa(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
             resultados_cumple_situacion_visitado_no_encontrado = obtener_cumple_situacion_visitado_no_encontrado(
-                provincia_seleccionada, distrito_seleccionado
+                departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
 
             # Estructura de datos inicial

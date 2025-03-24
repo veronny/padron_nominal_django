@@ -20,7 +20,7 @@
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>REGION :</label>
-                                                <select name="region" id="region" class="form-control" style="width: 100%;">
+                                                <select name="departamento" id="departamento" class="form-control" style="width: 100%;">
                                                     <option value="JUNIN">JUNIN</option>
                                                 </select>
                                             </div>
@@ -201,9 +201,6 @@
 
 
 <!-- Incluir la sección de seguimiento nominal desde un partial -->
-{% include "pn_situacion_actual/partials/_dashboard_situacion.html" %}
-
-<!-- Incluir la sección de seguimiento nominal desde un partial -->
 {% include "pn_situacion_actual/partials/_seguimiento_nominal.html" %}
 
 
@@ -336,7 +333,7 @@
                             },
                             { 
                                 name: `C: ${((data['cob_cnv'][0] * 100).toFixed(2))}%`, 
-                                value: data['cob_cnv'][0],
+                                value: (data['cob_cnv'][0]),
                                 itemStyle: { color: '#5470c6' } // Color por defecto (azul)
                             }
                         ]
