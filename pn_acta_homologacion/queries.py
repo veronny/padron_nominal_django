@@ -24,6 +24,98 @@ def obtener_distritos(provincia):
     distritos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Provincia=provincia).values('Distrito').distinct().order_by('Distrito')
     return list(distritos)
 
+
+def obtener_tabla_acta(departamento, provincia, distrito):
+    with connection.cursor() as cursor:
+        
+        # Ejecutar el query con crosstab y parámetros dinámicos
+        cursor.execute(
+            '''
+            SELECT departamento, provincia, distrito, municipio,
+                    mes_enero, mes_febrero, mes_marzo, mes_abril, mes_mayo, mes_junio,
+                    mes_julio, mes_agosto, mes_septiembre, mes_octubre, mes_noviembre, mes_diciembre  FROM public."matriz_acta"
+            WHERE 
+                (COALESCE(%s, '') = '' OR "departamento" = %s) AND
+                (COALESCE(%s, '') = '' OR "provincia" = %s) AND
+                (COALESCE(%s, '') = '' OR "distrito" = %s);
+            ''',
+            [
+                departamento, departamento,
+                provincia, provincia,
+                distrito, distrito
+            ]
+        )
+        return cursor.fetchall()
+
+
+def obtener_cards_regional_acta(departamento, provincia, distrito):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            '''
+            SELECT  
+                SUM("total_cumple_dni") AS total_cumple_dni,
+                SUM("brecha_dni") AS brecha_dni,
+                SUM("cob_dni") AS cob_dni
+            FROM public."SITUACION_PADRON"
+            WHERE 
+                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
+                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
+                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
+            ''',
+            [
+                departamento, departamento,
+                provincia, provincia,
+                distrito, distrito
+            ]
+        )
+        return cursor.fetchall()
+
+
+def obtener_grafico_regional_acta(departamento, provincia, distrito):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            '''
+            SELECT  
+                SUM("total_cumple_dni") AS total_cumple_dni,
+                SUM("brecha_dni") AS brecha_dni,
+                SUM("cob_dni") AS cob_dni
+            FROM public."SITUACION_PADRON"
+            WHERE 
+                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
+                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
+                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
+            ''',
+            [
+                departamento, departamento,
+                provincia, provincia,
+                distrito, distrito
+            ]
+        )
+        return cursor.fetchall()
+
+def obtener_ranking_acta(departamento, provincia, distrito):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            '''
+            SELECT  
+                SUM("total_cumple_dni") AS total_cumple_dni,
+                SUM("brecha_dni") AS brecha_dni,
+                SUM("cob_dni") AS cob_dni
+            FROM public."SITUACION_PADRON"
+            WHERE 
+                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
+                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
+                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
+            ''',
+            [
+                departamento, departamento,
+                provincia, provincia,
+                distrito, distrito
+            ]
+        )
+        return cursor.fetchall()
+
+
 def obtener_avance_situacion_padron(departamento,provincia, distrito):
     with connection.cursor() as cursor:
         cursor.execute(
@@ -61,292 +153,6 @@ def obtener_cumple_situacion_dni(departamento, provincia, distrito):
                 SUM("total_cumple_dni") AS total_cumple_dni,
                 SUM("brecha_dni") AS brecha_dni,
                 SUM("cob_dni") AS cob_dni
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_cnv(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_cnv") AS total_cumple_cnv,
-                SUM("brecha_cumple_cnv") AS brecha_cumple_cnv,
-                SUM("cob_cnv") AS cob_cnv
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_eje_vial(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_eje_vial") AS total_cumple_eje_vial,
-                SUM("brecha_eje_vial") AS brecha_eje_vial,
-                SUM("cob_eje_vial") AS cob_eje_vial
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_direccion(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_direccion") AS total_cumple_direccion,
-                SUM("brecha_direccion") AS brecha_direccion,
-                SUM("cob_direccion") AS cob_direccion
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_referencia(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_referencia") AS total_cumple_referencia,
-                SUM("brecha_referencia") AS brecha_referencia,
-                SUM("cob_referencia") AS cob_referencia
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_visitado(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_visitado") AS total_cumple_visitado,
-                SUM("brecha_visitado") AS brecha_visitado,
-                SUM("cob_visitado") AS cob_visitado
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_encontrado(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_encontrado") AS total_cumple_encontrado,
-                SUM("brecha_encontrado") AS brecha_encontrado,
-                SUM("cob_encontrado") AS cob_encontrado
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_celular(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_celular") AS total_cumple_celular,
-                SUM("brecha_celular") AS brecha_celular,
-                SUM("cob_celular") AS cob_celular
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_sexo(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_sexo_masculino") AS total_cumple_sexo_masculino,
-                SUM("total_cumple_sexo_femenino") AS total_cumple_sexo_femenino,
-                SUM("cob_sexo") AS cob_sexo
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_seguro(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_seguro") AS total_cumple_seguro,
-                SUM("brecha_seguro") AS brecha_seguro,
-                SUM("cob_seguro") AS cob_seguro
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_eess(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_eess") AS total_eess,
-                SUM("brecha_eess") AS brecha_eess,
-                SUM("cob_eess") AS cob_eess
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_frecuencia(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_frecuencia") AS total_frecuencia,
-                SUM("brecha_frecuencia") AS brecha_frecuencia,
-                SUM("cob_frecuencia") AS cob_frecuencia
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_direccion_completa(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_direccion_completa") AS total_direccion_completa,
-                SUM("brecha_direccion_completa") AS brecha_direccion_completa,
-                SUM("cob_direccion_completa") AS cob_direccion_completa
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_cumple_situacion_visitado_no_encontrado(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_visitado_no_encontrado") AS total_visitado_no_encontrado,
-                SUM("brecha_visitado_no_encontrado") AS brecha_visitado_no_encontrado,
-                SUM("cob_visitado_no_encontrado") AS cob_visitado_no_encontrado
             FROM public."SITUACION_PADRON"
             WHERE 
                 (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND

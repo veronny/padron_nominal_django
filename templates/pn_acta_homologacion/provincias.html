@@ -2,10 +2,10 @@
     <div class="row">
       <div class="col-md-12">
         <section class="card card-body shadow mb-2">
-            <div class="col-md-6 offset-md-3 text-center py-1 text-primary">
-                <h4>REPORTE POR DISTRITO</h4>
-            </div>
-          <form method="GET" enctype="multipart/form-data" action="{% url 'rpt_situacion_distrito_xls' %}">
+          <div class="col-md-6 offset-md-3 text-center py-1 text-primary">
+            <h4>REPORTE POR PROVINCIA </h4>
+          </div>
+          <form method="GET" enctype="multipart/form-data" action="{% url 'rpt_situacion_provincia_xls' %}">
             <!-- cabecera-->   
             <div class="form row">
               <!-- años-->
@@ -61,37 +61,25 @@
                     </select>
                 </div>            
               </div>
-            </div>           
-            <!-- provincia-->                  
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                    <label class="text-primary" for="provincia">PROVINCIA :</label>
-                    <select class="form-control" name="provincia" hx-get="{% url 'p_distrito_situacion' %}" hx-trigger="change" hx-target="#p_distrito_situacion">
-                        <option value="">--- SELECCIONAR ---</option>
-                        {% for p in provincias %}
-                        <option value="{{ p.ubigueo_filtrado }}">{{ p.Provincia }} </option>
-                        {% endfor %}
-                    </select>
-                </div>
-              </div>
             </div>
-                
-            <!--- INCLUDE DROP INCLUYENTE --->
+            <!-- provincia-->    
             <div class="row">
               <div class="col-md-12">
-                <div class="form-group">
-                  <div id="p_distrito_situacion">
-                      {% include 'pn_situacion_actual/partials/p_distritos.html' %}
+                  <div class="form-group">
+                    <label class="text-danger" for="provincia">PROVINCIA :</label>
+                    <select class="form-control" name="provincia">
+                      <option value="">--- SELECCIONAR ---</option>
+                      {% for p in provincias %}
+                      <option value="{{ p.ubigueo_filtrado }}">{{ p.Provincia }} </option>
+                      {% endfor %}
+                    </select>
                   </div>
-                </div>
               </div>
-            </div> 
-            <!--- FIN INCLUDE DROP INCLUYENTE --->
-
+            </div>   
+            <!-- fin cabecera-->
             <br>        
             <div class="col-md-6 offset-md-3 text-center py-1 form-group">        
-              <button type="submit" class="btn btn-success btn-lg text-center"><i class="fa fa-file-excel"></i> Procesar</button>
+              <button type="submit" class="btn btn-success btn-lg text-center"><i class="fa fa-file-excel"></i> PROCESAR</button>
             </div>
           </form>
         </section>

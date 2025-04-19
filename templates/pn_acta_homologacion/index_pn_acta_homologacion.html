@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+<style>
+/* General styles for dates */
+.matrix-table td {
+    padding: 5px;
+    text-align: center;
+}
+
+/* Green background for dates */
+.matrix-table .date-cell {
+    background-color: #dff0d8; /* Light green */
+    color: #3c763d; /* Dark green text */
+}
+
+/* Red background for empty March values */
+.matrix-table .empty-march {
+    background-color: #f2dede; /* Light red */
+    color: #a94442; /* Dark red text */
+}
+
+/* Alert label for municipalities with empty March */
+.matrix-table .alert-label {
+    color: #a94442; /* Dark red text */
+    font-weight: bold;
+}
+
+/* Align Municipio column to the left */
+.matrix-table .municipio-name-col {
+    text-align: left;
+}
+
+/* Add space between Municipio name and alert label */
+.matrix-table .alert-label {
+    margin-left: 10px; /* Add spacing */
+}
+
+.date-cell {
+    color: #28a745 !important;
+    font-weight: bold;
+}
+
+.empty-march {
+    background-color: #a94442 ;
+    color: white;
+}
+
+.alert-icon {
+    font-size: 0.8em;
+    padding: 3px 6px;
+    margin-left: 8px;
+    border-radius: 4px;
+}
+
+</style>
+
+
+<section class="content">
+    <div class="container-fluid">
+        
+        <div class="row">
+            <section class="col-lg-12 connectedSortable">
+                <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Matriz de Municipios y Actas por Mes</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="filter-container">
+                    <!-- Provincia dropdown -->
+                        <div class="province-filter">
+                            <select name="provincia" id="provincia" class="form-control">
+                                <option value="">SELECCIONAR</option>
+                                {% for provincia in provincias %}
+                                    <option value="{{ provincia }}">{{ provincia }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    <!-- … existing filters for ranking … -->
+                    </div>
+
+                    <!-- ADD: matrix-specific municipio filter -->
+                    <div class="filter-container">
+                        <div class="municipality-matrix-filter">
+                            <label>Buscar municipio:</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="municipality-matrix-search"
+                                    list="municipios-matrix-list"
+                                    placeholder="Buscar municipio en la matriz..."
+                                >
+                                <datalist id="municipios-matrix-list"></datalist>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="matrix-container">
+                        <table class="table table-bordered table-striped matrix-table" id="matrix-table">
+                            <thead>
+                                <tr>
+                                    <th class="municipality-name-col">Municipio</th>
+                                    <th>Ene</th>
+                                    <th>Feb</th>
+                                    <th>Mar</th>
+                                    <th>Abr</th>
+                                    <th>May</th>
+                                    <th>Jun</th>
+                                    <th>Jul</th>
+                                    <th>Ago</th>
+                                    <th>Sep</th>
+                                    <th>Oct</th>
+                                    <th>Nov</th>
+                                    <th>Dic</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matrix-body">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="text-muted small">
+                        <i class="fas fa-info-circle"></i> Las celdas muestran la fecha de la última subida de acta en el mes correspondiente.
+                    </div>
+                </div>
+                </div><!-- Right col - Ejemplo de otros gráficos -->
+            </section
+        </div>
+
+        <!-- Main row -->
+        <div class="row">
+            <!-- Left col -->
+            <section class="col-lg-12 connectedSortable">
+                <!-- Filtros -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content p-0">
+                            <div class="form-group">
+                                <!-- Form principal -->
+                                <form id="filtroForm">
+                                    <div class="row">
+                                        <!-- Selector de Región (estático) -->
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>REGION :</label>
+                                                <select name="departamento" id="departamento" class="form-control" style="width: 100%;">
+                                                    <option value="JUNIN">JUNIN</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Selector de Provincia con HTMX -->
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>PROVINCIA :</label>
+                                                <select
+                                                    id="provincia"
+                                                    name="provincia"
+                                                    class="form-control"
+                                                    style="width: 100%;"
+                                                    hx-get="{% url 'index_situacion_padron' %}?get_distritos=1"
+                                                    hx-trigger="change"
+                                                    hx-target="#distrito"
+                                                    hx-include="#provincia"
+                                                >
+                                                    <option value="">SELECCIONAR</option>
+                                                    {% for provincia in provincias %}
+                                                        <option value="{{ provincia }}">{{ provincia }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Selector de Distrito (se llena dinámicamente) -->
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>DISTRITO :</label>
+                                                <select
+                                                    id="distrito"
+                                                    name="distrito"
+                                                    class="form-control"
+                                                    style="width: 100%;"
+                                                >
+                                                    <option value="">SELECCIONAR</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Botón "VER" para disparar la consulta (submit del form) -->
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label style="color:white;">VER :</label>
+                                                <button class="btn btn-success col" type="submit">
+                                                    <i class="fa fa-search"></i> VER 
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form> 
+                            </div>
+                        </div>
+                    </div><!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+
+                <!-- EJEMPLO DE TARJETA CON GRÁFICO -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="ion ion-clipboard mr-1"></i>
+                            CANTIDAD DE NIÑOS
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="grafico" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.Left col -->
+
+            <!-- Right col - Ejemplo de otros gráficos -->
+
+        </div>
+
+    <!-- /.row (main row) -->
+    </div><!-- /.container-fluid -->
+</section>
+
+
+<!-- Incluir la sección de seguimiento nominal desde un partial -->
+{% include "pn_situacion_actual/_seguimiento_nominal.html" %}
+
+
+<!-- Librería ECharts -->
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        function loadMatrixData() {
+            const provincia = document.getElementById('provincia').value;
+            const departamento = document.getElementById('departamento').value;
+            const distrito = document.getElementById('distrito').value;
+            
+            const params = new URLSearchParams({
+                provincia: provincia,
+                departamento: departamento,
+                distrito: distrito
+            });
+            
+            fetch(`{% url "index_acta_padron" %}?${params.toString()}`, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error en la respuesta');
+                return response.json();
+            })
+            .then(data => {
+                const tbody = document.getElementById('matrix-body');
+                tbody.innerHTML = '';
+                
+                // Verificar si hay datos
+                if (data.municipio && data.municipio.length > 0) {
+                    data.municipio.forEach((municipio, index) => {
+                        const row = document.createElement('tr');
+                        
+                        // Municipio column with alert label
+                        let municipioCell = `<td class="municipio-name-col">${municipio}`;
+                        const marchValue = data.mes_marzo?.[index] || '-';
+                        if (marchValue === '-') {
+                            municipioCell += '    <span class="fas fa-exclamation-circle alert-icon badge bg-danger">  ¡Alerta!</span>';
+                        }
+                        municipioCell += '</td>';
+
+                        row.innerHTML = municipioCell;
+                        
+                        const meses = ['mes_enero', 'mes_febrero', 'mes_marzo',
+                                        'mes_abril', 'mes_mayo', 'mes_junio',
+                                        'mes_julio', 'mes_agosto', 'mes_septiembre',
+                                        'mes_octubre', 'mes_noviembre', 'mes_diciembre'];
+                        meses.forEach((mes, mesIndex) => {
+                            let valor = data[mes]?.[index] || '-';
+                            let cellClass = '';
+                            let formattedValor = valor;
+                        
+                            // Formatear fecha solo si hay valor
+                            if (valor !== '-' && valor !== 'None') {
+                                // Convertir a formato dd/mm/yyyy
+                                const [fechaParte] = valor.split(' ');  // Dividir fecha y hora
+                                const [anio, mesFecha, dia] = fechaParte.split('-');
+                                formattedValor = `${dia}/${mesFecha}/${anio}`;
+                                
+                                // Aplicar clase para texto verde
+                                cellClass = 'date-cell';
+                            }
+                        
+                            // Resaltar marzo vacío
+                            if (mes === 'mes_marzo' && valor === '-') {
+                                cellClass = 'empty-march';
+                            }
+                        
+                            row.innerHTML += `<td class="${cellClass}">${formattedValor}</td>`;
+                        });
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="13">No se encontraron datos</td></tr>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('matrix-body').innerHTML = 
+                    '<tr><td colspan="13">Error al cargar los datos</td></tr>';
+            });
+        }
+    
+        // Manejar submit del formulario
+        document.getElementById('filtroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            loadMatrixData();
+        });
+    
+        // Event listeners para cambios en los selects
+        document.getElementById('provincia').addEventListener('change', loadMatrixData);
+        document.getElementById('distrito').addEventListener('change', loadMatrixData);
+        
+        // Carga inicial
+        loadMatrixData();
+    });
+
+</script>
+
+
+{% endblock %}

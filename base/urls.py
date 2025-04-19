@@ -15,4 +15,7 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     ## PADRON NOMINAL SITUACION
     path('', include('pn_situacion_actual.urls')),
+    ## ACTA PADRON NOMINAL 
+    path('', include('pn_acta_homologacion.urls')),
+    
 ]

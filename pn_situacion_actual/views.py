@@ -8,7 +8,7 @@ from .queries import (obtener_distritos, obtener_avance_situacion_padron, obtene
                         obtener_cumple_situacion_celular, obtener_cumple_situacion_sexo,
                         obtener_cumple_situacion_seguro, obtener_cumple_situacion_eess,
                         obtener_cumple_situacion_frecuencia, obtener_cumple_situacion_direccion_completa,
-                        obtener_cumple_situacion_visitado_no_encontrado, obtener_seguimiento_situacion_padron)
+                        obtener_cumple_situacion_visitado_no_encontrado, obtener_seguimiento_situacion_padron, obtener_seguimiento_situacion_padron_distrito)
 
 from base.models import MAESTRO_HIS_ESTABLECIMIENTO, Actualizacion
 
@@ -403,7 +403,6 @@ def p_distritos_situacion(request):
     }
     return render(request, 'pn_situacion_actual/partials/p_distritos.html', context)
 
-
 ## SEGUIMIENTO POR REDES
 def get_redes_situacion(request,redes_id):
     redes = (
@@ -574,17 +573,17 @@ class RptSituacionProvincia(TemplateView):
 class RptSituacionDistrito(TemplateView):
     def get(self, request, *args, **kwargs):
         # Variables ingresadas
-        p_anio = request.GET.get('anio')
-        p_red = request.GET.get('red','')
-        p_microred = ''
-        p_establec = ''
-        p_inicio = int(request.GET.get('fecha_inicio'))
-        p_fin = int(request.GET.get('fecha_fin'))
+        p_departamento = 'JUNIN'
+        p_provincia = request.GET.get('provincia')
+        p_distrito = request.GET.get('distrito')
+        p_edades =  request.GET.get('edades','')
         p_cumple = request.GET.get('cumple', '') 
 
         # Creación de la consulta
-        resultado_seguimiento = obtener_seguimiento_redes_paquete_gestante(p_anio,p_red,p_microred,p_establec,p_inicio,p_fin,p_cumple)
-                
+        resultado_seguimiento = obtener_seguimiento_situacion_padron_distrito(p_departamento, p_provincia, p_distrito, p_edades, p_cumple)
+        
+
+        
         wb = Workbook()
         
         consultas = [
@@ -598,11 +597,11 @@ class RptSituacionDistrito(TemplateView):
             else:
                 ws = wb.create_sheet(title=sheet_name)
         
-            fill_worksheet_situacion_red(ws, results)
+            fill_worksheet_situacion(ws, results)
         
         ##########################################################################          
         # Establecer el nombre del archivo
-        nombre_archivo = "rpt_situacion_red.xlsx"
+        nombre_archivo = "rpt_situacion_distrito.xlsx"
         # Definir el tipo de respuesta que se va a dar
         response = HttpResponse(content_type="application/ms-excel")
         contenido = "attachment; filename={}".format(nombre_archivo)
@@ -649,7 +648,6 @@ class RptSituacionRed(TemplateView):
         wb.save(response)
 
         return response
-
 class RptSituacionMicroRed(TemplateView):
     def get(self, request, *args, **kwargs):
         # Variables ingresadas
@@ -688,7 +686,6 @@ class RptSituacionMicroRed(TemplateView):
         wb.save(response)
 
         return response
-
 class RptSituacionEstablec(TemplateView):
     def get(self, request, *args, **kwargs):
         # Variables ingresadas
@@ -770,7 +767,7 @@ def fill_worksheet_situacion(ws, results):
     ws.column_dimensions['AC'].width = 9
     ws.column_dimensions['AD'].width = 9    
     ws.column_dimensions['AE'].width = 9
-    ws.column_dimensions['AF'].width = 5   
+    ws.column_dimensions['AF'].width = 9   
     ws.column_dimensions['AG'].width = 9    
     ws.column_dimensions['AH'].width = 9   
     ws.column_dimensions['AI'].width = 25
@@ -816,7 +813,7 @@ def fill_worksheet_situacion(ws, results):
     ws.column_dimensions['BW'].width = 5
     
     # linea de division
-    ws.freeze_panes = 'R7'
+    ws.freeze_panes = 'H7'
     # Configuración del fondo y el borde
     # Definir el color usando formato aRGB (opacidad completa 'FF' + color RGB)
     fill = PatternFill(start_color='FF60D7E0', end_color='FF60D7E0', fill_type='solid')
@@ -906,7 +903,7 @@ def fill_worksheet_situacion(ws, results):
     ws.merge_cells('AC5:AG5')
     ws.merge_cells('AH5:AO5')
     ws.merge_cells('AQ5:AV5')
-    ws.merge_cells('AX5:BD5')
+    ws.merge_cells('AW5:BD5')
     ws.merge_cells('BF5:BW5')
 
     # Combina cela
@@ -915,7 +912,7 @@ def fill_worksheet_situacion(ws, results):
     ws['AC5'] = 'VISITAS DOMICILARIAS'
     ws['AH5'] = 'VARIBALES CON INFORMACION DE SALUD'
     ws['AQ5'] = 'DATOS DE LA MADRE'
-    ws['AX5'] = 'AUDITORIA DE LOS REGISTROS'
+    ws['AW5'] = 'AUDITORIA DE LOS REGISTROS'
     ws['BF5'] = 'INFORMACION HIS MINSA - ULTIMA ATENCION REGIONAL'
 
     ### numerador y denominador 
@@ -946,10 +943,10 @@ def fill_worksheet_situacion(ws, results):
     ws['AQ5'].fill = yellow_fill
     ws['AQ5'].border = border_negro
     
-    ws['AX5'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
-    ws['AX5'].font = Font(name = 'Arial', size= 10, bold = True)
-    ws['AX5'].fill = green_fill_2
-    ws['AX5'].border = border_negro
+    ws['AW5'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+    ws['AW5'].font = Font(name = 'Arial', size= 10, bold = True)
+    ws['AW5'].fill = green_fill_2
+    ws['AW5'].border = border_negro
     
     ws['BF5'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['BF5'].font = Font(name = 'Arial', size= 10, bold = True)
@@ -1034,16 +1031,28 @@ def fill_worksheet_situacion(ws, results):
     ws['B3'].font = Font(name = 'Arial', size= 7, color='0000CC')
     ws['B3'] ='El usuario se compromete a mantener la confidencialidad de los datos personales que conozca como resultado del reporte realizado, cumpliendo con lo establecido en la Ley N° 29733 - Ley de Protección de Datos Personales y sus normas complementarias.'
         
+    ws['AP5'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+    ws['AP5'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
+    ws['AP5'].fill = celeste_fill
+    
+    ws['BE5'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
+    ws['BE5'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
+    ws['BE5'].fill = orange_fill
+
+    
+    
+    
+    
     ws['B6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['B6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['B6'].fill = fill
-    ws['B6'].border = border
+    ws['B6'].border = border_negro
     ws['B6'] = 'ID'
     
     ws['C6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['C6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['C6'].fill = fill
-    ws['C6'].border = border
+    ws['C6'].border = border_negro 
     ws['C6'] = 'COD PADRON'
     
     ws['D6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
@@ -1080,7 +1089,7 @@ def fill_worksheet_situacion(ws, results):
     ws['I6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['I6'].fill = fill
     ws['I6'].border = border
-    ws['I6'] = 'IND'    
+    ws['I6'] = 'IND DNI'    
     
     ws['J6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['J6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
@@ -1194,7 +1203,7 @@ def fill_worksheet_situacion(ws, results):
     ws['AB6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['AB6'].fill = gray_fill
     ws['AB6'].border = border
-    ws['AB6'] = 'IND' 
+    ws['AB6'] = 'IND DIR' 
     
     ws['AC6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['AC6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
@@ -1218,13 +1227,13 @@ def fill_worksheet_situacion(ws, results):
     ws['AF6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['AF6'].fill = green_fill
     ws['AF6'].border = border
-    ws['AF6'] = 'VIST NO ENCON' 
+    ws['AF6'] = 'IND VIS' 
     
     ws['AG6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['AG6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['AG6'].fill = green_fill
     ws['AG6'].border = border
-    ws['AG6'] = 'IND'  
+    ws['AG6'] = 'TRANSITO'  
     
     ws['AH6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['AH6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
@@ -1260,7 +1269,7 @@ def fill_worksheet_situacion(ws, results):
     ws['AM6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['AM6'].fill = blue_fill
     ws['AM6'].border = border
-    ws['AM6'] = 'IND' 
+    ws['AM6'] = 'IND SALUD' 
     
     ws['AN6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['AN6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
@@ -1276,8 +1285,8 @@ def fill_worksheet_situacion(ws, results):
     
     ws['AP6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['AP6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
-    ws['AP6'].fill = yellow_fill
-    ws['AP6'].border = border
+    ws['AP6'].fill = celeste_fill
+    ws['AP6'].border = border_negro
     ws['AP6'] = 'PROG. SOCIAL'  
     
     ws['AQ6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
@@ -1308,7 +1317,7 @@ def fill_worksheet_situacion(ws, results):
     ws['AU6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['AU6'].fill = yellow_fill
     ws['AU6'].border = border
-    ws['AU6'] = 'IND' 
+    ws['AU6'] = 'IND MADRE' 
     
     ws['AV6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['AV6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
@@ -1368,11 +1377,11 @@ def fill_worksheet_situacion(ws, results):
     ws['BE6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
     ws['BE6'].fill = orange_fill
     ws['BE6'].border = border
-    ws['BE6'] = 'IND' 
+    ws['BE6'] = 'INDICADOR' 
     
     ws['BF6'].alignment = Alignment(horizontal= "center", vertical="center", wrap_text=True)
     ws['BF6'].font = Font(name = 'Arial', size= 8, bold = True, color='000000')
-    ws['BF6'].fill = orange_fill
+    ws['BF6'].fill = celeste_fill
     ws['BF6'].border = border
     ws['BF6'] = 'DEN'  
     
@@ -1532,7 +1541,7 @@ def fill_worksheet_situacion(ws, results):
                     cell.font = Font(name='Arial', size=7)
             
             # Aplicar color de letra SUB INDICADORES
-            elif col in [9, 39,47]:
+            elif col in [9, 32, 39,47]:
                 if value == 0:
                     cell.value = sub_no_cumple  # Insertar check
                     cell.font = Font(name='Arial', size=7, color="FF0000")  # Letra roja
@@ -1542,7 +1551,7 @@ def fill_worksheet_situacion(ws, results):
                 else:
                         cell.font = Font(name='Arial', size=7)
                         
-            elif col in [28, 33,39,47]:
+            elif col in [28,39,47]:
                 if value == '0':
                     cell.value = sub_no_cumple  # Insertar check
                     cell.font = Font(name='Arial', size=7, color="FF0000")  # Letra roja
@@ -1561,7 +1570,7 @@ def fill_worksheet_situacion(ws, results):
                 cell.font = Font(name='Arial', size=8)  # Fuente normal para otras columnas
 
             # Aplicar caracteres especiales check y X
-            if col in [32,58]:
+            if col in [33,58]:
                 if value == 1:
                     cell.value = check_mark  # Insertar check
                     cell.font = Font(name='Arial', size=10, color='00B050')  # Letra verde
@@ -1571,7 +1580,7 @@ def fill_worksheet_situacion(ws, results):
                 else:
                     cell.font = Font(name='Arial', size=8)  # Fuente normal si no es 1 o 0
             
-            if col in [32,58]:
+            if col in [33,58]:
                 if value == '1':
                     cell.value = check_mark  # Insertar check
                     cell.font = Font(name='Arial', size=10, color='00B050')  # Letra verde
