@@ -1,7 +1,7 @@
 import logging
 from django.shortcuts import render
 from django.http import JsonResponse
-from .queries import (obtener_tabla_acta,obtener_distritos, obtener_provincias)
+from .queries import (obtener_tabla_acta,obtener_distritos, obtener_grafico_regional_acta,obtener_ranking_acta, obtener_detalle_acta)
 
 from base.models import MAESTRO_HIS_ESTABLECIMIENTO, Actualizacion
 
@@ -81,17 +81,27 @@ def index_acta_padron(request):
                 distritos = obtener_distritos(provincia_seleccionada)
                 return JsonResponse(distritos, safe=False)
             
-            # AVANCE GRAFICO POR EDAD
+            # AVANCE MATRIZ ACTA
             resultados_tabla_acta = obtener_tabla_acta(
                 departamento_selecionado, provincia_seleccionada, distrito_seleccionado
             )
-
+            
+            # AVANCE GRAFICO REGIONAL MENSUALIZADO
+            resultados_grafico_regional = obtener_grafico_regional_acta()           
+            
+            resultados_ranking_acta = obtener_ranking_acta()
+            
+            # OBTENER DETALLE
+            resultados_detalle_acta = obtener_detalle_acta()
+            #print("resultados_detalle_acta:", resultados_detalle_acta)
+            
+            
             # Estructura de datos inicial
             data = {
-                # EDAD
+                # DATA MATRIZ
                 'departamento': [],
-                'provincia': [],
-                'distrito': [],
+                'provincia_matriz': [],
+                'distrito_matriz': [],
                 'municipio': [],
                 'mes_enero': [],
                 'mes_febrero': [],
@@ -104,18 +114,77 @@ def index_acta_padron(request):
                 'mes_septiembre': [],
                 'mes_octubre': [],
                 'mes_noviembre': [],
-                'mes_diciembre': []
+                'mes_diciembre': [],
+                
+                # DATA GRAFICO REGIONAL
+                'num_1': [],
+                'den_1': [],
+                'cob_1': [],
+                'num_2': [],
+                'den_2': [],
+                'cob_2': [],
+                'num_3': [],
+                'den_3': [],
+                'cob_3': [],
+                'num_4': [],
+                'den_4': [],
+                'cob_4': [],
+                'num_5': [],
+                'den_5': [],
+                'cob_5': [],
+                'num_6': [],
+                'den_6': [],
+                'cob_6': [],
+                'num_7': [],
+                'den_7': [],
+                'cob_7': [],
+                'num_8': [],
+                'den_8': [],
+                'cob_8': [],                
+                'num_9': [],
+                'den_9': [],
+                'cob_9': [],
+                'num_10': [],
+                'den_10': [],
+                'cob_10': [],
+                'num_11': [],
+                'den_11': [],
+                'cob_11': [],
+                'num_12': [],
+                'den_12': [],
+                'cob_12': [],
+                
+                # DATA RANKING ACTA
+                'provincia_ranking': [],
+                'distrito_ranking': [],
+                'den_ranking': [],
+                'num_ranking': [],
+                'avance_ranking': [],
+                'estado_ranking': [],
+                
+                # DATA DETALLE ACTA
+                'provincia_detalle': [],
+                'distrito_detalle': [],
+                'municipio_detalle': [],
+                'mes_detalle': [],
+                'fecha_inicial_detalle': [],
+                'fecha_final_detalle': [],
+                'fecha_envio_detalle': [], 
+                'dni_detalle': [],
+                'primer_apellido_detalle': [], 
+                'segundo_apellido_detalle': [], 
+                'nombres_detalle': [],
             }
 
             # ----------------------------------------------------------------------------
-            # 1) Avance Situacion Padron (EDAD)
+            # MATRIZ DETALLADA
             # ----------------------------------------------------------------------------
             for row in resultados_tabla_acta:
                 # En lugar de lanzar error, checamos si la tupla es la longitud esperada:
                 if len(row) == 16:
                     data['departamento'].append(row[0])
-                    data['provincia'].append(row[1])
-                    data['distrito'].append(row[2])
+                    data['provincia_matriz'].append(row[1])
+                    data['distrito_matriz'].append(row[2])
                     data['municipio'].append(row[3])
                     
                     # Convertir fechas a string y manejar None
@@ -133,11 +202,73 @@ def index_acta_padron(request):
                     data['mes_diciembre'].append(str(row[15]) if row[15] else None)
                 else:
                     logger.warning(f"Fila con estructura inválida: {row}")
-                    print("Ejemplo de datos enviados:", {k: v[:2] for k, v in data.items() if v})
+            
+            # --------------------------------------------------------
+            # 1. Procesar DATOS MENSUALIZADOS (filtrados por año)
+            # ---------------------------------------------------------
+            for index, row in enumerate(resultados_grafico_regional):
+                try:
+                    if len(row) != 36:
+                        raise ValueError(f"La fila {index} no tiene 36 columnas: {row}")
+
+                    for i in range(12):
+                        data[f'num_{i+1}'].append(row[i*3] if row[i*3] is not None else 0)
+                        data[f'den_{i+1}'].append(row[i*3+1] if row[i*3+1] is not None else 0)
+                        # Convertir Decimal a float
+                        cob_value = row[i*3+2]
+                        if cob_value is None:
+                            data[f'cob_{i+1}'].append(0.0)
+                        elif isinstance(cob_value, float):
+                            data[f'cob_{i+1}'].append(cob_value)
+                        else:
+                            data[f'cob_{i+1}'].append(float(cob_value))
+                except Exception as e:
+                    logger.error(f"Error procesando la fila {index}: {str(e)}")
+            
+            # ----------------------------------------------------------------------------
+            # 2. Procesar RANKING ACTA
+            # ----------------------------------------------------------------------------
+            for row in resultados_ranking_acta:
+                # En lugar de lanzar error, checamos si la tupla es la longitud esperada:
+                if len(row) == 6:
+                    data['provincia_ranking'].append(row[0])
+                    data['distrito_ranking'].append(row[1])
+                    # Cambia null (None) a 0
+                    data['den_ranking'].append(str(row[2]) if row[2] is not None else '0')
+                    data['num_ranking'].append(str(row[3]) if row[3] is not None else '0')
+                    data['avance_ranking'].append(str(row[4]) if row[4] is not None else '0')
+                    data['estado_ranking'].append(str(row[5]) if row[5] is not None else 'RIESGO')
+                else:
+                    logger.warning(f"Fila con estructura inválida: {row}")
+            
+            # ----------------------------------------------------------------------------
+            # 3. DETALLE DE ACTA
+            # ----------------------------------------------------------------------------
+            for row in resultados_detalle_acta:
+                # En lugar de lanzar error, checamos si la tupla es la longitud esperada:
+                if len(row) == 11:
+                    data['provincia_detalle'].append(row[0])
+                    data['distrito_detalle'].append(row[1])
+                    data['municipio_detalle'].append(row[2])
+                    data['mes_detalle'].append(row[3])
+                    # Cambia null (None) a 0
+                    data['fecha_inicial_detalle'].append(str(row[4]) if row[4] is not None else '')
+                    data['fecha_final_detalle'].append(str(row[5]) if row[5] is not None else '')
+                    data['fecha_envio_detalle'].append(str(row[6]) if row[6] is not None else '')
+                    data['dni_detalle'].append(str(row[7]) if row[7] is not None else '0')
+                    data['primer_apellido_detalle'].append(str(row[8]) if row[8] is not None else '0')
+                    data['segundo_apellido_detalle'].append(str(row[9]) if row[9] is not None else '0')
+                    data['nombres_detalle'].append(str(row[10]) if row[10] is not None else '0')
+                
+                else:
+                    logger.warning(f"Fila con estructura inválida: {row}")
+            
             return JsonResponse(data)
+        
         except:
             # Si ocurre alguna excepción global, la silenciamos (no mostramos nada)
             return JsonResponse({}, status=200)
+        
 
     # -- Si no es AJAX, render normal de la plantilla --
     return render(request, 'pn_acta_homologacion/index_pn_acta_homologacion.html', {

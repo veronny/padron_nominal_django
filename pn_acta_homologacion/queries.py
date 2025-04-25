@@ -24,10 +24,8 @@ def obtener_distritos(provincia):
     distritos = MAESTRO_HIS_ESTABLECIMIENTO.objects.filter(Provincia=provincia).values('Distrito').distinct().order_by('Distrito')
     return list(distritos)
 
-
 def obtener_tabla_acta(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        
+    with connection.cursor() as cursor:       
         # Ejecutar el query con crosstab y parámetros dinámicos
         cursor.execute(
             '''
@@ -47,123 +45,218 @@ def obtener_tabla_acta(departamento, provincia, distrito):
         )
         return cursor.fetchall()
 
-
-def obtener_cards_regional_acta(departamento, provincia, distrito):
+def obtener_grafico_regional_acta():
     with connection.cursor() as cursor:
         cursor.execute(
             '''
-            SELECT  
-                SUM("total_cumple_dni") AS total_cumple_dni,
-                SUM("brecha_dni") AS brecha_dni,
-                SUM("cob_dni") AS cob_dni
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
+            SELECT
+                -- ENERO
+                SUM(CASE WHEN mes = 1 THEN CAST(num AS INT) ELSE 0 END) AS NUM_1,
+                SUM(CASE WHEN mes = 1 THEN CAST(den AS INT) ELSE 0 END) AS DEN_1,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 1 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 1 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 1 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_1,
+                -- FEBRERO
+                SUM(CASE WHEN mes = 2 THEN CAST(num AS INT) ELSE 0 END) AS NUM_2,
+                SUM(CASE WHEN mes = 2 THEN CAST(den AS INT) ELSE 0 END) AS DEN_2,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 2 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 2 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 2 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_2,
+                -- MARZO
+                SUM(CASE WHEN mes = 3 THEN CAST(num AS INT) ELSE 0 END) AS NUM_3,
+                SUM(CASE WHEN mes = 3 THEN CAST(den AS INT) ELSE 0 END) AS DEN_3,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 3 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 3 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 3 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_3,
+                -- ABRIL
+                SUM(CASE WHEN mes = 4 THEN CAST(num AS INT) ELSE 0 END) AS NUM_4,
+                SUM(CASE WHEN mes = 4 THEN CAST(den AS INT) ELSE 0 END) AS DEN_4,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 4 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 4 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 4 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_4,
+                -- MAYO
+                SUM(CASE WHEN mes = 5 THEN CAST(num AS INT) ELSE 0 END) AS NUM_5,
+                SUM(CASE WHEN mes = 5 THEN CAST(den AS INT) ELSE 0 END) AS DEN_5,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 5 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 5 THEN CAST(num AS INT) ELSE 0 END) * 1.0
+                            / NULLIF(SUM(CASE WHEN mes = 5 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_5,
+                -- JUNIO
+                SUM(CASE WHEN mes = 6 THEN CAST(num AS INT) ELSE 0 END) AS NUM_6,
+                SUM(CASE WHEN mes = 6 THEN CAST(den AS INT) ELSE 0 END) AS DEN_6,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 6 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 6 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 6 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_6,
+                -- JULIO
+                SUM(CASE WHEN mes = 7 THEN CAST(num AS INT) ELSE 0 END) AS NUM_7,
+                SUM(CASE WHEN mes = 7 THEN CAST(den AS INT) ELSE 0 END) AS DEN_7,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 7 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 7 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 7 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_7,
+                -- AGOSTO
+                SUM(CASE WHEN mes = 8 THEN CAST(num AS INT) ELSE 0 END) AS NUM_8,
+                SUM(CASE WHEN mes = 8 THEN CAST(den AS INT) ELSE 0 END) AS DEN_8,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 8 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 8 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 8 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_8,
+                -- SETIEMBRE
+                SUM(CASE WHEN mes = 9 THEN CAST(num AS INT) ELSE 0 END) AS NUM_9,
+                SUM(CASE WHEN mes = 9 THEN CAST(den AS INT) ELSE 0 END) AS DEN_9,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 9 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 9 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 9 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2)
+                END AS COB_9,
+                -- OCTUBRE
+                SUM(CASE WHEN mes = 10 THEN CAST(num AS INT) ELSE 0 END) AS NUM_10,
+                SUM(CASE WHEN mes = 10 THEN CAST(den AS INT) ELSE 0 END) AS DEN_10,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 10 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 10 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 10 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_10,
+                -- NOVIEMBRE
+                SUM(CASE WHEN mes = 11 THEN CAST(num AS INT) ELSE 0 END) AS NUM_11,
+                SUM(CASE WHEN mes = 11 THEN CAST(den AS INT) ELSE 0 END) AS DEN_11,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 11 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 11 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 11 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_11,
+                -- DICIEMBRE
+                SUM(CASE WHEN mes = 12 THEN CAST(num AS INT) ELSE 0 END) AS NUM_12,
+                SUM(CASE WHEN mes = 12 THEN CAST(den AS INT) ELSE 0 END) AS DEN_12,
+                CASE 
+                    WHEN SUM(CASE WHEN mes = 12 THEN CAST(den AS INT) ELSE 0 END) = 0 
+                    THEN 0 
+                    ELSE ROUND(
+                        (
+                            SUM(CASE WHEN mes = 12 THEN CAST(num AS INT) ELSE 0 END) * 1.0 
+                            / NULLIF(SUM(CASE WHEN mes = 12 THEN CAST(den AS INT) ELSE 0 END), 0)
+                        ) * 100
+                    , 2) 
+                END AS COB_12
+                FROM public."indicador_acta"
             ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
         )
         return cursor.fetchall()
 
-
-def obtener_grafico_regional_acta(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_dni") AS total_cumple_dni,
-                SUM("brecha_dni") AS brecha_dni,
-                SUM("cob_dni") AS cob_dni
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-def obtener_ranking_acta(departamento, provincia, distrito):
-    with connection.cursor() as cursor:
-        cursor.execute(
-            '''
-            SELECT  
-                SUM("total_cumple_dni") AS total_cumple_dni,
-                SUM("brecha_dni") AS brecha_dni,
-                SUM("cob_dni") AS cob_dni
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
-            ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
-        )
-        return cursor.fetchall()
-
-
-def obtener_avance_situacion_padron(departamento,provincia, distrito):
+def obtener_ranking_acta():
     with connection.cursor() as cursor:
         cursor.execute(
             '''
             SELECT 
-                SUM("N28_dias") AS N28_dias,
-                SUM("N0a5meses") AS N0a5meses,
-                SUM("N6a11meses") AS N6a11meses,
-                SUM("cero_anios") AS cero_anios,
-                SUM("un_anios") AS un_anios,
-                SUM("dos_anios") AS dos_anios,
-                SUM("tres_anios") AS tres_anios,
-                SUM("cuatro_anio") AS cuatro_anio,
-                SUM("cinco_anios") AS cinco_anios,
-                SUM("total_den") AS total_den
-            FROM public."SITUACION_PADRON" 
+                t."provincia"::VARCHAR(200) AS provincia_ranking,
+                t."distrito"::VARCHAR(200) AS distrito_ranking,
+                SUM(t."den")::BIGINT AS den_ranking,
+                SUM(t."num")::BIGINT AS num_ranking,
+                COALESCE(ROUND(SUM(t."num") * 100.0 / NULLIF(SUM(t."den"), 0), 2), 0) AS avance_ranking,
+                CASE 
+                    WHEN COALESCE(ROUND(SUM(t."num") * 100.0 / NULLIF(SUM(t."den"), 0), 2), 0) BETWEEN 0 AND 8 THEN 'RIESGO'
+                    WHEN COALESCE(ROUND(SUM(t."num") * 100.0 / NULLIF(SUM(t."den"), 0), 2), 0) BETWEEN 8 AND 24 THEN 'PROCESO'
+                    WHEN COALESCE(ROUND(SUM(t."num") * 100.0 / NULLIF(SUM(t."den"), 0), 2), 0) BETWEEN 25 AND 100 THEN 'CUMPLE'
+                    ELSE 'RIESGO'
+                END AS estado_ranking
+            FROM 
+                public."indicador_acta" t
             WHERE
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
+                t."distrito" IS NOT NULL
+            GROUP BY 
+                t."provincia",
+                t."distrito"
             ''',
-            [   
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
         )
         return cursor.fetchall()
 
-def obtener_cumple_situacion_dni(departamento, provincia, distrito):
+def obtener_detalle_acta():
     with connection.cursor() as cursor:
         cursor.execute(
             '''
-            SELECT  
-                SUM("total_cumple_dni") AS total_cumple_dni,
-                SUM("brecha_dni") AS brecha_dni,
-                SUM("cob_dni") AS cob_dni
-            FROM public."SITUACION_PADRON"
-            WHERE 
-                (COALESCE(%s, '') = '' OR "DEPARTAMENTO" = %s) AND
-                (COALESCE(%s, '') = '' OR "PROVINCIA" = %s) AND
-                (COALESCE(%s, '') = '' OR "DISTRITO" = %s);
+                SELECT  
+                provincia as provincia_detalle, 
+                distrito as distrito_detalle, 
+                municipio as municipio_detalle, 
+                mes as mes_detalle, 
+                fecha_inicial as fecha_inicial_detalle, 
+                fecha_final as fecha_final_detalle, 
+                fecha_envio as fecha_envio_detalle, 
+                dni as dni_detalle, 
+                primer_apellido as primer_apellido_detalle, 
+                segundo_apellido as segundo_apellido_detalle, 
+                nombres as nombres_detalle
+                FROM public."indicador_acta"
+                WHERE fecha_inicial is not null
             ''',
-            [
-                departamento, departamento,
-                provincia, provincia,
-                distrito, distrito
-            ]
         )
         return cursor.fetchall()
 
@@ -268,7 +361,6 @@ def obtener_seguimiento_situacion_padron(departamento, provincia, edad, cumple):
         # Obtener los resultados
         return cursor.fetchall()
     
-
 def obtener_seguimiento_situacion_padron_distrito(departamento, provincia, distrito, edad, cumple):
     # Mapeo de las categorías de edad a condiciones SQL
     edad_conditions = {
