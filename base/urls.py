@@ -17,5 +17,7 @@ urlpatterns = [
     path('', include('pn_situacion_actual.urls')),
     ## ACTA PADRON NOMINAL 
     path('', include('pn_acta_homologacion.urls')),
+    ## NIÑOS OBSERVADOS 
+    path('', include('pn_nino_observados.urls'))
     
 ]
